@@ -102,16 +102,14 @@ app.post('/login', (req, res) => {
   });
 });
 
+
+
 app.post('/otp', (req, res) => {
   let email = req.body.email;
   let value = req.body.value;
   let otp = req.body.otp;
   const currentDate = new Date();
 
-
-
-  let sql;
-  let params;
 
   if (value == 1) {
     const sql = "SELECT * from awt_registeruser where email = ? and otp = ? and deleted = 0 ";
@@ -141,12 +139,147 @@ app.post('/otp', (req, res) => {
             if (err) {
               return res.json(err)
             } else {
+              const insertedId = data.insertId;
+              const sql = "SELECT * from awt_registeruser WHERE id = ? and deleted = 0";
 
+              con.query(sql, [insertedId], (err, data) => {
+                if (err) {
+                  console.log(err)
+                }
+                else {
+                  return res.json(data)
+                }
+              })
 
             }
           })
         }
+
+
+      }
+    })
+  }
+
+
+
+});
+
+app.post('/provider_login', (req, res) => {
+  let email = req.body.email;
+  let otp = req.body.otp;
+
+
+  const sql = "SELECT * from awt_service_register where email = ? AND deleted = 0"
+
+
+  con.query(sql, [email], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+
+      if (data.length !== 0) {
+        const sql2 = "UPDATE awt_service_register SET otp = ? WHERE email = ?";
+
+        con.query(sql2, [otp, email], (err, data) => {
+          if (err) {
+            return res.json(err)
+          }
+          else {
+            if (data.length !== 0) {
+
+              const sql = "SELECT * from awt_service_register WHERE email = ? and deleted = 0";
+              con.query(sql, [email], (err, data) => {
+                if (err) {
+                  return res.json(err)
+                } else {
+                  return res.json(data)
+                }
+              })
+            }
+
+          }
+        })
+      } else {
+        const sql3 = "INSERT INTO awt_registeruser_dummy(`email`,`otp`) VALUES (?, ?)";
+        con.query(sql3, [email, otp], (err, data) => {
+          if (err) {
+            return res.json(err);
+          }
+          else {
+            const insertedId = data.insertId;
+
+            const sql = "SELECT * from awt_registeruser_dummy WHERE id = ? and deleted = 0";
+            con.query(sql, [insertedId], (err, data) => {
+              if (err) {
+                console.log(err)
+              }
+              else {
+
+                return res.json(data)
+              }
+            })
+
+          }
+        })
+      }
+    }
+  });
+});
+
+app.post('/provider_otp', (req, res) => {
+  let email = req.body.email;
+  let value = req.body.value;
+  let otp = req.body.otp;
+  const currentDate = new Date();
+
+
+  let params;
+
+  if (value == 1) {
+    const sql = "SELECT * from awt_service_register where email = ? and otp = ? and deleted = 0 ";
+    params = [email, otp]
+    con.query(sql, params, (err, data) => {
+      if (err) {
+        return res.json(err)
+      } else {
+
         return res.json(data)
+      }
+    })
+  }
+
+  if (value == 0) {
+    const sql = "SELECT * from awt_registeruser_dummy where email = ? and otp = ? and deleted = 0 ";
+    params = [email, otp]
+
+    con.query(sql, params, (err, data) => {
+      if (err) {
+        return res.json(err)
+      } else {
+        if (data.length !== 0) {
+
+          const sql = "INSERT INTO awt_service_register(`email`,`otp`,`created_date`) VALUES(?,?,?)"
+
+          con.query(sql, [email, otp, currentDate], (err, data) => {
+            if (err) {
+              return res.json(err)
+            } else {
+              const insertedId = data.insertId;
+
+              const sql = "SELECT * from awt_service_register WHERE id = ? and deleted = 0";
+              con.query(sql, [insertedId], (err, data) => {
+                if (err) {
+                  console.log(err)
+                }
+                else {
+                  return res.json(data)
+                }
+              })
+
+            }
+          })
+        }
+
 
       }
     })
@@ -183,21 +316,43 @@ app.post('/resend', (req, res) => {
   })
 });
 
-app.post('/petProfile', (req, res, next)=>{
-  const id = req.body.userId;
-  const parent = req.body.parent;
-  const state = req.body.state; // Fix the typo here from req.bosy.state to req.body.state
-  const city = req.body.city;
-  const address = req.body.address;
-  const pincode = req.body.pincode;
+app.post('/resend_provider', (req, res) => {
+  let email = req.body.email;
+  let value = req.body.value;
+  let otp = req.body.otp;
 
-  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)';
+  let sql;
+  let params;
 
-  con.query(sql, [id, state, city, pincode],(err, data)=>{
-    if(err){
-      return res.json(err);
-    }else{
-      return res.json(data);
+  if (value == 1) {
+    sql = "UPDATE awt_service_register SET otp = ? WHERE email = ? and  deleted = 0";
+    params = [otp, email];
+  }
+  else {
+    sql = "UPDATE awt_registeruser_dummy SET otp = ? WHERE email = ? and  deleted = 0";
+    params = [otp, email];
+  }
+
+  con.query(sql, params, (err, data) => {
+    if (err) {
+      return res.json(err)
+    }
+    else {
+      return res.json(data)
     }
   })
 });
+
+app.post('/dashboard', (req,res)=>{
+  const type = req.body.type;
+  const sql = "SELECT title ,icon, type , status,link from awt_dashboard where type = ? and status = 1 and deleted = 0";
+
+  con.query(sql , [type] , (err,data)=>{
+    if(err){
+      return res.json(err)
+    }
+    else{
+      return res.json(data)
+    }
+  })
+})
