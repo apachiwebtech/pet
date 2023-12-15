@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Register from './Pages/Register';
 import MyPet from './Pages/MyPet';
-
+import BusinessListing from './Pages/BusinessListing';
 const routing = createBrowserRouter([
   
   {
@@ -35,7 +35,10 @@ const routing = createBrowserRouter([
         path:'/mypet',
         element:<MyPet/>
       },
-   
+      {
+        path:'/listing/:category',
+        element:<BusinessListing/>
+      }
     ]
 
   }

@@ -10,8 +10,10 @@ const Header = () => {
         return 'Register';
       case '/splash':
         return 'Welcome';
-        case '/':
+      case '/':
         return 'Dashboard';
+      case '/listing/vet':
+        return 'Vets'
       default:
         return '';
     }

@@ -5,6 +5,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import CustomInput from "../UI/CustomInput";
 import PrimaryButton from "../UI/PrimaryButton";
 import PetProfileForm from "../Forms/PetProfileForm";
+import MaleIcon from '@mui/icons-material/Male';
 const MyPet = () => {
   const [values, setValues] = useState({
     parent: "",
@@ -50,12 +51,12 @@ const MyPet = () => {
         >
           <div>
             <h3 style={{ color: "white" }}>Bella</h3>
-            <p style={{ color: "dark22a36b", fontWeight: "", fontSize: "1.2rem" }}>
+            <p style={{ color: "#22a36b", fontWeight: "bold", fontSize: "1.2rem" }}>
               Border Collie
             </p>
           </div>
           <div className="gender-img">
-            <img src={malesign} alt="" />
+            {/* <img src={malesign} alt="" /> */}<MaleIcon sx={{fontSize:"3rem", color:"#2e2e2e"}}/>
           </div>
         </div>
         <div style={{ position: "relative", top: "3em", padding:"0 10px", display:"flex", flexDirection:"row", alignItems:"center" }}>

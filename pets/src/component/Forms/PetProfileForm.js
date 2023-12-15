@@ -54,7 +54,7 @@ const PetProfileForm = () => {
                 <CustomInput style={{ width: "100%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="State" name="state" value={values.state} onChange={handleChange}/>
                 <CustomInput style={{ width: "100%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="City" name="city" value={values.city} onChange={handleChange}/>
                 </div>
-                <CustomInput style={{ width: "30%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="PIN Code" name="pincode" value={values.pincode} maxlength='6' onChange={handleChange}/>
+                <CustomInput style={{ width: "30%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="PIN Code" name="pincode" value={values.pincode} maxLength='6' onChange={handleChange}/>
             </form>
             <div style={{marginTop:"20px", display:"flex",justifyContent:"space-between", gap:"20px", width:"100%", backgroundColor:""}}>
                 <PrimaryButton type="submit" form="profileForm" style={{width:"100%", padding:"10px", borderRadius:"5px",backgroundColor:"#4acf7e", color:"white",border:"none",fontSize:"1.2rem"}}>Save Profile</PrimaryButton>

@@ -5,7 +5,7 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import HouseIcon from "@mui/icons-material/House";
 import StoreIcon from "@mui/icons-material/Store";
 import SearchField from "../UI/SearchField";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 const Dash = () => {
   return (
     <div className="mx-3">
@@ -28,18 +28,18 @@ const Dash = () => {
           <HouseIcon className="dash-icon" />
           <p>Community</p>
         </div>
-        <div className="col-4 ">
+        <NavLink to="/listing/vet" className="col-4" style={{color:"black", textDecoration:"none"}}>
           <StoreIcon className="dash-icon" />
           <p>Vet</p>
-        </div>
-        <div className="col-4">
+        </NavLink>
+        <NavLink to='/listing/Groomers' className="col-4" style={{color:"black", textDecoration:"none"}} >
           <LocalHospitalIcon className="dash-icon" />
           <p>Grommers</p>
-        </div>
-        <div className="col-4">
+        </NavLink>
+        <NavLink to='listing/Walkers' className="col-4" style={{color:"black", textDecoration:"none"}}>
           <StoreIcon className="dash-icon" />
           <p>Walkers</p>
-        </div>
+        </NavLink>
         <div className="col-4 ">
           <LocalHospitalIcon className="dash-icon" />
           <p>Boarders</p>
