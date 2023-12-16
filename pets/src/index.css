@@ -3,6 +3,9 @@
   padding: 0px;
   box-sizing: border-box;
 }
+.row {
+   --bs-gutter-x: 0rem !important; 
+}
 body{
   overflow-x: hidden;
 }
@@ -19,7 +22,7 @@ body{
 }
 .head-arrow{
   position: absolute;
-  left: 4px;
+  left: 7px;
   top: 33px;
 }
 /* Header End */
@@ -71,6 +74,11 @@ body{
 /* Splash Section  */
 
 /* Register */
+.mob-box{
+  width: 260px;
+
+  margin: auto;
+}
 .reg-head{
   padding: 30px 0px;
   color: darkblue;
@@ -78,15 +86,20 @@ body{
 .mobile-detail .mob-no{
 width: 100%;
 border-radius: 6px;
-padding: 4px;
+padding: 10px;
 border: 1px solid lightslategrey;
 }
 .otp-box input{
-width: 25px;
-height: 25px;
+text-align: center;
+width: 50px;
+height: 50px;
 margin-right: 10px;
 border-radius: 6px;
 border: 1px solid lightslategrey;
+font-size: 20px;
+}
+.otp-text {
+  font-size: 13px;
 }
 .reg-btn{
   color: #fff;
@@ -119,7 +132,37 @@ border: 1px solid lightslategrey;
 .color-blue{
   color: darkblue;
 }
+.foot-info{
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+.foot-info2{
+  position: absolute;
+  bottom: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
 /* Register */
+
+/* Otp start  */
+
+.Verify-btn{
+
+  color: #fff;
+  background-color: green;
+  padding: 18px 180px 18px 18px;
+  border: none;
+  border-radius: 10px;
+  width: 261px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+}
+/* Otp End  */
 
 /* Footer start*/
 .footer{

@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 const port = 8081;
 app.listen(port, () => {
-  (`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
 const con = sql.createConnection({
@@ -353,6 +353,23 @@ app.post('/dashboard', (req,res)=>{
     }
     else{
       return res.json(data)
+    }
+  })
+})
+
+app.post('/petProfile', (req, res)=>{
+  const userId = req.body.userId;
+  const state = req.body.state;
+  const city = req.body.city;
+  const pincode = req.body.pincode;
+
+  const sql =  'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
+
+  con.query(sql, [userId, state, city, pincode], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
     }
   })
 })

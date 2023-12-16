@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { DUMMY_DATA } from '../../Dummy_Data';
 import ListingCard from "../SubComponents/LisitingCard";
 import SearchField from "../UI/SearchField";
 const BusinessListing = () => {
+  const [search, setSearch] = useState('')
   const { category } = useParams();
   console.log(category);
   return (
     <>
       <div style={{ margin: "10px 10px", position: "sticky", zIndex: "100" }}>
-        <SearchField />
+        <SearchField setSearch={setSearch}/>
       </div>
       <div
         style={{
@@ -39,9 +40,9 @@ const BusinessListing = () => {
           >
             {DUMMY_DATA.filter((item) => {
               return item.category === category;
-            }).map((item) => {
+            }).filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
               return (
-                <ListingCard key={item.title} title={item.title} rating={item.rating} heading={item.heading} date={item.date}/>
+                <ListingCard key={item.title} title={item.title} rating={item.rating} heading={item.heading} date={item.date} img={item.imageSrc} altText={item.alt}/>
                 // <Card
                 //   style={{
                 //     width: "100%",

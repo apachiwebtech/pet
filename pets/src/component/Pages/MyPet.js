@@ -31,11 +31,11 @@ const MyPet = () => {
     });
   };
   return (
-    <div className="main" style={{ position: "relative" }}>
+    <div className="main" style={{ position: "relative",paddingBottom:"80px" }}>
       <div className="pet-img">
         <img src={petimg} width="100%" height="auto" alt="" />
       </div>
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", backgroundColor:"" }}>
         <div
           className="d-flex justify-content-between align-items-center pet-name"
           style={{
@@ -65,7 +65,7 @@ const MyPet = () => {
           <h4 >About Bella</h4>
         </div>
         </div>
-        <div style={{display:"flex", flexDirection:"row", padding:"10px", gap:"10px", flexWrap:"wrap", marginTop:"10px", justifyContent:"center"}}>
+        <div style={{display:"flex", flexDirection:"row", padding:"10px", gap:"10px", flexWrap:"", marginTop:"10px", justifyContent:"center"}}>
 
     
 

@@ -14,6 +14,8 @@ const Header = () => {
         return 'Dashboard';
       case '/listing/vet':
         return 'Vets'
+      case '/pet' : 
+      return 'Pet profile'  
       default:
         return '';
     }

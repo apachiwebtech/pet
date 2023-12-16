@@ -62,8 +62,8 @@ const ListingCard = (props)=>{
                       }}
                     >
                       <img
-                        src={dog}
-                        alt="dog"
+                        src={props.img}
+                        alt={props.altText}
                         style={{
                           objectFit: "contain",
                           height: "100px",

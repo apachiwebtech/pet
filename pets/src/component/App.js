@@ -13,6 +13,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Register from './Pages/Register';
 import MyPet from './Pages/MyPet';
 import BusinessListing from './Pages/BusinessListing';
+import Otp from './Pages/Otp';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 const routing = createBrowserRouter([
   
   {
@@ -32,8 +35,12 @@ const routing = createBrowserRouter([
         element:<Register/>
       },
       {
-        path:'/mypet',
+        path:'listing/pet',
         element:<MyPet/>
+      },
+      {
+        path:'/otp',
+        element:<Otp/>
       },
       {
         path:'/listing/:category',
@@ -44,10 +51,28 @@ const routing = createBrowserRouter([
   }
 ])
 
+function checkLocalStorageAndRedirect(navigate) {
+  const pet_email = localStorage.getItem('pet_email');
+  if (pet_email == null) {
+    navigate('/reg'); // Redirect to dashboard if id exists in localStorage
+  }
+}
 
 
 function App() {
-  
+  const [flag, setFlag]  = useState(false);
+  useEffect(()=>{
+
+  if(window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && window.location.pathname !== '/listing/pet'){
+    setFlag(true);
+  }
+},[flag])
+
+const navigate = useNavigate();
+
+  useEffect(() => {
+    checkLocalStorageAndRedirect(navigate);
+  }, [navigate]);
   return (
     <>
       <Header />
