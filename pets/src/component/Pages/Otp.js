@@ -17,7 +17,7 @@ const Otp = () => {
     console.log(otp, "from ls")
     const generateOTP = (length) => {
 
-        const characters = '0123456789';
+        const characters = '123456789';
         let otp = '';
 
         for (let i = 0; i < length; i++) {
@@ -302,13 +302,12 @@ useEffect(()=>{
                         </div>
                    
                         <p className='text-danger' id="err"></p>
-                         <div id='msg'>
-                            
-                           
+                        <div id='msg'>
+                            {
+                                showOtp && <p>{otp}</p>
+                            }
                          </div>
-                      <div>
-                        hello
-                      </div>
+                      
                         <div className='foot-info'>
                             <div>
                                 <p>(by registering, I agree to the Terms of <br /> Use and Privacy Policy)</p>

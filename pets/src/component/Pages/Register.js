@@ -4,7 +4,7 @@ import { Link ,useNavigate} from 'react-router-dom'
 import { BASE_URL } from '../Utils/BaseUrl'
 
 const generateOTP = (length) => {
-    const characters = '0123456789';
+    const characters = '123456789';
     let otp = '';
 
     for (let i = 0; i < length; i++) {

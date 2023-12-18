@@ -1,9 +1,10 @@
 const sql = require('mysql')
 const express = require('express')
-
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv')
 const app = express()
 const cors = require('cors');
-
+dotenv.config();
 
 app.use(
   cors({
@@ -17,7 +18,7 @@ app.get('/', (req, res) => {
   return res.json("this is from backend")
 });
 
-const port = 8081;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
@@ -54,6 +55,21 @@ app.post('/login', (req, res) => {
     } else {
 
       if (data.length !== 0) {
+        const mailOptions ={
+          from : 'dharvik.badga22@gmail.com',
+          to : email,
+          subject : 'OTP for login into pupcat app',
+          text : `your otp has been updated to ${otp}`,
+          
+        }
+
+        transporter.sendMail(mailOptions, (error, data) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + data);
+          }
+        });
         const sql2 = "UPDATE awt_registeruser SET otp = ? WHERE email = ?";
 
         con.query(sql2, [otp, email], (err, data) => {
@@ -84,6 +100,20 @@ app.post('/login', (req, res) => {
           else {
             const insertedId = data.insertId;
 
+            const mailOptions = {
+              from: 'Your Sender Email',
+              to: email,
+              subject: 'Welcome to Our Platform!',
+              text: 'Thank you for registering. Your OTP is ' + otp,
+            };
+
+            transporter.sendMail(mailOptions, (error, data) => {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + data);
+              }
+            });
             const sql = "SELECT * from awt_registeruser_dummy WHERE id = ? and deleted = 0";
             con.query(sql, [insertedId], (err, data) => {
               if (err) {
@@ -178,6 +208,21 @@ app.post('/provider_login', (req, res) => {
     } else {
 
       if (data.length !== 0) {
+        const mailOptions ={
+          from : 'dharvik.badga22@gmail.com',
+          to : email,
+          subject : 'OTP for login into pupcat app',
+          text : `your otp has been updated to ${otp}`,
+          
+        }
+
+        transporter.sendMail(mailOptions, (error, data) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + data);
+          }
+        });
         const sql2 = "UPDATE awt_service_register SET otp = ? WHERE email = ?";
 
         con.query(sql2, [otp, email], (err, data) => {
@@ -208,6 +253,20 @@ app.post('/provider_login', (req, res) => {
           else {
             const insertedId = data.insertId;
 
+            const mailOptions = {
+              from: 'Your Sender Email',
+              to: email,
+              subject: 'Welcome to Our Platform!',
+              text: 'Thank you for registering. Your OTP is ' + otp,
+            };
+
+            transporter.sendMail(mailOptions, (error, data) => {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + data);
+              }
+            });
             const sql = "SELECT * from awt_registeruser_dummy WHERE id = ? and deleted = 0";
             con.query(sql, [insertedId], (err, data) => {
               if (err) {
@@ -373,3 +432,15 @@ app.post('/petProfile', (req, res)=>{
     }
   })
 })
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  service : 'gmail',
+  secure: true,
+  auth: {
+    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+    user: process.env.SMTP_MAIL,
+    pass: process.env.PLAY_PASSWORD,
+  },
+});
