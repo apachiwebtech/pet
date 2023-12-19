@@ -17,6 +17,7 @@ import Otp from './Pages/Otp';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from './Pages/DetailPage';
+import ServiceProviderForm from './Forms/ServiceProviderForm';
 const routing = createBrowserRouter([
   
   {
@@ -50,7 +51,11 @@ const routing = createBrowserRouter([
       {
         path:'/listing/:category/:id',
         element:<DetailPage/>
-      }
+      },
+      {
+        path:'/serviceproform',
+        element:<ServiceProviderForm/>
+      },
     ]
 
   }
