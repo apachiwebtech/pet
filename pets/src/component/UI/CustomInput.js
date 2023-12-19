@@ -5,6 +5,7 @@ const CustomInput = ({ type, placeholder, name, value, onChange, className,style
   //     const classes = 'card ' + props.className;
 
   const classes = 'Input ' + className;
+  
   return (
     <input
       type={type}

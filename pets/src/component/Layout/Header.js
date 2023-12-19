@@ -16,6 +16,8 @@ const Header = () => {
         return 'Vets'
       case '/pet' : 
       return 'Pet profile'  
+      case '/serviceproform' : 
+      return 'Service Provider'  
       default:
         return '';
     }

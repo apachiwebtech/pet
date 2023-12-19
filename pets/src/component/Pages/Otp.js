@@ -186,7 +186,7 @@ const Otp = () => {
                     }, 2000)
                 } else {
                     // navigate('/')
-                    window.location.pathname = '/';
+                    window.location.pathname = '/serviceproform';
                     const role = res.data[0].role; 
                 const value = res.data[0].value; 
                 const id = res.data[0].id;

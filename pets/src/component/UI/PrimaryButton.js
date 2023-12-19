@@ -1,8 +1,9 @@
 import React from "react";
-import classes from './PrimaryButton.module.css'
-const PrimaryButton = ({ children, style, type, form }) => {
+import './PrimaryButton.css'
+const PrimaryButton = ({className, children, style, type, form }) => {
+  const classes = 'PrimaryButton ' + className;
   return (
-    <button className={classes.PrimaryButton} type={type} form={form} style={style}>
+    <button className={classes} type={type} form={form} style={style}>
       {children}
     </button>
   );

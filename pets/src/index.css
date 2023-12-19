@@ -212,6 +212,7 @@ padding-top: 15px;
 font-size: 13px;
 }
 /* Dashboard  End*/
+  
 /* My Pet start  */
 .pet-name{
   padding: 5px 30px;
@@ -224,3 +225,23 @@ font-size: 13px;
   width: 100%;
 }
 /* My Pet End  */
+
+/* Service form start */
+input[type="file"]
+{ 
+   border: 2px solid #34495e; 
+   width: 100px; 
+   height: 100px; 
+   border-radius: 3px; 
+}
+
+input[type='file'] { font-size: 0; }
+::file-selector-button { display: none; }
+
+.upload-box p {
+  position: absolute;
+  top: 51px;
+  left: 18px;
+}
+
+/* Service form end */
