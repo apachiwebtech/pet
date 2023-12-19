@@ -1,0 +1,50 @@
+.Container{
+    /* style={{position:"relative", height:"", backgroundColor:""}} */
+    position: relative;
+}
+.imageContainer{
+    /* style={{backgroundColor:"red", height:"270px", overflow:"hidden", position:"", top:""}} */
+    height: 270px;
+    overflow: hidden;
+}
+.contentContainer{
+    /* style={{display:"flex",flexDirection:"column", alignItems:"center", padding:"0 30px",backgroundColor:"",minHeight:"520px",gap:"10px", position:"absolute", top:"calc(90%)"}} */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 30px;
+    min-height: 520px;
+    gap: 10px;
+    position: absolute;
+    top: 90%;
+}
+
+.subContentContainer{
+    /* style={{textAlign:"justify", marginTop:"10px", fontSize:"0.85rem", display:"flex", flexDirection:"column", gap:"5px"}} */
+    text-align: justify;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.subContentContainer p {
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.tagsContainer{
+    /* style={{display:"flex",flexDirection:"row",gap:"20px", backgroundColor:"", padding:"5px 0"}} */
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 5px 0;
+    
+}
+.tags{
+    /* style={{ display: "flex", flexWrap: "wrap", gap: "10px",backgroundColor:"", width:"100%" }} */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}

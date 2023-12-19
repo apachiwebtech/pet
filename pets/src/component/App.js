@@ -16,6 +16,7 @@ import BusinessListing from './Pages/BusinessListing';
 import Otp from './Pages/Otp';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DetailPage from './Pages/DetailPage';
 const routing = createBrowserRouter([
   
   {
@@ -45,6 +46,10 @@ const routing = createBrowserRouter([
       {
         path:'/listing/:category',
         element:<BusinessListing/>
+      },
+      {
+        path:'/listing/:category/:id',
+        element:<DetailPage/>
       }
     ]
 
