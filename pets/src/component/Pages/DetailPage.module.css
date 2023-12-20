@@ -33,18 +33,33 @@
     font-size: 0.8rem;
 }
 
-.tagsContainer{
-    /* style={{display:"flex",flexDirection:"row",gap:"20px", backgroundColor:"", padding:"5px 0"}} */
+.tagsContainer {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 15px;
     padding: 5px 0;
-    
-}
-.tags{
-    /* style={{ display: "flex", flexWrap: "wrap", gap: "10px",backgroundColor:"", width:"100%" }} */
+    background-color: "";
+  }
+  
+  .tagsContainer h6 {
+    font-size: 0.9rem;
+    white-space: nowrap; /* Prevents text from wrapping */
+
+    flex: 1;
+  }
+  
+  .tags {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    width: 100%;
-}
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+
+  .tags span{
+    padding:5px 8px;
+    border: 1px solid #8a8a8a;
+    border-radius: 30px;
+    font-size: 0.65rem;
+    
+  }
