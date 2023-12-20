@@ -17,7 +17,9 @@ import Otp from './Pages/Otp';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from './Pages/DetailPage';
+import ProductManagingForm from './Forms/ProductManagingForm';
 import ServiceProviderForm from './Forms/ServiceProviderForm';
+import ManagageServicesForm from './Forms/ManagageServicesForm';
 const routing = createBrowserRouter([
   
   {
@@ -53,9 +55,17 @@ const routing = createBrowserRouter([
         element:<DetailPage/>
       },
       {
+        path:'/productmanaging',
+        element : <ProductManagingForm/>
+      },
+      {
         path:'/serviceproform',
         element:<ServiceProviderForm/>
       },
+      {
+        path:"/manageServices",
+        element:<ManagageServicesForm/>
+      }
     ]
 
   }
