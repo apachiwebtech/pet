@@ -26,7 +26,7 @@ const Dash = () => {
     getDashicon()
   }, [])
 
-console.log(feild);
+// console.log(feild);
   // const handlesearch = (e) =>{
   // setSearch(e.target.value)
   // }
@@ -42,7 +42,7 @@ console.log(feild);
       <div className='row text-center pt-3 icon-area'>
 
         {
-          feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
+          feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item,index) => {
             return (
               <div className='col-4'>
                  <Link to={`/${item.link}`}><img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
@@ -52,8 +52,6 @@ console.log(feild);
             )
           })
         }
-
-
 
       </div>
       <hr />

@@ -20,8 +20,6 @@ import DetailPage from './Pages/DetailPage';
 import ProductManagingForm from './Forms/ProductManagingForm';
 import ServiceProviderForm from './Forms/ServiceProviderForm';
 import ManagageServicesForm from './Forms/ManagageServicesForm';
-import packageJson from '../../package.json'
-import BookingAppointment from './Pages/BookingAppointment';
 const routing = createBrowserRouter([
   
   {
@@ -67,10 +65,6 @@ const routing = createBrowserRouter([
       {
         path:"/manageServices",
         element:<ManagageServicesForm/>
-      },
-      {
-        path:"/bookappointment",
-        element:<BookingAppointment/>
       }
     ]
 
@@ -105,7 +99,7 @@ const navigate = useNavigate();
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && <Footer />}
+      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' &&window.location.pathname !== '/listing/services' && <Footer />}
     </>
 
   );

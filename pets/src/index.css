@@ -243,5 +243,13 @@ input[type='file'] { font-size: 0; }
   top: 51px;
   left: 18px;
 }
+.area-list p{
+  margin: 0px;
+}
+.custom-card{
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  
+}
 
 /* Service form end */
