@@ -7,17 +7,28 @@ import classes from './DetailPage.module.css'
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import TodayIcon from '@mui/icons-material/Today';
+import { DUMMY_DATA } from '../../Dummy_Data';
+import { NavLink, useParams } from 'react-router-dom';
 const DetailPage = () => {
+
+    const {id} = useParams();
+
+    console.log(id);
+    const serviceProvider = DUMMY_DATA.find((itm) => itm.id === id);
+
+    console.log(serviceProvider);
+
   return (
     <div className={classes.Container}>
 
     <div className={classes.imageContainer}>
-        <img src={clinic} width="100%" alt="DetailImage" style={{objectFit:"contian"}}/>
+        <img src={serviceProvider.imageSrc} width="100%" alt="DetailImage" style={{objectFit:"contian"}}/>
 
     </div>
     <div className={classes.contentContainer}>
     <Card style={{width:"100%", height:"180px", padding:"20px", display:"flex", flexDirection:"column", justifyContent:"space-between", zIndex:"1"}}>
-            <h3 style={{padding:"0", margin:"0", fontWeight:"bold"}}>Title</h3>
+            <h3 style={{padding:"0", margin:"0", fontWeight:"bold"}}>{serviceProvider.title}</h3>
 
             <h5 style={{padding:"0", margin:"0", color:"#006699"}}>Designation</h5>
 
@@ -25,23 +36,23 @@ const DetailPage = () => {
                
 
                 <p style={{margin:"0"}}>
-                    5.0
+                    {serviceProvider.rating}
                 </p>
-                <Rating sx={{padding:"0", margin:"0"}} value={4} size='small'></Rating>
+                <Rating name="half-rating" defaultValue={0} value={serviceProvider.rating}precision={0.5} readOnly />
                 <p style={{margin:"0",color:"#757575"}}>
-                    (150 reviews)
+                    ({serviceProvider.reviews})
                 </p>
             </div>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 <p style={{margin:"0", fontSize:"0.75rem", display:"flex", alignItems:"center",gap:"5px", color:"#757575"}}>
-                    <AccessAlarmsIcon sx={{fontSize:"1rem"}}/> monday-friday 10:00 AM - 5:00PM 
+                    <AccessAlarmsIcon sx={{fontSize:"1rem"}}/> Monday-Friday 10:00 AM - 5:00 PM 
                 </p >
                 <p style={{margin:"0", fontSize:"0.75rem",display:"flex", alignItems:"center",gap:"5px", color:"#757575"}}>
-                  <LocationOnIcon sx={{fontSize:"1rem"}}/>2.8km
+                  <LocationOnIcon sx={{fontSize:"1rem"}}/>{serviceProvider.distance} km
                 </p>
             </div>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-                <h6 style={{margin:"0",color:"rgb(62, 179, 108)"}}>Location : Andheri</h6>
+                <h6 style={{margin:"0",color:"rgb(62, 179, 108)"}}>Location : {serviceProvider.location}</h6>
                 <div className='d-flex flex-row gap-2 align-items-center'>
 
                 <span><FavoriteIcon sx={{color:"#cc2944"}}/></span>
@@ -50,24 +61,30 @@ const DetailPage = () => {
             </div>
         </Card>
         <div className={classes.subContentContainer}>
-            <p style={{padding:"0", margin:"0",fontSize:"0.8rem", color:"#454545"}}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
+            <p>
+                {serviceProvider.description}
             </p>
             <div className={classes.tagsContainer}>
                 <h6>
                     Recommended for :
                 </h6>
                 <div className={classes.tags}>
-                   
-                    <span>CleanUp</span>
-                    <span>Surgery</span>
-                    <span>CleanUp</span>
-                    <span>CleanUp</span>
-                    
-                    
+                   {
+                    serviceProvider.recommendedFor.map((service)=>{
+                        return (
+                            <span>{service}</span>    
+                        )
+                        })
+                   }
                 </div>
             </div>
-            <PrimaryButton >Book Appointment</PrimaryButton>
+            <NavLink to='/bookappointment' style={{textDecoration:"none"}}>
+
+            <PrimaryButton style={{display:"flex", flexDirection:"row", alignItems:"center",justifyContent:"center", gap:"10px"}} >
+                Book Appointment<TodayIcon/>
+                
+                </PrimaryButton>
+            </NavLink>
         </div>
     </div>
     

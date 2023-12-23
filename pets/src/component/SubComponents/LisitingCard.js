@@ -6,8 +6,12 @@ import Rating from "@mui/material/Rating";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import PrimaryButton from "../UI/PrimaryButton";
 import {DUMMY_DATA} from '../../Dummy_Data'
+import { NavLink } from 'react-router-dom';
 const ListingCard = (props)=>{
     return (
+      <NavLink to={`/detail/${props.id}` }style={{textDecoration:"none"}}>
+
+     
         <Card
                   style={{
                     width: "100%",
@@ -37,8 +41,11 @@ const ListingCard = (props)=>{
                         padding: "0",
                         fontWeight: "bold",
                         color: "#454545",
+                        whiteSpace:"nowrap"
                       }}
                     >
+                     
+
                       {props.heading}
                     </h4>
                   </div>
@@ -79,12 +86,15 @@ const ListingCard = (props)=>{
                         position: "relative",
                       }}
                     >
-                      <h5 style={{ margin: "0 0 0px 0", color: "#454545" }}>
+                      <NavLink to={`/detail/${props.id}`}>
+
+                      <h6 style={{ margin: "0 0 0px 0", color: "#454545",whiteSpace:"wrap",fontSize:"1rem" }}>
                         {props.title}
-                      </h5>
+                      </h6>
+                      </NavLink>
                       <p
                         style={{
-                          fontSize: "0.8rem",
+                          fontSize: "0.7rem",
                           margin: "0 0 10px 0",
                           color: "#adadad",
                         }}
@@ -161,19 +171,25 @@ const ListingCard = (props)=>{
                     </div>
                     <PrimaryButton
                       style={{
-                        backgroundColor: "transparent",
+                        fontSize: "0.8rem",
                         padding: "0",
                         display: "flex",
                         justifyContent: "flex-end",
                         alignItems: "center",
                         border: "none",
+                        backgroundColor:"transparent",
+                        color:"black"
                       }}
                     >
+                      <NavLink to='/bookappointment' style={{textDecoration:"none", color:"black"}}>
+
                       Book Appointment
+                      </NavLink>
                       <NavigateNextIcon />
                     </PrimaryButton>
                   </Card>
                 </Card>
+                </NavLink>
     )
 }
 

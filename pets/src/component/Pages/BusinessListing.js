@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DUMMY_DATA } from '../../Dummy_Data';
 import ListingCard from "../SubComponents/LisitingCard";
 import SearchField from "../UI/SearchField";
+import axios from "axios";
 const BusinessListing = () => {
   const [search, setSearch] = useState('')
-  const { category } = useParams();
+  const [listData, setListData] = useState([]);
+  const {link, category } = useParams();
   console.log(category);
+  console.log(link)
+
+  useEffect(()=>{
+    axios.get('http://localhost:8081/listing')
+    .then((res)=>{
+      console.log(res.data);
+      setListData(res.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  },[])
   return (
     <>
       <div style={{ margin: "10px 10px", position: "sticky", zIndex: "100" }}>
@@ -39,10 +52,10 @@ const BusinessListing = () => {
             }}
           >
             {DUMMY_DATA.filter((item) => {
-              return item.category === category;
+              return item.category === link;
             }).filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
               return (
-                <ListingCard key={item.title} title={item.title} rating={item.rating} heading={item.heading} date={item.date} img={item.imageSrc} altText={item.alt}/>
+                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading} date={item.date} img={item.imageSrc} altText={item.alt} id={item.id}/>
                 // <Card
                 //   style={{
                 //     width: "100%",

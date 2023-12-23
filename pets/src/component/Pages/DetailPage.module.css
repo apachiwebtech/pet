@@ -1,11 +1,13 @@
 .Container{
     /* style={{position:"relative", height:"", backgroundColor:""}} */
     position: relative;
+    padding: 0;
 }
 .imageContainer{
     /* style={{backgroundColor:"red", height:"270px", overflow:"hidden", position:"", top:""}} */
     height: 270px;
     overflow: hidden;
+    object-fit: cover;
 }
 .contentContainer{
     /* style={{display:"flex",flexDirection:"column", alignItems:"center", padding:"0 30px",backgroundColor:"",minHeight:"520px",gap:"10px", position:"absolute", top:"calc(90%)"}} */
@@ -30,15 +32,20 @@
 .subContentContainer p {
     padding: 0;
     margin: 0;
-    font-size: 0.8rem;
+    font-size: 1rem;
+    color:#454545;
+    min-height: 100px;
 }
 
 .tagsContainer {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    gap: 15px;
     padding: 5px 0;
     background-color: "";
+    /* grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto; */
+    grid-template-rows: repeat(auto-fill, minmax(20px, 1fr)); /* Adjust minmax and width as needed */
+  grid-auto-flow: row;
   }
   
   .tagsContainer h6 {
@@ -58,8 +65,9 @@
 
   .tags span{
     padding:5px 8px;
-    border: 1px solid #8a8a8a;
+    border: 1px solid rgb(74, 207, 126);
     border-radius: 30px;
-    font-size: 0.65rem;
-    
+    font-size: 0.64rem;
+    display: flex;
+    align-items: center;
   }

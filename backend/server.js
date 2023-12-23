@@ -444,3 +444,16 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PLAY_PASSWORD,
   },
 });
+
+
+app.get('/listing', (req, res, next)=>{
+  const sql = 'SELECT * FROM awt_add_services'
+
+  con.query(sql, (err,data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})

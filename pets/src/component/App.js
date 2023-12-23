@@ -20,6 +20,8 @@ import DetailPage from './Pages/DetailPage';
 import ProductManagingForm from './Forms/ProductManagingForm';
 import ServiceProviderForm from './Forms/ServiceProviderForm';
 import ManagageServicesForm from './Forms/ManagageServicesForm';
+import packageJson from '../../package.json'
+import BookingAppointment from './Pages/BookingAppointment';
 const routing = createBrowserRouter([
   
   {
@@ -39,7 +41,7 @@ const routing = createBrowserRouter([
         element:<Register/>
       },
       {
-        path:'listing/pet',
+        path:'/pet',
         element:<MyPet/>
       },
       {
@@ -47,11 +49,11 @@ const routing = createBrowserRouter([
         element:<Otp/>
       },
       {
-        path:'/listing/:category',
+        path:'/:link',
         element:<BusinessListing/>
       },
       {
-        path:'/listing/:category/:id',
+        path:'/detail/:id',
         element:<DetailPage/>
       },
       {
@@ -65,6 +67,10 @@ const routing = createBrowserRouter([
       {
         path:"/manageServices",
         element:<ManagageServicesForm/>
+      },
+      {
+        path:"/bookappointment",
+        element:<BookingAppointment/>
       }
     ]
 
@@ -93,6 +99,8 @@ const navigate = useNavigate();
   useEffect(() => {
     checkLocalStorageAndRedirect(navigate);
   }, [navigate]);
+
+  console.log(packageJson.version, "this is the app version");
   return (
     <>
       <Header />

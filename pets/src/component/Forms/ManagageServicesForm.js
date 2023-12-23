@@ -24,7 +24,7 @@ const ManagageServicesForm = () => {
         console.log(
             values.serviceCategory,
             values.serviceName,
-            values.serviceName
+            values.serviceDescription
         )
 
         setValues({
