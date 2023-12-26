@@ -10,6 +10,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import TodayIcon from '@mui/icons-material/Today';
 import { DUMMY_DATA } from '../../Dummy_Data';
 import { NavLink, useParams } from 'react-router-dom';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import distance from '../Utils/DistaceCalc';
 const DetailPage = () => {
 
     const {id} = useParams();
@@ -48,7 +50,7 @@ const DetailPage = () => {
                     <AccessAlarmsIcon sx={{fontSize:"1rem"}}/> Monday-Friday 10:00 AM - 5:00 PM 
                 </p >
                 <p style={{margin:"0", fontSize:"0.75rem",display:"flex", alignItems:"center",gap:"5px", color:"#757575"}}>
-                  <LocationOnIcon sx={{fontSize:"1rem"}}/>{serviceProvider.distance} km
+                  <LocationOnIcon sx={{fontSize:"1rem"}}/>{distance(localStorage.getItem('latitutde'), serviceProvider.latitude, localStorage.getItem('longitude'), serviceProvider.longitude).toFixed(2)} km
                 </p>
             </div>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
@@ -56,7 +58,7 @@ const DetailPage = () => {
                 <div className='d-flex flex-row gap-2 align-items-center'>
 
                 <span><FavoriteIcon sx={{color:"#cc2944"}}/></span>
-                <p style={{margin:"0", fontSize:""}}>Comment</p>
+                <p style={{margin:"0", fontSize:""}}><ModeCommentOutlinedIcon/></p>
                 </div>
             </div>
         </Card>

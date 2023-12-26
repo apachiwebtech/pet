@@ -20,6 +20,7 @@ import DetailPage from './Pages/DetailPage';
 import ProductManagingForm from './Forms/ProductManagingForm';
 import ServiceProviderForm from './Forms/ServiceProviderForm';
 import ManagageServicesForm from './Forms/ManagageServicesForm';
+import distance from './Utils/DistaceCalc';
 const routing = createBrowserRouter([
   
   {
@@ -77,7 +78,25 @@ function checkLocalStorageAndRedirect(navigate) {
     navigate('/reg'); // Redirect to dashboard if id exists in localStorage
   }
 }
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(success, error);
+} else {
+  console.log("Geolocation not supported");
+}
 
+function success(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+  localStorage.setItem('latitutde', latitude);
+  localStorage.setItem('longitude', longitude);
+}
+
+function error() {
+  console.log("Unable to retrieve your location");
+}
+console.log(distance(localStorage.getItem('latitutde'), 19.200306300000012, localStorage.getItem('longitude'), 73.1647712).toFixed(2))
 
 function App() {
   const [flag, setFlag]  = useState(false);
@@ -94,7 +113,7 @@ const navigate = useNavigate();
     checkLocalStorageAndRedirect(navigate);
   }, [navigate]);
 
-  console.log(packageJson.version, "this is the app version");
+  // console.log(packageJson.version, "this is the app version");
   return (
     <>
       <Header />

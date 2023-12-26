@@ -22,7 +22,9 @@ export const DUMMY_DATA = [
       "Clean up", "immunology", "parasitology", "Surgery"
     ],
     distance : 1.4,
-    location:"Thane"
+    location:"Thane",
+    latitude:19.295892357174775, 
+    longitude:72.86044107066728,
   },
   {
     id: "2",
@@ -39,7 +41,9 @@ export const DUMMY_DATA = [
       "General Check up", "Major and Minor Surgery", "Veterinary Physician", "Veterinary Consultation"
     ],
     distance : 2.8,
-    location:"Mumbai"
+    location:"Mumbai",
+    latitude:19.242361306837687,
+    longitude: 72.86950667554311,
   },
   {
     id: "3",
@@ -56,7 +60,9 @@ export const DUMMY_DATA = [
       "Pet Grooming", "Pet Care", "Pet Foods"
     ],
     distance : 3.4,
-    location:"Mumbai"
+    location:"Mumbai",
+    latitude:19.08514367768771,
+    longitude: 72.83079662186006,
   },
   {
     id: "4",
@@ -73,7 +79,9 @@ export const DUMMY_DATA = [
       "Pet Accessories", "Pet Care", "Pet Food", "Pet Grooming"
     ],
     distance : 2,
-    location:"Matunga"
+    location:"Matunga",
+    latitude:19.027410409332173,
+    longitude: 72.85331621016677,
   },
   {
     id: "5",
@@ -92,7 +100,9 @@ export const DUMMY_DATA = [
       "Pet Boarding", "Pet Grooming"
     ],
     distance : 4.2,
-    location:"Vasai"
+    location:"Vasai",
+    latitude:19.377015892010295, 
+    longitude:72.81850752670081,
   },
   {
     id: "6",
@@ -109,7 +119,9 @@ export const DUMMY_DATA = [
       "Clean up", "immunology", "parasitology", "Surgery"
     ],
     distance : 3.2,
-    location:"Malad"
+    location:"Malad",
+    latitude:19.200720339564388, 
+    longitude:72.84246270602277,
   },
   {
     id: "7",
@@ -126,7 +138,9 @@ export const DUMMY_DATA = [
       "Clean up", "immunology", "parasitology", "Surgery"
     ],
     distance : 4.6,
-    location:"Andheri"
+    location:"Andheri",
+    latitude:19.118087432156685, 
+    longitude:72.84104454678794,
   },
   {
     id: "8",
@@ -143,6 +157,8 @@ export const DUMMY_DATA = [
       "Clean up", "immunology", "parasitology", "Surgery"
     ],
     distance : 5,
-    location:"Chembur"
+    location:"Chembur",
+    latitude:19.052923223230007, 
+    longitude:72.89434219487455,
   },
 ];
