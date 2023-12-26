@@ -1,4 +1,3 @@
-
 import '../App.css';
 import Dash from './Pages/Dash';
 import {
@@ -21,8 +20,11 @@ import ProductManagingForm from './Forms/ProductManagingForm';
 import ServiceProviderForm from './Forms/ServiceProviderForm';
 import ManagageServicesForm from './Forms/ManagageServicesForm';
 import distance from './Utils/DistaceCalc';
+import packageJson from '../../package.json'
+import BookingAppointment from './Pages/BookingAppointment';
+import Services from './Pages/Services';
 const routing = createBrowserRouter([
-  
+
   {
     path: '/',
     element: <App />,
@@ -32,40 +34,47 @@ const routing = createBrowserRouter([
         path: '/'
       },
       {
-        path:'/splash',
-        element:<Splash/>
+        path: '/splash',
+        element: <Splash />
       },
       {
-        path:'/reg',
-        element:<Register/>
+        path: '/reg',
+        element: <Register />
       },
       {
-        path:'/pet',
-        element:<MyPet/>
+        path: '/pet',
+        element: <MyPet />
       },
       {
-        path:'/otp',
-        element:<Otp/>
+        path: '/otp',
+        element: <Otp />
       },
       {
-        path:'/:link',
-        element:<BusinessListing/>
+        path: '/:link',
+        element: <BusinessListing />
       },
       {
-        path:'/detail/:id',
-        element:<DetailPage/>
+        path: '/detail/:id',
+        element: <DetailPage />
       },
       {
-        path:'/productmanaging',
-        element : <ProductManagingForm/>
+        path: '/productmanaging',
+        element: <ProductManagingForm />
       },
       {
-        path:'/serviceproform',
-        element:<ServiceProviderForm/>
+        path: '/serviceproform',
+        element: <ServiceProviderForm />
       },
       {
-        path:"/manageServices",
-        element:<ManagageServicesForm/>
+        path: "/manageServices",
+        element: <ManagageServicesForm />
+      },
+      {
+        path: "/bookappointment",
+        element: <BookingAppointment />
+      }, {
+        path: "/services",
+        element: <Services />
       }
     ]
 
@@ -99,15 +108,9 @@ function error() {
 console.log(distance(localStorage.getItem('latitutde'), 19.200306300000012, localStorage.getItem('longitude'), 73.1647712).toFixed(2))
 
 function App() {
-  const [flag, setFlag]  = useState(false);
-  useEffect(()=>{
 
-  if(window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && window.location.pathname !== '/listing/pet'){
-    setFlag(true);
-  }
-},[flag])
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkLocalStorageAndRedirect(navigate);
@@ -118,7 +121,7 @@ const navigate = useNavigate();
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' &&window.location.pathname !== '/listing/services' && <Footer />}
+      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' && <Footer />}
     </>
 
   );
