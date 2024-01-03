@@ -7,12 +7,34 @@ import axios from "axios";
 const BusinessListing = () => {
   const [search, setSearch] = useState('')
   const [listData, setListData] = useState([]);
-  const {link, category } = useParams();
-  console.log(category);
+  const {link, id } = useParams();
   console.log(link)
+  console.log(id)
 
+ 
+  const returnHeading=(id)=>{
+    switch (id) {
+      case '5' : 
+      return 'Top Clinics'
+      case '6' : 
+      return 'Top Groomers'
+      case '7' : 
+      return 'Top Walkers'
+      case '8' : 
+      return 'Top Boarders'
+      case '9' : 
+      return 'Top Trainers'
+      default : 
+      return ''
+    }
+  }
+  let heading = "";
+  
+   heading =  returnHeading(id);
+
+  
   useEffect(()=>{
-    axios.get('http://localhost:8081/listing')
+    axios.get(`http://localhost:8081/listing/${id}`)
     .then((res)=>{
       console.log(res.data);
       setListData(res.data);
@@ -51,11 +73,9 @@ const BusinessListing = () => {
               paddingBottom: "80px",
             }}
           >
-            {DUMMY_DATA.filter((item) => {
-              return item.category === link;
-            }).filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
+            {listData?.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
               return (
-                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading} date={item.date} img={item.imageSrc} altText={item.alt} id={item.id}/>
+                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading  || `${heading}`} date={item.date || ''} img={item.upload_image} altText={item.alt || "alternate image"} id={item.id}/>
                 // <Card
                 //   style={{
                 //     width: "100%",

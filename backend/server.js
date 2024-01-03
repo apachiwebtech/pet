@@ -8,10 +8,16 @@ dotenv.config();
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: '*',
   })
 );
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -23,6 +29,12 @@ app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
+// const con = sql.createConnection({
+//   host: 'localhost',
+//   user: 'pet_shop',
+//   password: '}jR1Z(UR#w7d',
+//   database: 'pet_shop',
+// })
 const con = sql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -32,14 +44,27 @@ const con = sql.createConnection({
 
 con.connect((err) => {
   if (err) {
-    ('err')
+    console.log('err')
   }
   else {
-    ('connection is ok')
+    console.log('connection is ok')
   }
 })
+// const response = {
+//   connected: false,
+//   message: 'pls connect'
+// };
 
+// con.connect('/',(err) => {
+//   if (err) {
+//     response.message = `Error connecting to database: ${err.message}`;
+//   } else {
+//     response.connected = true;
+//     response.message = 'Connected to database!';
+//     // Perform other operations here after successful connection
+//   }
 
+// })
 
 app.post('/login', (req, res) => {
   let email = req.body.email;
@@ -62,7 +87,13 @@ app.post('/login', (req, res) => {
           text : `your otp has been updated to ${otp}`,
           
         }
-
+        transporter.verify(function (error, success) {
+          if (error) {
+            console.log(error, "error connecting server");
+          } else {
+            console.log("Server is ready to take our messages");
+          }
+        });
         transporter.sendMail(mailOptions, (error, data) => {
           if (error) {
             console.log(error);
@@ -106,7 +137,13 @@ app.post('/login', (req, res) => {
               subject: 'Welcome to Our Platform!',
               text: 'Thank you for registering. Your OTP is ' + otp,
             };
-
+            transporter.verify(function (error, success) {
+              if (error) {
+                console.log(error, "error connecting server");
+              } else {
+                console.log("Server is ready to take our messages");
+              }
+            });
             transporter.sendMail(mailOptions, (error, data) => {
               if (error) {
                 console.log(error);
@@ -215,7 +252,13 @@ app.post('/provider_login', (req, res) => {
           text : `your otp has been updated to ${otp}`,
           
         }
-
+        transporter.verify(function (error, success) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Server is ready to take our messages");
+          }
+        });
         transporter.sendMail(mailOptions, (error, data) => {
           if (error) {
             console.log(error);
@@ -260,6 +303,13 @@ app.post('/provider_login', (req, res) => {
               text: 'Thank you for registering. Your OTP is ' + otp,
             };
 
+            transporter.verify(function (error, success) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log("Server is ready to take our messages");
+              }
+            });
             transporter.sendMail(mailOptions, (error, data) => {
               if (error) {
                 console.log(error);
@@ -404,7 +454,7 @@ app.post('/resend_provider', (req, res) => {
 
 app.post('/dashboard', (req,res)=>{
   const type = req.body.type;
-  const sql = "SELECT title ,icon, type , status,link from awt_dashboard where type = ? and status = 1 and deleted = 0";
+  const sql = "SELECT id,title ,icon, type , status,link from awt_dashboard where type = ? and status = 1 and deleted = 0";
 
   con.query(sql , [type] , (err,data)=>{
     if(err){
@@ -437,7 +487,7 @@ const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   service : 'gmail',
-  secure: true,
+  secure: false,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
     user: process.env.SMTP_MAIL,
@@ -446,10 +496,26 @@ const transporter = nodemailer.createTransport({
 });
 
 
-app.get('/listing', (req, res, next)=>{
-  const sql = 'SELECT * FROM awt_add_services'
+app.get('/listing/:id', (req, res, next)=>{
 
-  con.query(sql, (err,data)=>{
+  const id = req.params.id;
+  const sql = 'SELECT * FROM awt_add_services WHERE scatid = ?'
+
+  con.query(sql,[id], (err,data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
+
+app.get('/detailPage/:id', (req, res, next)=>{
+  const id = req.params.id;
+
+  const sql = 'SELECT * FROM awt_add_services WHERE id = ?'
+
+  con.query(sql,[id], (err, data)=>{
     if(err){
       return res.json(err);
     }else{

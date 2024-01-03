@@ -6,6 +6,7 @@ import CustomInput from "../UI/CustomInput";
 import PrimaryButton from "../UI/PrimaryButton";
 import PetProfileForm from "../Forms/PetProfileForm";
 import MaleIcon from '@mui/icons-material/Male';
+import DropDown from "../UI/DropDown";
 const MyPet = () => {
   const [values, setValues] = useState({
     parent: "",
@@ -30,6 +31,28 @@ const MyPet = () => {
       pincode: ""
     });
   };
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const style = {
+      position: 'absolute' ,
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 2,
+    };
+
+    const [selectedOption, setSelectedOption] = useState("");
+    const handleSelectedOption = (option) => {
+      console.log(option, 'from MyPet component');
+  setSelectedOption(option);
+      // Further logic with the selected option in the parent component
+    };
+
+    console.log(selectedOption, "selected option ftom my pet")
   return (
     <div className="main" style={{ position: "relative", paddingBottom: "80px" }}>
       <div className="pet-img">
@@ -70,31 +93,31 @@ const MyPet = () => {
 
 
 
-          <div style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
+          <div onClick={handleOpen} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Species</p>
             <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>Dog</span>
 
           </div>
-          <div style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
+          <div onClick={handleOpen} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Age</p>
             <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>1.7 y</span>
 
           </div>
-          <div style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
+          <div onClick={handleOpen} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Weight</p>
             <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>7.5 kg</span>
 
           </div>
-          <div style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
+          <div onClick={handleOpen} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Height</p>
             <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>54 cm</span>
 
           </div>
-          <div style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
+          <div onClick={handleOpen} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Color</p>
             <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>Black</span>
@@ -104,6 +127,11 @@ const MyPet = () => {
 
         </div>
         <PetProfileForm />
+        <DropDown
+           open={open}
+           onClose={handleClose}
+           onSelect={handleSelectedOption}
+        ></DropDown>
       </div>
     </div>
   );

@@ -23,6 +23,8 @@ import distance from './Utils/DistaceCalc';
 import packageJson from '../../package.json'
 import BookingAppointment from './Pages/BookingAppointment';
 import Services from './Pages/Services';
+import Reviews from './Pages/Reviews';
+
 const routing = createBrowserRouter([
 
   {
@@ -42,7 +44,7 @@ const routing = createBrowserRouter([
         element: <Register />
       },
       {
-        path: '/pet',
+        path: '/pet/:id',
         element: <MyPet />
       },
       {
@@ -50,11 +52,11 @@ const routing = createBrowserRouter([
         element: <Otp />
       },
       {
-        path: '/:link',
+        path: '/:link/:id',
         element: <BusinessListing />
       },
       {
-        path: '/detail/:id',
+        path: '/detailPage/:id',
         element: <DetailPage />
       },
       {
@@ -75,7 +77,12 @@ const routing = createBrowserRouter([
       }, {
         path: "/services",
         element: <Services />
+      },
+      {
+        path: "/reviews",
+        element:<Reviews/>
       }
+      
     ]
 
   }

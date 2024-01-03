@@ -9,7 +9,7 @@ import {DUMMY_DATA} from '../../Dummy_Data'
 import { NavLink } from 'react-router-dom';
 const ListingCard = (props)=>{
     return (
-      <NavLink to={`/detail/${props.id}` }style={{textDecoration:"none"}}>
+      <NavLink to={`/detailPage/${props.id}` }style={{textDecoration:"none"}}>
 
      
         <Card
@@ -86,12 +86,12 @@ const ListingCard = (props)=>{
                         position: "relative",
                       }}
                     >
-                      <NavLink to={`/detail/${props.id}`}>
+                     
 
                       <h6 style={{ margin: "0 0 0px 0", color: "#454545",whiteSpace:"wrap",fontSize:"1rem" }}>
                         {props.title}
                       </h6>
-                      </NavLink>
+                      
                       <p
                         style={{
                           fontSize: "0.7rem",

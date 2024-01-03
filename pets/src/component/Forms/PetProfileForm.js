@@ -69,8 +69,8 @@ const PetProfileForm = () => {
                 <CustomInput style={{ width: "30%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="PIN Code" name="pincode" value={values.pincode} maxLength='6' onChange={handleChange}/>
             </form>
             <div style={{marginTop:"20px", display:"flex",justifyContent:"space-between", gap:"10px", width:"100%", backgroundColor:""}}>
-                <PrimaryButton type="submit" form="profileForm" style={{width:"100%", padding:"10px", borderRadius:"5px",backgroundColor:"#4acf7e", color:"white",border:"none",fontSize:"1rem"}}>Save Profile</PrimaryButton>
-                <PrimaryButton type="submit" form="profileForm" style={{width:"100%", padding:"10px", borderRadius:"5px",backgroundColor:"#4acf7e",color:"white", border:"none",fontSize:"1rem"}}>Post to Community</PrimaryButton>              
+                <PrimaryButton type="submit" form="profileForm" >Save Profile</PrimaryButton>
+                <PrimaryButton type="submit" form="profileForm" >Post to Community</PrimaryButton>              
             </div>
         </div>  )
 }
