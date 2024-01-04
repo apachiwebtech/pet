@@ -18,6 +18,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -516,6 +517,19 @@ app.get('/detailPage/:id', (req, res, next)=>{
   const sql = 'SELECT * FROM awt_add_services WHERE id = ?'
 
   con.query(sql,[id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
+
+app.get('/get_category', (req, res, next)=>{
+
+  const sql = 'SELECT * FROM awt_dashboard where deleted = 0 and status = 1'
+
+  con.query(sql, (err, data)=>{
     if(err){
       return res.json(err);
     }else{

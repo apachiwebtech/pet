@@ -251,5 +251,7 @@ input[type='file'] { font-size: 0; }
   border-radius: 5px;
   
 }
-
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  padding-left: 0px !important;
+}
 /* Service form end */

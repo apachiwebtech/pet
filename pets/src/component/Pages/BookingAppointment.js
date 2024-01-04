@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import PrimaryButton from "../UI/PrimaryButton";
 import classes from "./BookingAppointment.module.css";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Card from "../UI/Card";
+
+import { createTheme } from "@mui/material/styles";
 
 const BookingAppointment = () => {
   const newTheme = (theme) =>
@@ -115,13 +112,7 @@ const BookingAppointment = () => {
           gap: "",
         }}
       >
-        <Card style={{ padding: "0", height: "100%" }}>
-          <ThemeProvider  theme={newTheme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <StaticDatePicker sx={{fontSize : "50px"}} orientation="portrait" />
-            </LocalizationProvider>
-          </ThemeProvider>
-        </Card>
+    
         <div style={{padding:"10px"}}>
 
         <h3 style={{padding:"0", marginBottom:"20px"}}>Select appointment timing</h3>
