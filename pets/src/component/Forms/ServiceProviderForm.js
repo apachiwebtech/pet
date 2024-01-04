@@ -10,16 +10,21 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete"
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { red } from '@mui/material/colors';
 
 
 const ServiceProviderForm = () => {
     const [address, setAddress] = useState('');
     const [scriptLoaded, setScriptLoaded] = useState(false);
-    const [cat , setCat] = useState([])
+    const [cat, setCat] = useState([])
     const [value, setValue] = useState({
-
+        image: '',
+        image2: '',
+        image3: '',
     })
-
+    const [image, setImage] = useState(null);
+    const [image2, setImage2] = useState(null);
+    const [image3, setImage3] = useState(null);
     const [coordinates, setCoordinates] = useState({
         lat: null,
         lng: null,
@@ -87,7 +92,7 @@ const ServiceProviderForm = () => {
     async function getcategory() {
         axios.get(`${BASE_URL}/get_category`)
             .then((res) => {
-               setCat(res.data)
+                setCat(res.data)
             })
             .catch((err) => {
                 console.log(err)
@@ -97,6 +102,54 @@ const ServiceProviderForm = () => {
     useEffect(() => {
         getcategory()
     })
+    async function ImageBase64(file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        const data = new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (err) => reject(err);
+        });
+
+        return data;
+    }
+    
+    const handleUpload = async (e) => {
+        document.getElementById("uptext1").style.display = "none"
+        const data = await ImageBase64(e.target.files[0]);
+        const file = e.target.files[0];
+        setImage(file);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image: data,
+            };
+        });
+    };
+    const handleUpload2 = async (e) => {
+        document.getElementById("uptext2").style.display = "none"
+        const data = await ImageBase64(e.target.files[0]);
+        const file = e.target.files[0];
+        setImage2(file);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image2: data,
+            };
+        });
+    };
+    const handleUpload3 = async (e) => {
+        document.getElementById("uptext3").style.display = "none"
+        const data = await ImageBase64(e.target.files[0]);
+        const file = e.target.files[0];
+        setImage3(file);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image3: data,
+            };
+        });
+    };
 
     const onHandleChange = (e) => {
         setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -112,16 +165,17 @@ const ServiceProviderForm = () => {
                             disablePortal
                             id="combo-box-demo"
                             options={cat.map((item) => item.title)}
-                            sx={{ width: "100%" }}
+                            sx={{ width: "100%",borderRadius : "8px" ,border : "1px solid #757575",boxShadow : " 0 2px 6px rgba(0, 0, 0, 0.3)" }}
                             className='my-2'
                             renderInput={(params) => <TextField {...params} label="Category" />}
+                            name="category"
                         />
-                        <CustomInput className="my-2" placeholder="Shop/Service Name" onChange={onHandleChange} />
-                        <CustomInput className="my-2" placeholder="Owner's Name" onChange={onHandleChange} />
+                        <CustomInput className="my-2" placeholder="Shop/Service Name" onChange={onHandleChange} name="service" />
+                        <CustomInput className="my-2" placeholder="Owner's Name(Enter full name)" onChange={onHandleChange} name="fullname" />
 
                         <div className='d-flex'>
-                            <CustomInput className="my-2 mx-1" placeholder="Contact No 1" onChange={onHandleChange} />
-                            <CustomInput className="my-2 mx-1" placeholder="Contact No 2" onChange={onHandleChange} />
+                            <CustomInput className="my-2 " style={{marginRight : "0.25rem"}} placeholder="Contact No 1" onChange={onHandleChange} />
+                            <CustomInput className="my-2 " style={{marginLeft : "0.25rem"}} placeholder="Contact No 2" onChange={onHandleChange} />
                         </div>
                         <PlacesAutocomplete
                             value={address}
@@ -183,16 +237,19 @@ const ServiceProviderForm = () => {
                         </div>
                         <div className='d-flex justify-content-evenly '>
                             <div className='upload-box' style={{ position: "relative" }}>
-                                <p>Upload 1</p>
-                                <input type='file' placeholder='upload' />
+                                <p id='uptext1' style={{zIndex : "-1"}}>Upload 1</p>
+                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload} />
                             </div>
                             <div className='upload-box' style={{ position: "relative" }}>
-                                <p>Upload 2</p>
-                                <input type='file' placeholder='upload' />
+                                <p id='uptext2' style={{zIndex : "-1"}}>Upload 2</p>
+                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload2} />
                             </div>
                             <div className='upload-box' style={{ position: "relative" }}>
-                                <p>Upload 3</p>
-                                <input type='file' placeholder='upload' />
+                                <p id='uptext3' style={{zIndex : "-1"}}>Upload 3</p>
+                                <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload3} />
                             </div>
                         </div>
                         <Link to="/"><PrimaryButton type="submit" children="Submit" className="mt-5" /></Link>
