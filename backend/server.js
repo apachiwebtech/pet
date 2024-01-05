@@ -3,6 +3,8 @@ const express = require('express')
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv')
 const app = express()
+const path = require('path');
+const multer = require('multer');
 const cors = require('cors');
 dotenv.config();
 
@@ -20,6 +22,14 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
+
+const storage = multer.diskStorage({
+  destination: 'uploads/', // 
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   return res.json("this is from backend")
@@ -537,3 +547,26 @@ app.get('/get_category', (req, res, next)=>{
     }
   })
 })
+
+app.post('/provider_details', upload.single('image'),  (req, res) => {
+  let pet_id = req.body.pet_id;
+  let imagepath = req.file.filename;
+  let fullname = req.body.fullname;
+  let mobile = req.body.mobile;
+  let mobile1 = req.body.mobile1;
+  let address = req.body.address;
+  let state = req.body.state;
+  let pin = req.body.pin;
+  let currentDate = new Date();
+
+  const sql = "update awt_service_register set profile = ? , fullname = ?,mobile = ? , mobile2 = ? , address = ?,state = ?,pin = ?, updated_date = ? where id = ?";
+
+  con.query(sql, [imagepath,fullname,mobile,mobile1,address,state,pin,currentDate,pet_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    }
+    else {
+      return res.json(data)
+    }
+  })
+});

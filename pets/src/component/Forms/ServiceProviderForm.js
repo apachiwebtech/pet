@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import CustomInput from '../UI/CustomInput'
 import PrimaryButton from '../UI/PrimaryButton'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../Utils/BaseUrl';
+import Validation from '../Utils/Validate'
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
@@ -15,12 +16,18 @@ import { red } from '@mui/material/colors';
 
 const ServiceProviderForm = () => {
     const [address, setAddress] = useState('');
+    const [errors, setError] = useState({});
     const [scriptLoaded, setScriptLoaded] = useState(false);
     const [cat, setCat] = useState([])
     const [value, setValue] = useState({
         image: '',
-        image2: '',
-        image3: '',
+        fullname: '',
+        mobile: '',
+        mobile1: '',
+        address: '',
+        state: '',
+        city: '',
+        pin: '',
     })
     const [image, setImage] = useState(null);
     const [image2, setImage2] = useState(null);
@@ -71,23 +78,8 @@ const ServiceProviderForm = () => {
     }, []);
 
 
-    // console.log(address, "addrees")
 
-    const onhandleSubmit = (e) => {
-        e.preventDefault();
 
-        const data = {
-
-        }
-
-        axios.post(`${BASE_URL}/add_provider`, data)
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
 
     async function getcategory() {
         axios.get(`${BASE_URL}/get_category`)
@@ -101,7 +93,7 @@ const ServiceProviderForm = () => {
 
     useEffect(() => {
         getcategory()
-    })
+    }, [])
     async function ImageBase64(file) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -113,7 +105,7 @@ const ServiceProviderForm = () => {
 
         return data;
     }
-    
+
     const handleUpload = async (e) => {
         document.getElementById("uptext1").style.display = "none"
         const data = await ImageBase64(e.target.files[0]);
@@ -126,6 +118,44 @@ const ServiceProviderForm = () => {
             };
         });
     };
+    const Navigate = useNavigate()
+    const handlesubmit = (e) => {
+        e.preventDefault()
+        setError(Validation(value));
+        setTimeout(() => {
+            setError("");
+        }, 5000);
+        const formData = new FormData();
+        formData.append('pet_id', localStorage.getItem("pet_id"))
+        formData.append('image', image)
+        formData.append('fullname', value.fullname)
+        formData.append('mobile', value.mobile)
+        formData.append('mobile1', value.mobile1)
+        formData.append('address', value.address)
+        formData.append('state', value.state)
+        formData.append('pin', value.pin)
+
+        if (value.address !== "" && value.image !== "" && value.fullname !== "" && value.mobile !== "" && value.address !== "" && value.state !== "" && value.city !== "" && image !== "") {
+
+            fetch(`${BASE_URL}/provider_details`, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(data => {
+                    if (data) {
+                        Navigate('/')
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        } else {
+
+        }
+
+    }
+
+
     const handleUpload2 = async (e) => {
         document.getElementById("uptext2").style.display = "none"
         const data = await ImageBase64(e.target.files[0]);
@@ -158,32 +188,57 @@ const ServiceProviderForm = () => {
     return (
         <div className='mx-2'>
             {scriptLoaded && (
-                <form onSubmit={onhandleSubmit}>
+                <form onSubmit={handlesubmit} method='POST'>
                     <div>
+
+                        <div className='d-flex '>
+                            <div className='upload-box' style={{ position: "relative" }}>
+                                <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>profile</p>
+                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                            </div>
+                            {/* <div className='upload-box' style={{ position: "relative" }}>
+                                <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload2} />
+                            </div>
+                            <div className='upload-box' style={{ position: "relative" }}>
+                                <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                                <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload3} />
+                            </div> */}
+                        </div>
+                        <p class='text-danger m-0 pl-31'>{errors.image}</p>
                         {/* <CustomInput className="my-2" placeholder="Category: <drop-down feild " onChange={onHandleChange} /> */}
-                        <Autocomplete
+                        {/* <Autocomplete
                             disablePortal
                             id="combo-box-demo"
                             options={cat.map((item) => item.title)}
-                            sx={{ width: "100%",borderRadius : "8px" ,border : "1px solid #757575",boxShadow : " 0 2px 6px rgba(0, 0, 0, 0.3)" }}
+                            sx={{ width: "100%", borderRadius: "8px", border: "1px solid #757575", boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)" }}
                             className='my-2'
                             renderInput={(params) => <TextField {...params} label="Category" />}
                             name="category"
-                        />
-                        <CustomInput className="my-2" placeholder="Shop/Service Name" onChange={onHandleChange} name="service" />
+                        /> */}
+                        {/* <CustomInput className="my-2" placeholder="Shop/Service Name" onChange={onHandleChange} name="service" /> */}
                         <CustomInput className="my-2" placeholder="Owner's Name(Enter full name)" onChange={onHandleChange} name="fullname" />
-
+                        <p class='text-danger m-0 pl-31'>{errors.fullname}</p>
                         <div className='d-flex'>
-                            <CustomInput className="my-2 " style={{marginRight : "0.25rem"}} placeholder="Contact No 1" onChange={onHandleChange} />
-                            <CustomInput className="my-2 " style={{marginLeft : "0.25rem"}} placeholder="Contact No 2" onChange={onHandleChange} />
+                            <div>
+                                <CustomInput className="my-2 " style={{ marginRight: "0.25rem" }} placeholder="Contact No 1" onChange={onHandleChange} name="mobile" />
+                                <p class='text-danger m-0 pl-31'>{errors.mobile}</p>
+                            </div>
+                            <div>
+                                <CustomInput className="my-2 " style={{ marginLeft: "0.25rem" }} placeholder="Contact No 2" onChange={onHandleChange} name="mobile1" />
+
+                            </div>
                         </div>
                         <PlacesAutocomplete
+
                             value={address}
                             onChange={setAddress}
                             onSelect={handleSelect}
                             searchOptions={{
                                 bounds: MaharashtraBounds,
-                                // You can add other search options here if needed
                             }}
                         >
                             {({
@@ -225,34 +280,22 @@ const ServiceProviderForm = () => {
                                 </div>
                             )}
                         </PlacesAutocomplete>
-                        <CustomInput className="my-2" placeholder="State" onChange={onHandleChange} />
+                        <CustomInput className="my-2" placeholder="Address" onChange={onHandleChange} name="address" />
+                        <p class='text-danger m-0 pl-31'>{errors.address}</p>
+                        <CustomInput className="my-2" placeholder="State" onChange={onHandleChange} name="state" />
+                        <p class='text-danger m-0 pl-31'>{errors.state}</p>
 
                         <div className=' row d-flex justify-content-between'>
                             <div className='col-7'>
-                                <CustomInput className="my-2 " placeholder="city" onChange={onHandleChange} />
+                                <CustomInput className="my-2 " placeholder="city" onChange={onHandleChange} name="city" />
+                                <p class='text-danger m-0 pl-31'>{errors.city}</p>
                             </div>
                             <div className='col-4 '>
-                                <CustomInput className="my-2 " placeholder="Pin Code" onChange={onHandleChange} />
+                                <CustomInput className="my-2 " placeholder="Pin Code" onChange={onHandleChange} name="pin" />
+                                <p class='text-danger m-0 pl-31'>{errors.pin}</p>
                             </div>
                         </div>
-                        <div className='d-flex justify-content-evenly '>
-                            <div className='upload-box' style={{ position: "relative" }}>
-                                <p id='uptext1' style={{zIndex : "-1"}}>Upload 1</p>
-                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                <input type='file' placeholder='upload' onChange={handleUpload} />
-                            </div>
-                            <div className='upload-box' style={{ position: "relative" }}>
-                                <p id='uptext2' style={{zIndex : "-1"}}>Upload 2</p>
-                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                <input type='file' placeholder='upload' onChange={handleUpload2} />
-                            </div>
-                            <div className='upload-box' style={{ position: "relative" }}>
-                                <p id='uptext3' style={{zIndex : "-1"}}>Upload 3</p>
-                                <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                <input type='file' placeholder='upload' onChange={handleUpload3} />
-                            </div>
-                        </div>
-                        <Link to="/"><PrimaryButton type="submit" children="Submit" className="mt-5" /></Link>
+                        <PrimaryButton type="submit" children="Submit" className="mt-5" />
                     </div>
                 </form>
             )}
