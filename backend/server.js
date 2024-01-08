@@ -523,3 +523,61 @@ app.get('/detailPage/:id', (req, res, next)=>{
     }
   })
 })
+app.get('/recommendedFor/:id', (req, res, next)=>{
+  const id = req.params.id;
+
+  const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
+
+  con.query(sql,[id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
+
+app.post('/addComment', (req, res, next)=>{
+  const {pet_id, serviceProviderId, comment, rating} = req.body;
+  const currentDate = new Date();
+  const sql = 'INSERT INTO awt_comments (`user_id`,`service_provider_id`,`comment`, `rating`, `created_at`) VALUES (?,?,?,?,?)'
+
+  con.query(sql,[pet_id, serviceProviderId, comment, rating, currentDate], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.status(200).json({message: "Comment added successfully", status: 201})
+
+    }
+  })
+  
+})
+
+app.get('/getComments/:id', (req, res, next)=>{
+  const id = req.params.id;
+
+  const sql = 'SELECT * FROM awt_comments WHERE service_provider_id = ? AND deleted = 0'
+  con.query(sql,[id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.status(200).json(data)
+
+    }
+  })
+
+})
+
+app.post('/getUserName', (req, res, next)=>{
+  const {user_id} = req.body;
+
+  const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
+
+  con.query(sql, [user_id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})

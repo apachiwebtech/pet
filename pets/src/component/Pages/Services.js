@@ -78,7 +78,8 @@ const Services = () => {
             </Stack>
             <div className='area-covrage row d-flex justify-content-between mt-3 align-items-center'>
                 <TextField id="outlined-basic" label="Area Coverage" variant="outlined" className=' col-7' />
-                <PrimaryButton className='mt-2 col-4 '>Add +</PrimaryButton>
+                <PrimaryButton className='mt-2' style={{width:"100px"}}>Add +</PrimaryButton>
+
             </div>
 
             <div className='area-list mt-3'>
@@ -112,7 +113,7 @@ const Services = () => {
                         </DemoContainer>
                     </LocalizationProvider>
                 </div>
-                <PrimaryButton className='mt-2 col-4 '>Add +</PrimaryButton>
+                <PrimaryButton className='mt-2' style={{height:"inherit"}}>Add +</PrimaryButton>
             </div>
             <div className='custom-card p-2 row mt-3 text-center'>
                 <p className='col-3'>07:30 pm</p>
@@ -122,9 +123,9 @@ const Services = () => {
                 <p className='col-3'>11:30 pm</p>
                 <p className='col-3'>10:30 pm</p>
             </div>
-            {/* <div className=''>
+            <div className=''>
                 <PrimaryButton>Add Service +</PrimaryButton>
-            </div> */}
+            </div>
             <hr/>
 
             <div className='add-services mt-3 '>
@@ -178,8 +179,8 @@ const Services = () => {
                 </React.Fragment>
 
             </div>
-            <div className='position-fixed w-100' style={{bottom : "0px", left :"0px"}}>
-                <PrimaryButton className="w-100">Submit</PrimaryButton>
+            <div className='position-fixed' style={{bottom : "0px", left :"0px"}}>
+                <PrimaryButton className="" style={{width:"50%"}}>Submit</PrimaryButton>
             </div>
         </div>
     )

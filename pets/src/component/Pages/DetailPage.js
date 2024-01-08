@@ -23,6 +23,7 @@ const DetailPage = () => {
   const serviceProvider = DUMMY_DATA.find((itm) => itm.id === id);
   const [open, setOpen] = useState(false);
 
+  const [recommenderFor, setRecommendedFor] = useState([]);
   const [detail, setDetail] = useState({});
   console.log("component rerendered");
   const handleOpen = () => setOpen(true);
@@ -56,6 +57,15 @@ const DetailPage = () => {
     })
   },[])
 
+  useEffect(()=>{
+    axios.get(`http://localhost:8081/recommendedFor/${id}`)
+    .then((res)=>{
+      console.log(res.data);
+      setRecommendedFor(res.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }, [])
   console.log(detail.address)
 
   const handleCommentSubmuit=(event)=>{
@@ -184,7 +194,10 @@ const DetailPage = () => {
                 <FavoriteIcon sx={{ color: "#cc2944" }} />
               </span>
               <p style={{ margin: "0", fontSize: "" }}>
-                <ModeCommentOutlinedIcon onClick={handleOpen} />
+                <NavLink to={`/reviews/${serviceProvider.id}`} style={{color:"#757575"}}>
+
+                <ModeCommentOutlinedIcon/>
+                </NavLink>
               </p>
             </div>
           </div>
@@ -193,13 +206,14 @@ const DetailPage = () => {
           <p>{detail.description}</p>
           <div className={classes.tagsContainer}>
             <h6>Recommended for :</h6>
-            {/* <div className={classes.tags}>
-              {serviceProvider.recommendedFor.map((service) => {
-                return <span>{service}</span>;
+            <div className={classes.tags}>
+              {recommenderFor.map((item) => {
+                return <span>{item.recommended_for}</span>;
+                // console.log(item.recommended_for)
               })}
-            </div> */}
+            </div>
           </div>
-          <NavLink to="/bookappointment" style={{ textDecoration: "none" }}>
+          <NavLink to={`/bookappointment/${id}`} style={{ textDecoration: "none" }}>
             <PrimaryButton
               style={{
                 display: "flex",

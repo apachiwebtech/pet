@@ -24,6 +24,8 @@ import packageJson from '../../package.json'
 import BookingAppointment from './Pages/BookingAppointment';
 import Services from './Pages/Services';
 import Reviews from './Pages/Reviews';
+import { BASE_URL } from './Utils/BaseUrl';
+import axios from 'axios';
 
 const routing = createBrowserRouter([
 
@@ -72,14 +74,14 @@ const routing = createBrowserRouter([
         element: <ManagageServicesForm />
       },
       {
-        path: "/bookappointment",
+        path: "/bookappointment/:id",
         element: <BookingAppointment />
       }, {
         path: "/services",
         element: <Services />
       },
       {
-        path: "/reviews",
+        path: "/reviews/:id",
         element:<Reviews/>
       }
       
@@ -112,8 +114,20 @@ function success(position) {
 function error() {
   console.log("Unable to retrieve your location");
 }
-console.log(distance(localStorage.getItem('latitutde'), 19.200306300000012, localStorage.getItem('longitude'), 73.1647712).toFixed(2))
+// console.log(distance(localStorage.getItem('latitutde'), 19.200306300000012, localStorage.getItem('longitude'), 73.1647712).toFixed(2))
 
+const getUserName = (userId)=>{
+  const user_id = localStorage.getItem('pet_id');
+
+  axios.post(`${BASE_URL}/getUserName`, {user_id})
+  .then((res)=>{
+    localStorage.setItem('awt_parent_name', res.data[0].parent_name);
+    console.log(res.data[0])
+  })
+  .catch((err)=>{
+    console.log(err);
+  })
+}
 function App() {
 
 
@@ -121,6 +135,7 @@ function App() {
 
   useEffect(() => {
     checkLocalStorageAndRedirect(navigate);
+    getUserName();
   }, [navigate]);
 
   // console.log(packageJson.version, "this is the app version");
