@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import CustomInput from '../UI/CustomInput'
-import PrimaryButton from '../UI/PrimaryButton'
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL } from '../Utils/BaseUrl';
-import Validation from '../Utils/Validate'
+import React, { useEffect, useState } from 'react';
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
-} from "react-places-autocomplete"
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { red } from '@mui/material/colors';
+} from "react-places-autocomplete";
+import { useNavigate } from 'react-router-dom';
+import CustomInput from '../UI/CustomInput';
+import PrimaryButton from '../UI/PrimaryButton';
+import { BASE_URL } from '../Utils/BaseUrl';
+import Validation from '../Utils/Validate';
 
 
 const ServiceProviderForm = () => {
