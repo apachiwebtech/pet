@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PrimaryButton from "../UI/PrimaryButton";
 import classes from "./BookingAppointment.module.css";
 import dayjs from "dayjs";
@@ -80,48 +80,39 @@ const BookingAppointment = () => {
           gap: "10px",
         }}
       >
-        <Card
-          style={{
-            padding: "0",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* <ThemeProvider  theme={newTheme}>
+        <Card style={{ padding: "0", height: "100%" }}>
+          <ThemeProvider  theme={newTheme}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <StaticDatePicker sx={{fontSize : "50px"}} orientation="portrait" />
             </LocalizationProvider>
-          </ThemeProvider> */}
-
-          <ThemeProvider theme={newTheme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DateCalendar", "DateCalendar"]}>
-                <DemoItem>
-                  <DateCalendar
-                    showDaysOutsideCurrentMonth
-                    value={value}
-                    onChange={(newValue) => setValue(newValue)}
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider>
           </ThemeProvider>
         </Card>
-        <div style={{ padding: "10px" }}>
-          <h3 style={{ padding: "0", marginBottom: "20px" }}>
-            Select appointment timing
-          </h3>
-          <div className={classes.times}>
-            {timing.map((item) => {
-              return (
-                <span key={item} onClick={() => setTime(item)}>
-                  {item}
-                </span>
-              );
-            })}
-          </div>
+        <div style={{padding:"10px"}}>
+
+        <h3 style={{padding:"0", marginBottom:"20px"}}>Select appointment timing</h3>
+        <div className={classes.times}>
+          <span>9:00</span>
+
+          <span>10:00</span>
+
+          <span>11:00</span>
+
+          <span>12:00</span>
+
+          <span>2:00</span>
+
+          <span>3:00</span>
+
+          <span>4:00</span>
+
+          <span>5:00</span>
+
+          <span>6:00</span>
+
+          <span>7:00</span>
+          <span>8:00</span>
+          <span>9:00</span>
+        </div>
         </div>
       </div>
       <div style={{ width: "100%" }}>

@@ -17,7 +17,7 @@ const Header = () => {
       case '/pet' : 
       return 'Pet profile'  
       case '/serviceproform' : 
-      return 'Service Provider' 
+      return 'Provider Details' 
       case '/listing/services' : 
       return 'Services'  
       case '/productmanaging' : 

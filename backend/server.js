@@ -3,6 +3,8 @@ const express = require('express')
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv')
 const app = express()
+const path = require('path');
+const multer = require('multer');
 const cors = require('cors');
 dotenv.config();
 
@@ -18,7 +20,16 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
 app.use(express.json());
+
+const storage = multer.diskStorage({
+  destination: 'uploads/', // 
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   return res.json("this is from backend")
@@ -523,12 +534,21 @@ app.get('/detailPage/:id', (req, res, next)=>{
     }
   })
 })
+<<<<<<< HEAD
 app.get('/recommendedFor/:id', (req, res, next)=>{
   const id = req.params.id;
 
   const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
 
   con.query(sql,[id], (err, data)=>{
+=======
+
+app.get('/get_category', (req, res, next)=>{
+
+  const sql = 'SELECT * FROM awt_dashboard where deleted = 0 and status = 1'
+
+  con.query(sql, (err, data)=>{
+>>>>>>> d367c6daeb228b8b9401743e7b2088fe8ab285b9
     if(err){
       return res.json(err);
     }else{
@@ -537,6 +557,7 @@ app.get('/recommendedFor/:id', (req, res, next)=>{
   })
 })
 
+<<<<<<< HEAD
 app.post('/addComment', (req, res, next)=>{
   const {pet_id, serviceProviderId, comment, rating} = req.body;
   const currentDate = new Date();
@@ -581,3 +602,27 @@ app.post('/getUserName', (req, res, next)=>{
     }
   })
 })
+=======
+app.post('/provider_details', upload.single('image'),  (req, res) => {
+  let pet_id = req.body.pet_id;
+  let imagepath = req.file.filename;
+  let fullname = req.body.fullname;
+  let mobile = req.body.mobile;
+  let mobile1 = req.body.mobile1;
+  let address = req.body.address;
+  let state = req.body.state;
+  let pin = req.body.pin;
+  let currentDate = new Date();
+
+  const sql = "update awt_service_register set profile = ? , fullname = ?,mobile = ? , mobile2 = ? , address = ?,state = ?,pin = ?, updated_date = ? where id = ?";
+
+  con.query(sql, [imagepath,fullname,mobile,mobile1,address,state,pin,currentDate,pet_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    }
+    else {
+      return res.json(data)
+    }
+  })
+});
+>>>>>>> d367c6daeb228b8b9401743e7b2088fe8ab285b9

@@ -229,10 +229,13 @@ font-size: 13px;
 /* Service form start */
 input[type="file"]
 { 
-   border: 2px solid #34495e; 
+
    width: 100px; 
    height: 100px; 
-   border-radius: 3px; 
+   
+   border-radius: 8px;
+    border: 1px solid #757575;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 input[type='file'] { font-size: 0; }
@@ -241,7 +244,8 @@ input[type='file'] { font-size: 0; }
 .upload-box p {
   position: absolute;
   top: 51px;
-  left: 18px;
+  left: 27px;
+  
 }
 .area-list p{
   margin: 0px;
@@ -251,5 +255,14 @@ input[type='file'] { font-size: 0; }
   border-radius: 5px;
   
 }
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  padding-left: 0px !important;
+}
 
+.service-img{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 /* Service form end */
