@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PrimaryButton from "../UI/PrimaryButton";
 import classes from "./BookingAppointment.module.css";
 import dayjs from "dayjs";
@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
 import Card from "../UI/Card";
+import { StaticDatePicker } from "@mui/x-date-pickers";
 
 const timing = [
   "9:00",

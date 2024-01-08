@@ -26,6 +26,8 @@ import Services from './Pages/Services';
 import Reviews from './Pages/Reviews';
 import { BASE_URL } from './Utils/BaseUrl';
 import axios from 'axios';
+import AddService from './Forms/AddService';
+
 
 const routing = createBrowserRouter([
 
@@ -70,6 +72,10 @@ const routing = createBrowserRouter([
         element: <ServiceProviderForm />
       },
       {
+        path: '/addservice',
+        element: <AddService />
+      },
+      {
         path: "/manageServices",
         element: <ManagageServicesForm />
       },
@@ -83,7 +89,7 @@ const routing = createBrowserRouter([
       {
         path: "/reviews/:id",
         element:<Reviews/>
-      }
+            }
       
     ]
 
