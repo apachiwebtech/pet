@@ -6,6 +6,7 @@ const app = express()
 const path = require('path');
 const multer = require('multer');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 dotenv.config();
 
 app.use(
@@ -21,7 +22,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(express.json());
+// app.use(express.json());  
+app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
   destination: 'uploads/', // 
@@ -534,21 +536,18 @@ app.get('/detailPage/:id', (req, res, next)=>{
     }
   })
 })
-<<<<<<< HEAD
-app.get('/recommendedFor/:id', (req, res, next)=>{
-  const id = req.params.id;
+// app.get('/recommendedFor/:id', (req, res, next)=>{
+//   const id = req.params.id;
 
-  const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
+//   const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
 
-  con.query(sql,[id], (err, data)=>{
-=======
+//   con.query(sql,[id], (err, data)=>{
 
 app.get('/get_category', (req, res, next)=>{
 
   const sql = 'SELECT * FROM awt_dashboard where deleted = 0 and status = 1'
 
   con.query(sql, (err, data)=>{
->>>>>>> d367c6daeb228b8b9401743e7b2088fe8ab285b9
     if(err){
       return res.json(err);
     }else{
@@ -557,7 +556,6 @@ app.get('/get_category', (req, res, next)=>{
   })
 })
 
-<<<<<<< HEAD
 app.post('/addComment', (req, res, next)=>{
   const {pet_id, serviceProviderId, comment, rating} = req.body;
   const currentDate = new Date();
@@ -602,7 +600,7 @@ app.post('/getUserName', (req, res, next)=>{
     }
   })
 })
-=======
+
 app.post('/provider_details', upload.single('image'),  (req, res) => {
   let pet_id = req.body.pet_id;
   let imagepath = req.file.filename;
@@ -624,5 +622,46 @@ app.post('/provider_details', upload.single('image'),  (req, res) => {
       return res.json(data)
     }
   })
+})
+
+app.post('/add_service',upload.single('image') ,(req, res) => {
+  const category = req.body.category;
+  const service = req.body.service;
+  const address = req.body.address;
+  let imagepath = req.file.filename;
+  const description = req.body.description;
+  const user_id = req.body.user_id
+  const daysJSON = req.body.days;
+  const days = JSON.parse(daysJSON);
+
+  const created_date = new Date()
+
+  // Insert data into the main table
+  const insertMainQuery = 'INSERT INTO awt_add_services (catid, service, address, upload_image, description) VALUES (?, ?, ?, ?, ?)';
+  const mainValues = [1, service, address,imagepath, description];
+
+  con.query(insertMainQuery, mainValues, (err, mainResult) => {
+    if (err) {
+      console.error('Error inserting data into main table:', err);
+      return res.json(err);
+    }
+
+    const insertedId = mainResult.insertId;
+    console.log('Inserted ID:', insertedId);
+
+    // Now, insert 'days' data into another table
+    const insertDaysQuery = 'INSERT INTO awt_service_time (day, starttime, endtime, closed , created_date , created_by) VALUES ?';
+    const daysValues = days.map(day => [day.name, day.start, day.end, day.chaeckval, created_date , user_id]);
+
+    con.query(insertDaysQuery, [daysValues], (daysErr, daysResult) => {
+      if (daysErr) {
+        console.error('Error inserting data into days table:', daysErr);
+        return res.json(daysErr);
+      }
+
+      console.log('Data inserted into days table:', daysResult);
+
+      res.json({ message: 'Data received and inserted successfully' });
+    });
+  });
 });
->>>>>>> d367c6daeb228b8b9401743e7b2088fe8ab285b9

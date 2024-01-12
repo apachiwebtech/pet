@@ -30,7 +30,7 @@ const Header = () => {
   };
   return (
     <div className='head text-center position-relative'>
-        <p>{getPageName()}</p>
+        <p style={{color :"white"}}>{getPageName()}</p>
         {window.location.pathname !== '/' && <ArrowBackIosIcon className='head-arrow' onClick={() => navigate(-1)}/>} 
 
     </div>

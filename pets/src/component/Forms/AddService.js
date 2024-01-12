@@ -17,12 +17,10 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
-import axios from 'axios';
 import { BASE_URL } from '../Utils/BaseUrl';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -108,6 +106,12 @@ const AddService = () => {
 
 
     const [isChecked, setChecked] = useState(false);
+    const [isChecked2, setChecked2] = useState(false);
+    const [isChecked3, setChecked3] = useState(false);
+    const [isChecked7, setChecked7] = useState(false);
+    const [isChecked4, setChecked4] = useState(false);
+    const [isChecked5, setChecked5] = useState(false);
+    const [isChecked6, setChecked6] = useState(false);
 
 
     const handleClickOpen = () => {
@@ -118,14 +122,82 @@ const AddService = () => {
         setOpen(false);
     };
 
+
+    const [Checked, setCheckedVal] = useState(0);
+    const [Checked2, setCheckedVal2] = useState(0);
+    const [Checked3, setCheckedVal3] = useState(0);
+    const [Checked7, setCheckedVal7] = useState(0);
+    const [Checked4, setCheckedVal4] = useState(0);
+    const [Checked5, setCheckedVal5] = useState(0);
+    const [Checked6, setCheckedVal6] = useState(0);
+
     const handleCheckboxChange = () => {
         setChecked(!isChecked); // Toggle the checkbox state
 
         // Send the value as 1 or 0 based on the checkbox state
         const valueToSend = isChecked ? 0 : 1;
         // Now, you can use the 'valueToSend' variable as needed.
-        console.log(valueToSend);
+        setCheckedVal(valueToSend)
+        // console.log(valueToSend , "val1");
     };
+
+    const handleCheckboxChange2 = () => {
+        setChecked2(!isChecked2); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked2 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        // console.log(valueToSend , "val2");
+        setCheckedVal2(valueToSend)
+    };
+    const handleCheckboxChange3 = () => {
+        setChecked3(!isChecked3); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked3 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        // console.log(valueToSend);
+        setCheckedVal3(valueToSend)
+    };
+    const handleCheckboxChange4 = () => {
+        setChecked4(!isChecked4); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked4 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        // console.log(valueToSend);
+        setCheckedVal4(valueToSend)
+    };
+    const handleCheckboxChange5 = () => {
+        setChecked5(!isChecked5); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked5 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        console.log(valueToSend);
+        setCheckedVal5(valueToSend)
+    };
+    const handleCheckboxChange6 = () => {
+        setChecked6(!isChecked6); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked6 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        // console.log(valueToSend);
+        setCheckedVal6(valueToSend)
+    };
+    const handleCheckboxChange7 = () => {
+        setChecked7(!isChecked7); // Toggle the checkbox state
+
+        // Send the value as 1 or 0 based on the checkbox state
+        const valueToSend = isChecked7 ? 0 : 1;
+        // Now, you can use the 'valueToSend' variable as needed.
+        setCheckedVal7(valueToSend)
+    };
+
+
+
+
 
     async function ImageBase64(file) {
         const reader = new FileReader();
@@ -138,6 +210,17 @@ const AddService = () => {
 
         return data;
     }
+
+    const days = [
+        { name: 'Monday', start: selectedTime, handler: handleTimeChange, end: selectedTime2, handler2: handleTimeChange2, chaeckval: Checked, checkhandle: handleCheckboxChange },
+        { name: 'Tuesday', start: selectedTime3, handler: handleTimeChange3, end: selectedTime4, handler2: handleTimeChange4, chaeckval: Checked2, checkhandle: handleCheckboxChange2 },
+        { name: 'Wednesday', start: selectedTime5, handler: handleTimeChange5, end: selectedTime6, handler2: handleTimeChange6, chaeckval: Checked3, checkhandle: handleCheckboxChange3 },
+        { name: 'Thursday', start: selectedTime7, handler: handleTimeChange7, end: selectedTime8, handler2: handleTimeChange8, chaeckval: Checked4, checkhandle: handleCheckboxChange4 },
+        { name: 'Friday', start: selectedTime9, handler: handleTimeChange9, end: selectedTime10, handler2: handleTimeChange10, chaeckval: Checked5, checkhandle: handleCheckboxChange5 },
+        { name: 'Saturday', start: selectedTime11, handler: handleTimeChange11, end: selectedTime12, handler2: handleTimeChange12, chaeckval: Checked6, checkhandle: handleCheckboxChange6 },
+        { name: 'Sunday', start: selectedTime13, handler: handleTimeChange13, end: selectedTime14, handler2: handleTimeChange14, chaeckval: Checked7, checkhandle: handleCheckboxChange7 },
+    ];
+
 
 
 
@@ -184,7 +267,7 @@ const AddService = () => {
     }
 
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = (e) => {
         e.preventDefault()
 
         const formData = new FormData();
@@ -192,20 +275,23 @@ const AddService = () => {
         formData.append('service', value.servicename)
         formData.append('address', value.address)
         formData.append('image', image)
-        formData.append('image2', image2)
-        formData.append('image3', image3)
+        // formData.append('image2', image2)
+        // formData.append('image3', image3)
         formData.append('description', value.description)
+        formData.append('user_id', localStorage.getItem("pet_id"))
+
+        formData.append('days', JSON.stringify(days));
 
         fetch(`${BASE_URL}/add_service`, {
             method: 'POST',
             body: formData,
         })
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
     return (
 
@@ -241,7 +327,7 @@ const AddService = () => {
                     </div>
                 </div>
                 <div className='my-2'>
-                    <PrimaryButton children="Add Timings" onClick={handleClickOpen} />
+                    <PrimaryButton children="Add Timings" type="button"  onClick={handleClickOpen} />
                     <Dialog
                         fullScreen
                         open={open}
@@ -274,7 +360,7 @@ const AddService = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-
+                                    {/* 
                                     <TableRow
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
@@ -282,7 +368,7 @@ const AddService = () => {
                                         <TableCell align="left">
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange} />
+                                                <MobileTimePicker defaultValue={days.state} onChange={(newTime) => days.handler(newTime)}  />
 
                                             </LocalizationProvider>
                                         </TableCell>
@@ -428,7 +514,25 @@ const AddService = () => {
                                         <TableCell align="left">
                                             <Checkbox {...label} defaultChecked className='text-danger' />
                                         </TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
+                                    {days.map((day, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="left">{day.name}</TableCell>
+                                            <TableCell align="left">
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} />
+                                                </LocalizationProvider>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileTimePicker defaultValue={day.end} onChange={(newTime) => day.handler2(newTime)} />
+                                                </LocalizationProvider>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Checkbox {...label}  className='text-danger' onChange={() => day.checkhandle()} />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
