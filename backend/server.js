@@ -638,7 +638,7 @@ app.post('/add_service', upload.single('image'), (req, res) => {
 
   // Insert data into the main table
   const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image, description , created_date , created_by) VALUES (?, ?, ?, ?, ?,?,?)';
-  const mainValues = [1, service, address, imagepath, description, created_date, user_id];
+  const mainValues = [category, service, address, imagepath, description, created_date, user_id];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
     if (err) {
@@ -671,6 +671,52 @@ app.post('/service_listing', (req, res) => {
   let user_id = req.body.user_id
 
   const sql = "select * from awt_add_services where created_by = ? and deleted = 0 order by id desc";
+
+  con.query(sql, [user_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      return res.json(data)
+    }
+  })
+})
+
+app.post('/add_product', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 }
+]), (req, res) => {
+  let user_id = req.body.user_id
+  let title = req.body.title
+  let description =req.body.description;
+  const image1 = req.files['image'];
+  const image2 = req.files['image2'];
+  const image3 = req.files['image3'];
+
+  let img1 = image1[0].filename
+  let img2 = image2[0].filename
+  let img3 = image3[0].filename
+  let date = new Date()
+
+  console.log(img1)
+
+
+  const sql = "insert into awt_add_product(`title`,`description`,`upload_image`,`upload_image2`,`upload_image3`,`created_date`,`created_by`) values(?,?,?,?,?,?,?)";
+
+  con.query(sql, [title,description,img1,img2,img3,date,user_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      return res.json(data)
+    }
+  })
+})
+
+app.post('/product_listing', (req, res) => {
+
+  let user_id = req.body.user_id
+
+  const sql = "select * from awt_add_product where created_by = ? and deleted = 0 order by id desc";
 
   con.query(sql, [user_id], (err, data) => {
     if (err) {

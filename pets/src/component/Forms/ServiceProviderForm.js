@@ -62,17 +62,17 @@ const ServiceProviderForm = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCZAhXRzVtn3HGzQyn5SZ9AJ20y8DefuU0&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqdnE5M-UzB69n455IQ5GPCmsdIXIfBQ&libraries=places`;
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));
-
+    
         document.head.appendChild(script);
-
+    
         return () => {
-            document.head.removeChild(script);
+          document.head.removeChild(script);
         };
-    }, []);
+      }, []);
 
 
 

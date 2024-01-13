@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CustomLinearProgress from "../UI/LinearProgressBar";
+import { BASE_URL } from "../Utils/BaseUrl";
 
 
 const Reviews = () => {
@@ -59,7 +60,7 @@ const Reviews = () => {
 
   const getComments = (id) => {
     axios
-      .get(`http://localhost:8081/getComments/${id}`)
+      .get(`${BASE_URL}/getComments/${id}`)
       .then((res) => {
         setCommentData(res.data.reverse());
         console.log(res.data);

@@ -26,7 +26,7 @@ const Dash = () => {
     getDashicon()
   }, [])
 
-// console.log(feild);
+  // console.log(feild);
   // const handlesearch = (e) =>{
   // setSearch(e.target.value)
   // }
@@ -35,17 +35,17 @@ const Dash = () => {
     <div className='mx-3'>
       <div className='text-center '>
         <p className='hello-text'>Hello, how can we help you</p>
-          <Search setSearch={setSearch} />
+        <Search setSearch={setSearch} />
       </div>
 
 
       <div className='row text-center pt-3 icon-area'>
 
         {
-          feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item,index) => {
+          feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item, index) => {
             return (
               <div className='col-4 py-2'>
-                 <Link to={`/${item.link}/${item.id}`}><img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
+                <Link to={`/${item.link}/${item.id}`}><img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
                 {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
                 <p>{item.title}</p>
               </div>
@@ -56,14 +56,30 @@ const Dash = () => {
       </div>
       <hr />
       <div className='d-flex justify-content-between text-center icon-area'>
-        <div className=''>
-          <StoreIcon className='dash-icon' />
-          <p>My <br />Appointment</p>
-        </div>
-        <div className=' '>
-          <StoreIcon className='dash-icon' />
-          <p>My Order <br /> Booking</p>
-        </div>
+
+        {
+          localStorage.getItem("pet_role") == 2 ?
+           <Link to="/servicerequest"><div className=''>
+           <StoreIcon className='dash-icon' />
+           <p>service <br />Request</p>
+         </div></Link>  :
+            <div className=''>
+              <StoreIcon className='dash-icon' />
+              <p>My <br />Appointment</p>
+            </div>
+        }
+        {
+          localStorage.getItem("pet_role") == 2 ?
+          <div className=' '><Link to="/productrequest">
+              <StoreIcon className='dash-icon' />
+              <p>Product  <br /> Request</p>
+              </Link> </div>:
+            <div className=' '>
+              <StoreIcon className='dash-icon' />
+              <p>My Order <br /> Booking</p>
+            </div>
+        }
+
       </div>
     </div>
   )

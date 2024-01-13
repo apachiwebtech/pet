@@ -17,13 +17,18 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { Autocomplete, TextField } from '@mui/material';
+import axios from 'axios';
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng,
+} from "react-places-autocomplete";
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -35,6 +40,7 @@ const AddService = () => {
     const [image, setImage] = useState(null);
     const [image2, setImage2] = useState(null);
     const [image3, setImage3] = useState(null);
+    const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTime2, setSelectedTime2] = useState(null);
     const [selectedTime3, setSelectedTime3] = useState(null);
@@ -50,7 +56,7 @@ const AddService = () => {
     const [selectedTime13, setSelectedTime13] = useState(null);
     const [selectedTime14, setSelectedTime14] = useState(null);
     const [value, setValue] = useState({
-        servicecategory: '',
+        category: '',
         servicename: '',
         description: '',
         address: '',
@@ -198,7 +204,55 @@ const AddService = () => {
         setCheckedVal7(valueToSend)
     };
 
+    const [address, setAddress] = useState('');
+    const [errors, setError] = useState({});
+    const [scriptLoaded, setScriptLoaded] = useState(false);
 
+
+    const [coordinates, setCoordinates] = useState({
+        lat: null,
+        lng: null,
+        point: null,
+    });
+
+    const handleSelect = async (selectedAddress) => {
+        try {
+            const results = await geocodeByAddress(selectedAddress);
+            const latLng = await getLatLng(results[0]);
+            console.log("Selected Address:", selectedAddress);
+            console.log("Coordinates:", latLng);
+            setAddress(selectedAddress);
+            setCoordinates({
+                lat: latLng.lat,
+                lng: latLng.lng,
+                point: { type: "Point", coordinates: [latLng.lng, latLng.lat] },
+            });
+        } catch (error) {
+            console.error("Error selecting address:", error);
+        }
+    };
+
+    const MaharashtraBounds = {
+        // Replace these values with the actual latitude and longitude bounds for Maharashtra
+        north: 21.748512,
+        south: 15.602284,
+        west: 72.659167,
+        east: 80.859336,
+    };
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqdnE5M-UzB69n455IQ5GPCmsdIXIfBQ&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        script.addEventListener("load", () => setScriptLoaded(true));
+    
+        document.head.appendChild(script);
+    
+        return () => {
+          document.head.removeChild(script);
+        };
+      }, []);
 
 
 
@@ -274,7 +328,7 @@ const AddService = () => {
         e.preventDefault()
 
         const formData = new FormData();
-        formData.append('category', value.servicecategory)
+        formData.append('category', value.category)
         formData.append('service', value.servicename)
         formData.append('address', value.address)
         formData.append('image', image)
@@ -300,74 +354,167 @@ const AddService = () => {
                 console.log(err)
             })
     }
+
+    async function getcategory() {
+        axios.get(`${BASE_URL}/get_category`)
+            .then((res) => {
+                setCat(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getcategory()
+    }, [])
+
+    const HandleChange = (selectedValue) => {
+        if (selectedValue) {
+            const selectedId = selectedValue.id;
+            console.log(selectedId, "ser");
+            // Now you have the selected id, you can use it in your application logic
+        }
+    };
+
+
+
+
     return (
+        <>
+            {scriptLoaded && (
+                <div className='mx-2'>
+                    <form onSubmit={handleSubmit} method='POST'>
 
-        <div className='mx-2'>
-            <form onSubmit={handleSubmit} method='POST'>
 
+                        <div className='my-2'>
+                            <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                options={cat}
+                                getOptionLabel={(option) => option.title}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                sx={{
+                                    width: "100%",
+                                    borderRadius: "8px",
+                                    border: "1px solid #757575",
+                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                }}
+                                className='my-2'
+                                renderInput={(params) => <TextField {...params} label="Category" />}
+                                name="category"
+                                onChange={(event, value) => HandleChange(value)} // Pass only the value
+                            />
+                            {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                        </div>
 
-                <div className='my-2'>
-                    <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} />
-                </div>
-                <div className='my-2'>
-                    <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
-                </div>
-                <div className='my-2'>
-                    <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
-                </div>
-                <div className='row text-center my-4'>
-                    <p>Service Images</p>
-                    <div className='upload-box col-4' style={{ position: "relative" }}>
-                        <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
-                        <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                        <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
-                    </div>
-                    <div className='upload-box col-4' style={{ position: "relative" }}>
-                        <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
-                        <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                        <input type='file' placeholder='upload' onChange={handleUpload2} />
-                    </div>
-                    <div className='upload-box col-4' style={{ position: "relative" }}>
-                        <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
-                        <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                        <input type='file' placeholder='upload' onChange={handleUpload3} />
-                    </div>
-                </div>
-                <div className='my-2'>
-                    <PrimaryButton children="Add Timings" type="button" onClick={handleClickOpen} />
-                    <Dialog
-                        fullScreen
-                        open={open}
-                        onClose={handleClose}
-                        TransitionComponent={Transition}
-                    >
-                        <AppBar sx={{ position: 'relative' }}>
-                            <Toolbar>
-                                <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                                    Select Time
-                                </Typography>
-                                <IconButton
-                                    edge="start"
-                                    color="inherit"
-                                    onClick={handleClose}
-                                    aria-label="close"
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            </Toolbar>
-                        </AppBar>
-                        <TableContainer component={Paper}>
-                            <Table sx={{ minWidth: 400 }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="left">Day</TableCell>
-                                        <TableCell align="center">Starttime</TableCell>
-                                        <TableCell align="center">Endtime</TableCell>
-                                        <TableCell align="center">Closed</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {/* 
+                        <div className='my-2'>
+                            <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
+                        </div>
+                            <PlacesAutocomplete
+
+                                value={address}
+                                onChange={setAddress}
+                                onSelect={handleSelect}
+                                searchOptions={{
+                                    bounds: MaharashtraBounds,
+                                }}
+                            >
+                                {({
+                                    getInputProps,
+                                    suggestions,
+                                    getSuggestionItemProps,
+                                    loading,
+                                }) => (
+                                    <div className="col-md-12">
+                        
+                                        <input
+                                            {...getInputProps({
+                                                className: "location-search-input form-control",
+                                                autoComplete: "on",
+                                            })}
+                                        />
+                                        <div className="autocomplete-dropdown-container">
+                                            {loading && <div>Loading...</div>}
+                                            {/* {console.log(suggestions, "sugge")} */}
+                                            {suggestions.map((suggestion,index) => {
+                                                const style = {
+                                                    backgroundColor: suggestion.active
+                                                        ? "#41b6e6"
+                                                        : "#fff",
+                                                };
+                                                return (
+                                                    <div
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            style,
+                                                        })}
+                                                        key={index}
+                                                    >
+                                                        {suggestion.description}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </PlacesAutocomplete>
+                        <div className='my-2'>
+                            <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
+                        </div>
+                        <div className='row text-center my-4'>
+                            <p>Service Images</p>
+                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
+                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                            </div>
+                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload2} />
+                            </div>
+                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                                <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                <input type='file' placeholder='upload' onChange={handleUpload3} />
+                            </div>
+                        </div>
+
+                        <div className='my-2'>
+                            <PrimaryButton children="Add Timings" type="button" onClick={handleClickOpen} />
+                            <Dialog
+                                fullScreen
+                                open={open}
+                                onClose={handleClose}
+                                TransitionComponent={Transition}
+                            >
+                                <AppBar sx={{ position: 'relative' ,background :"green"}}>
+                                    <Toolbar>
+                                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                                            Select Time
+                                        </Typography>
+                                        <IconButton
+                                            edge="start"
+                                            color="inherit"
+                                            onClick={handleClose}
+                                            aria-label="close"
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </Toolbar>
+                                </AppBar>
+                                <TableContainer component={Paper}>
+                                    <Table sx={{ minWidth: 400 }} aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="left">Day</TableCell>
+                                                <TableCell align="center">Starttime</TableCell>
+                                                <TableCell align="center">Endtime</TableCell>
+                                                <TableCell align="center">Closed</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {/* 
                                     <TableRow
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
@@ -522,40 +669,42 @@ const AddService = () => {
                                             <Checkbox {...label} defaultChecked className='text-danger' />
                                         </TableCell>
                                     </TableRow> */}
-                                    {days.map((day, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell align="left">{day.name}</TableCell>
-                                            <TableCell align="left">
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                    <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} />
-                                                </LocalizationProvider>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                    <MobileTimePicker defaultValue={day.end} onChange={(newTime) => day.handler2(newTime)} />
-                                                </LocalizationProvider>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <Checkbox {...label} className='text-danger' onChange={() => day.checkhandle()} />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Dialog>
+                                            {days.map((day, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell align="left">{day.name}</TableCell>
+                                                    <TableCell align="left">
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                            <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} />
+                                                        </LocalizationProvider>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                            <MobileTimePicker defaultValue={day.end} onChange={(newTime) => day.handler2(newTime)} />
+                                                        </LocalizationProvider>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <Checkbox {...label} className='text-danger' onChange={() => day.checkhandle()} />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Dialog>
+                        </div>
+                        <div>
+                            <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />
+                        </div>
+                        <div>
+                            <PrimaryButton children="submit" type="submit" />
+                        </div>
+                    </form>
+                    <div className='text-center py-3'>
+                        <Link to="/servicelistingpage" className='text-success'>View All Services</Link>
+                    </div>
                 </div>
-                <div>
-                    <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />
-                </div>
-                <div>
-                    <PrimaryButton children="submit" type="submit" />
-                </div>
-            </form>
-            <div className='text-center py-3'>
-                <Link to="/servicelistingpage" className='text-success'>View All Services</Link>
-            </div>
-        </div>
+            )}
+        </>
     )
 }
 

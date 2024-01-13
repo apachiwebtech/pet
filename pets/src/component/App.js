@@ -28,6 +28,10 @@ import { BASE_URL } from './Utils/BaseUrl';
 import axios from 'axios';
 import AddService from './Forms/AddService';
 import ServiceListingPage from './Pages/ServiceListingPage';
+import AddProduct from './Forms/AddProduct';
+import ProductListingPage from './Pages/PorductListingPage';
+import ServiceRequest from './Pages/ServiceRequest';
+import ProductRequest from './Pages/ProductRequest';
 
 
 const routing = createBrowserRouter([
@@ -94,6 +98,22 @@ const routing = createBrowserRouter([
       {
         path: "/servicelistingpage",
         element: <ServiceListingPage />
+      },
+      {
+        path: "/addproduct/:id",
+        element: <AddProduct/>
+      },
+      {
+        path: "/productlistingpage",
+        element: <ProductListingPage />
+      },
+      {
+        path : "/servicerequest",
+        element: <ServiceRequest />
+      },
+      {
+        path : "/productrequest",
+        element: <ProductRequest />
       }
 
     ]
