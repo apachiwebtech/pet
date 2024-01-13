@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 
 import { MemoIzedModal } from "../UI/MemoIzedModal";
 import axios from "axios";
+import { BASE_URL } from "../Utils/BaseUrl";
 const DetailPage = () => {
   const { id } = useParams();
   const serviceProvider = DUMMY_DATA.find((itm) => itm.id === id);
@@ -48,7 +49,7 @@ const DetailPage = () => {
   };
 
   useEffect(()=>{
-    axios.get(`http://localhost:8081/detailPage/${id}`)
+    axios.get(`${BASE_URL}/detailPage/${id}`)
     .then((res)=>{
       console.log(res.data);
       setDetail(res.data[0]);
@@ -58,7 +59,7 @@ const DetailPage = () => {
   },[])
 
   useEffect(()=>{
-    axios.get(`http://localhost:8081/recommendedFor/${id}`)
+    axios.get(`${BASE_URL}/recommendedFor/${id}`)
     .then((res)=>{
       console.log(res.data);
       setRecommendedFor(res.data);
@@ -86,6 +87,8 @@ const DetailPage = () => {
   }
 
   const commnetRef = useRef('');
+
+  
   return (
     <div className={classes.Container}>
       <div className={classes.imageContainer}>

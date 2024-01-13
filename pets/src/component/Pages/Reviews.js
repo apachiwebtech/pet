@@ -119,7 +119,7 @@ const Reviews = () => {
     ratingCalc(commentData);
   }, [commentData]);
 
-    const style = {
+  const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -133,26 +133,26 @@ const Reviews = () => {
   return (
     <div className="container">
       <div className={classes.header}>
-        
+
         <h1>
           {
             isNaN(average) ? '' : (average.toFixed(1))
           }
-          
-          </h1>
-{
-  isNaN(average) ? <></> : (
 
-    <>
-<Rating value={average.toFixed(1)} precision={0.1} readOnly></Rating>
+        </h1>
+        {
+          isNaN(average) ? <></> : (
 
-<Typography variant="p">
-  {`Based on ${commentData.length} reviews`}
-</Typography>
-    </>
-  )
-}
-        
+            <>
+              <Rating value={average.toFixed(1)} precision={0.1} readOnly></Rating>
+
+              <Typography variant="p">
+                {`Based on ${commentData.length} reviews`}
+              </Typography>
+            </>
+          )
+        }
+
         <AddBoxIcon
           sx={{
             position: "absolute",
@@ -163,120 +163,120 @@ const Reviews = () => {
           onClick={handleOpen}
         />
       </div>
-{
-  commentData.length === 0 ? (<h6 style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)", width:""}}>Be the first to comment and rate</h6>) : (
-<>
+      {
+        commentData.length === 0 ? (<h6 style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "" }}>Be the first to comment and rate</h6>) : (
+          <>
 
-      <div className={classes.meterContainer}>
-        {/* <div className='d-flex flex-direction-row ' style={{display:"flex",alignItems : 'center', justifyContent:"space-between"}}>
+            <div className={classes.meterContainer}>
+              {/* <div className='d-flex flex-direction-row ' style={{display:"flex",alignItems : 'center', justifyContent:"space-between"}}>
 
             <p style={{padding:"0", margin:"0"}}>Excellent</p>
             <meter value={excellent} min="1" low='2' high='5' max="5" style={{marginLeft:"auto", width:"70%", color:"red"}}>{`${excellent} out of 5`}</meter><br/>
             </div> */}
-        <div
-          className="d-flex flex-direction-row "
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p style={{ padding: "0", margin: "0" }}>Excellent</p>
-          
-          <CustomLinearProgress value={excellent} color={'#6BC8A3'}></CustomLinearProgress>
-        </div>
-        <div
-          className="d-flex flex-direction-row "
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p style={{ padding: "0", margin: "0" }}>Very good</p>
-          
-          <CustomLinearProgress value={veryGood} color={'#A9D78C'}></CustomLinearProgress>
+              <div
+                className="d-flex flex-direction-row "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ padding: "0", margin: "0" }}>Excellent</p>
 
-          <br />
-        </div>
-        <div
-          className="d-flex flex-direction-row "
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p style={{ padding: "0", margin: "0" }}>Good</p>
-          <CustomLinearProgress value={good} color={'#FFD84C'} ></CustomLinearProgress>
-
-          <br />
-        </div>
-        <div
-          className="d-flex flex-direction-row "
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p style={{ padding: "0", margin: "0" }}>Average</p>
-           <CustomLinearProgress value={averageRating} color={'#FFB246'}></CustomLinearProgress>
-
-          <br />
-        </div>
-        <div
-          className="d-flex flex-direction-row "
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <p style={{ padding: "0", margin: "0" }}>Poor</p>
-            <CustomLinearProgress value={poor} color={'#FF8B60'}></CustomLinearProgress>
-
-          <br />
-        </div>
-      </div>
-
-      <div className={classes.commentSection}>
-        {commentData.map((item) => {
-          return (
-            <Card className={classes.reviewCard}>
-              <div className={classes.cardHeading}>
-                <div className={classes.imageContainer}>
-                  {item.image ? (
-                    <img src="" alt="userImage" />
-                  ) : (
-                    <AccountCircleIcon
-                      sx={{ height: "50px", width: "50px", color: "#b3b3b3" }}
-                    />
-                  )}
-                </div>
-                <div className={classes.user}>
-                  <h4>{item.name || localStorage.getItem('awt_parent_name')}</h4>
-
-                  <p>{getTimeDifference(item.created_at)}</p>
-                </div>
+                <CustomLinearProgress value={excellent} color={'#6BC8A3'}></CustomLinearProgress>
               </div>
+              <div
+                className="d-flex flex-direction-row "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ padding: "0", margin: "0" }}>Very good</p>
 
-              <div className={classes.comment}>
-                <Rating
-                  value={Number(item.rating)}
-                  precision={0.5}
-                  readOnly
-                ></Rating>
-                <p>{item.comment}</p>
+                <CustomLinearProgress value={veryGood} color={'#A9D78C'}></CustomLinearProgress>
+
+                <br />
               </div>
-            </Card>
-          );
-        })}
-      </div>
-      </>
+              <div
+                className="d-flex flex-direction-row "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ padding: "0", margin: "0" }}>Good</p>
+                <CustomLinearProgress value={good} color={'#FFD84C'} ></CustomLinearProgress>
 
-  )
-}
+                <br />
+              </div>
+              <div
+                className="d-flex flex-direction-row "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ padding: "0", margin: "0" }}>Average</p>
+                <CustomLinearProgress value={averageRating} color={'#FFB246'}></CustomLinearProgress>
+
+                <br />
+              </div>
+              <div
+                className="d-flex flex-direction-row "
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ padding: "0", margin: "0" }}>Poor</p>
+                <CustomLinearProgress value={poor} color={'#FF8B60'}></CustomLinearProgress>
+
+                <br />
+              </div>
+            </div>
+
+            <div className={classes.commentSection}>
+              {commentData.map((item) => {
+                return (
+                  <Card className={classes.reviewCard}>
+                    <div className={classes.cardHeading}>
+                      <div className={classes.imageContainer}>
+                        {item.image ? (
+                          <img src="" alt="userImage" />
+                        ) : (
+                          <AccountCircleIcon
+                            sx={{ height: "50px", width: "50px", color: "#b3b3b3" }}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.user}>
+                        <h4>{item.name || localStorage.getItem('awt_parent_name')}</h4>
+
+                        <p>{getTimeDifference(item.created_at)}</p>
+                      </div>
+                    </div>
+
+                    <div className={classes.comment}>
+                      <Rating
+                        value={Number(item.rating)}
+                        precision={0.5}
+                        readOnly
+                      ></Rating>
+                      <p>{item.comment}</p>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </>
+
+        )
+      }
       <MemoIzedModal
         open={open}
         onClose={handleClose}

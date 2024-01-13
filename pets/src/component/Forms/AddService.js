@@ -22,6 +22,7 @@ import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
+import { Link, useNavigate } from 'react-router-dom';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -61,6 +62,9 @@ const AddService = () => {
         day2: '',
         ischeked2: '',
     })
+
+    const navigate = useNavigate();
+
     const handleTimeChange = (newTime) => {
         setSelectedTime(newTime);
     };
@@ -174,7 +178,6 @@ const AddService = () => {
         // Send the value as 1 or 0 based on the checkbox state
         const valueToSend = isChecked5 ? 0 : 1;
         // Now, you can use the 'valueToSend' variable as needed.
-        console.log(valueToSend);
         setCheckedVal5(valueToSend)
     };
     const handleCheckboxChange6 = () => {
@@ -287,7 +290,11 @@ const AddService = () => {
             body: formData,
         })
             .then((res) => {
-                console.log(res)
+                // console.log(res)
+                if (res) {
+                    navigate('/servicelistingpage')
+
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -303,7 +310,7 @@ const AddService = () => {
                     <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} />
                 </div>
                 <div className='my-2'>
-                    <CustomInput name="servicename" placeholder="Service Name" onChange={onHandleChange} />
+                    <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
                 </div>
                 <div className='my-2'>
                     <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
@@ -327,7 +334,7 @@ const AddService = () => {
                     </div>
                 </div>
                 <div className='my-2'>
-                    <PrimaryButton children="Add Timings" type="button"  onClick={handleClickOpen} />
+                    <PrimaryButton children="Add Timings" type="button" onClick={handleClickOpen} />
                     <Dialog
                         fullScreen
                         open={open}
@@ -529,7 +536,7 @@ const AddService = () => {
                                                 </LocalizationProvider>
                                             </TableCell>
                                             <TableCell align="left">
-                                                <Checkbox {...label}  className='text-danger' onChange={() => day.checkhandle()} />
+                                                <Checkbox {...label} className='text-danger' onChange={() => day.checkhandle()} />
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -545,6 +552,9 @@ const AddService = () => {
                     <PrimaryButton children="submit" type="submit" />
                 </div>
             </form>
+            <div className='text-center py-3'>
+                <Link to="/servicelistingpage" className='text-success'>View All Services</Link>
+            </div>
         </div>
     )
 }

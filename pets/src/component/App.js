@@ -27,6 +27,7 @@ import Reviews from './Pages/Reviews';
 import { BASE_URL } from './Utils/BaseUrl';
 import axios from 'axios';
 import AddService from './Forms/AddService';
+import ServiceListingPage from './Pages/ServiceListingPage';
 
 
 const routing = createBrowserRouter([
@@ -72,7 +73,7 @@ const routing = createBrowserRouter([
         element: <ServiceProviderForm />
       },
       {
-        path: '/addservice',
+        path: '/addservice/:id',
         element: <AddService />
       },
       {
@@ -88,9 +89,13 @@ const routing = createBrowserRouter([
       },
       {
         path: "/reviews/:id",
-        element:<Reviews/>
-            }
-      
+        element: <Reviews />
+      },
+      {
+        path: "/servicelistingpage",
+        element: <ServiceListingPage />
+      }
+
     ]
 
   }
@@ -122,17 +127,17 @@ function error() {
 }
 // console.log(distance(localStorage.getItem('latitutde'), 19.200306300000012, localStorage.getItem('longitude'), 73.1647712).toFixed(2))
 
-const getUserName = (userId)=>{
+const getUserName = (userId) => {
   const user_id = localStorage.getItem('pet_id');
 
-  axios.post(`${BASE_URL}/getUserName`, {user_id})
-  .then((res)=>{
-    localStorage.setItem('awt_parent_name', res.data[0].parent_name);
-    console.log(res.data[0])
-  })
-  .catch((err)=>{
-    console.log(err);
-  })
+  axios.post(`${BASE_URL}/getUserName`, { user_id })
+    .then((res) => {
+      localStorage.setItem('awt_parent_name', res.data[0].parent_name);
+      console.log(res.data[0])
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 function App() {
 

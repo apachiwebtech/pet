@@ -22,8 +22,10 @@ const Header = () => {
       return 'Services'  
       case '/productmanaging' : 
       return 'Manage Product'  
-      case '/addservice' : 
-      return 'Add Service'   
+      case `/addservice/id` : 
+      return 'Add Service'
+      case '/servicelistingpage' : 
+      return 'Service Listing'     
       default:
         return '';
     }

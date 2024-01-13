@@ -44,7 +44,7 @@ const Dash = () => {
         {
           feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item,index) => {
             return (
-              <div className='col-4'>
+              <div className='col-4 py-2'>
                  <Link to={`/${item.link}/${item.id}`}><img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
                 {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
                 <p>{item.title}</p>

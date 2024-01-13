@@ -93,12 +93,12 @@ app.post('/login', (req, res) => {
     } else {
 
       if (data.length !== 0) {
-        const mailOptions ={
-          from : 'dharvik.badga22@gmail.com',
-          to : email,
-          subject : 'OTP for login into pupcat app',
-          text : `your otp has been updated to ${otp}`,
-          
+        const mailOptions = {
+          from: 'dharvik.badga22@gmail.com',
+          to: email,
+          subject: 'OTP for login into pupcat app',
+          text: `your otp has been updated to ${otp}`,
+
         }
         transporter.verify(function (error, success) {
           if (error) {
@@ -258,12 +258,12 @@ app.post('/provider_login', (req, res) => {
     } else {
 
       if (data.length !== 0) {
-        const mailOptions ={
-          from : 'dharvik.badga22@gmail.com',
-          to : email,
-          subject : 'OTP for login into pupcat app',
-          text : `your otp has been updated to ${otp}`,
-          
+        const mailOptions = {
+          from: 'dharvik.badga22@gmail.com',
+          to: email,
+          subject: 'OTP for login into pupcat app',
+          text: `your otp has been updated to ${otp}`,
+
         }
         transporter.verify(function (error, success) {
           if (error) {
@@ -465,32 +465,32 @@ app.post('/resend_provider', (req, res) => {
   })
 });
 
-app.post('/dashboard', (req,res)=>{
+app.post('/dashboard', (req, res) => {
   const type = req.body.type;
-  const sql = "SELECT id,title ,icon, type , status,link from awt_dashboard where type = ? and status = 1 and deleted = 0";
+  const sql = "SELECT id, title ,icon, type , status, link from awt_dashboard where type = ? and status = 1 and deleted = 0";
 
-  con.query(sql , [type] , (err,data)=>{
-    if(err){
+  con.query(sql, [type], (err, data) => {
+    if (err) {
       return res.json(err)
     }
-    else{
+    else {
       return res.json(data)
     }
   })
 })
 
-app.post('/petProfile', (req, res)=>{
+app.post('/petProfile', (req, res) => {
   const userId = req.body.userId;
   const state = req.body.state;
   const city = req.body.city;
   const pincode = req.body.pincode;
 
-  const sql =  'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
+  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
 
-  con.query(sql, [userId, state, city, pincode], (err, data)=>{
-    if(err){
+  con.query(sql, [userId, state, city, pincode], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
@@ -499,7 +499,7 @@ app.post('/petProfile', (req, res)=>{
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
-  service : 'gmail',
+  service: 'gmail',
   secure: false,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
@@ -509,29 +509,29 @@ const transporter = nodemailer.createTransport({
 });
 
 
-app.get('/listing/:id', (req, res, next)=>{
+app.get('/listing/:id', (req, res, next) => {
 
   const id = req.params.id;
   const sql = 'SELECT * FROM awt_add_services WHERE scatid = ?'
 
-  con.query(sql,[id], (err,data)=>{
-    if(err){
+  con.query(sql, [id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
 })
 
-app.get('/detailPage/:id', (req, res, next)=>{
+app.get('/detailPage/:id', (req, res, next) => {
   const id = req.params.id;
 
   const sql = 'SELECT * FROM awt_add_services WHERE id = ?'
 
-  con.query(sql,[id], (err, data)=>{
-    if(err){
+  con.query(sql, [id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
@@ -543,43 +543,43 @@ app.get('/detailPage/:id', (req, res, next)=>{
 
 //   con.query(sql,[id], (err, data)=>{
 
-app.get('/get_category', (req, res, next)=>{
+app.get('/get_category', (req, res, next) => {
 
   const sql = 'SELECT * FROM awt_dashboard where deleted = 0 and status = 1'
 
-  con.query(sql, (err, data)=>{
-    if(err){
+  con.query(sql, (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
 })
 
-app.post('/addComment', (req, res, next)=>{
-  const {pet_id, serviceProviderId, comment, rating} = req.body;
+app.post('/addComment', (req, res, next) => {
+  const { pet_id, serviceProviderId, comment, rating } = req.body;
   const currentDate = new Date();
   const sql = 'INSERT INTO awt_comments (`user_id`,`service_provider_id`,`comment`, `rating`, `created_at`) VALUES (?,?,?,?,?)'
 
-  con.query(sql,[pet_id, serviceProviderId, comment, rating, currentDate], (err, data)=>{
-    if(err){
+  con.query(sql, [pet_id, serviceProviderId, comment, rating, currentDate], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
-      return res.status(200).json({message: "Comment added successfully", status: 201})
+    } else {
+      return res.status(200).json({ message: "Comment added successfully", status: 201 })
 
     }
   })
-  
+
 })
 
-app.get('/getComments/:id', (req, res, next)=>{
+app.get('/getComments/:id', (req, res, next) => {
   const id = req.params.id;
 
   const sql = 'SELECT * FROM awt_comments WHERE service_provider_id = ? AND deleted = 0'
-  con.query(sql,[id], (err, data)=>{
-    if(err){
+  con.query(sql, [id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.status(200).json(data)
 
     }
@@ -587,21 +587,21 @@ app.get('/getComments/:id', (req, res, next)=>{
 
 })
 
-app.post('/getUserName', (req, res, next)=>{
-  const {user_id} = req.body;
+app.post('/getUserName', (req, res, next) => {
+  const { user_id } = req.body;
 
   const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
 
-  con.query(sql, [user_id], (err, data)=>{
-    if(err){
+  con.query(sql, [user_id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
 })
 
-app.post('/provider_details', upload.single('image'),  (req, res) => {
+app.post('/provider_details', upload.single('image'), (req, res) => {
   let pet_id = req.body.pet_id;
   let imagepath = req.file.filename;
   let fullname = req.body.fullname;
@@ -614,7 +614,7 @@ app.post('/provider_details', upload.single('image'),  (req, res) => {
 
   const sql = "update awt_service_register set profile = ? , fullname = ?,mobile = ? , mobile2 = ? , address = ?,state = ?,pin = ?, updated_date = ? where id = ?";
 
-  con.query(sql, [imagepath,fullname,mobile,mobile1,address,state,pin,currentDate,pet_id], (err, data) => {
+  con.query(sql, [imagepath, fullname, mobile, mobile1, address, state, pin, currentDate, pet_id], (err, data) => {
     if (err) {
       return res.json(err)
     }
@@ -624,7 +624,7 @@ app.post('/provider_details', upload.single('image'),  (req, res) => {
   })
 })
 
-app.post('/add_service',upload.single('image') ,(req, res) => {
+app.post('/add_service', upload.single('image'), (req, res) => {
   const category = req.body.category;
   const service = req.body.service;
   const address = req.body.address;
@@ -637,8 +637,8 @@ app.post('/add_service',upload.single('image') ,(req, res) => {
   const created_date = new Date()
 
   // Insert data into the main table
-  const insertMainQuery = 'INSERT INTO awt_add_services (catid, service, address, upload_image, description) VALUES (?, ?, ?, ?, ?)';
-  const mainValues = [1, service, address,imagepath, description];
+  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image, description , created_date , created_by) VALUES (?, ?, ?, ?, ?,?,?)';
+  const mainValues = [1, service, address, imagepath, description, created_date, user_id];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
     if (err) {
@@ -647,21 +647,36 @@ app.post('/add_service',upload.single('image') ,(req, res) => {
     }
 
     const insertedId = mainResult.insertId;
-    console.log('Inserted ID:', insertedId);
 
     // Now, insert 'days' data into another table
-    const insertDaysQuery = 'INSERT INTO awt_service_time (day, starttime, endtime, closed , created_date , created_by) VALUES ?';
-    const daysValues = days.map(day => [day.name, day.start, day.end, day.chaeckval, created_date , user_id]);
+    const insertDaysQuery = 'INSERT INTO awt_service_time (service_id, day, starttime, endtime, closed , created_date , created_by) VALUES ?';
+    const daysValues = days.map(day => [insertedId, day.name, day.start, day.end, day.chaeckval, created_date, user_id]);
 
     con.query(insertDaysQuery, [daysValues], (daysErr, daysResult) => {
       if (daysErr) {
         console.error('Error inserting data into days table:', daysErr);
         return res.json(daysErr);
       }
+      else {
 
-      console.log('Data inserted into days table:', daysResult);
+        return res.json({ hii: 'Service Added Successfully' });
+      }
 
-      res.json({ message: 'Data received and inserted successfully' });
     });
   });
 });
+
+app.post('/service_listing', (req, res) => {
+
+  let user_id = req.body.user_id
+
+  const sql = "select * from awt_add_services where created_by = ? and deleted = 0 order by id desc";
+
+  con.query(sql, [user_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      return res.json(data)
+    }
+  })
+})
