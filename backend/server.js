@@ -536,12 +536,20 @@ app.get('/detailPage/:id', (req, res, next) => {
     }
   })
 })
-// app.get('/recommendedFor/:id', (req, res, next)=>{
-//   const id = req.params.id;
 
-//   const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
+app.get('/recommendedFor/:id', (req, res, next)=>{
+  const id = req.params.id;
 
-//   con.query(sql,[id], (err, data)=>{
+  const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
+
+  con.query(sql,[id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
 
 app.get('/get_category', (req, res, next) => {
 
@@ -556,52 +564,7 @@ app.get('/get_category', (req, res, next) => {
   })
 })
 
-app.post('/addComment', (req, res, next) => {
-  const { pet_id, serviceProviderId, comment, rating } = req.body;
-  const currentDate = new Date();
-  const sql = 'INSERT INTO awt_comments (`user_id`,`service_provider_id`,`comment`, `rating`, `created_at`) VALUES (?,?,?,?,?)'
-
-  con.query(sql, [pet_id, serviceProviderId, comment, rating, currentDate], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      return res.status(200).json({ message: "Comment added successfully", status: 201 })
-
-    }
-  })
-
-})
-
-app.get('/getComments/:id', (req, res, next) => {
-  const id = req.params.id;
-
-  const sql = 'SELECT * FROM awt_comments WHERE service_provider_id = ? AND deleted = 0'
-  con.query(sql, [id], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      return res.status(200).json(data)
-
-    }
-  })
-
-})
-
-app.post('/getUserName', (req, res, next) => {
-  const { user_id } = req.body;
-
-  const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
-
-  con.query(sql, [user_id], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      return res.json(data);
-    }
-  })
-})
-
-app.post('/provider_details', upload.single('image'), (req, res) => {
+app.post('/provider_details', upload.single('image'),  (req, res) => {
   let pet_id = req.body.pet_id;
   let imagepath = req.file.filename;
   let fullname = req.body.fullname;
@@ -619,109 +582,6 @@ app.post('/provider_details', upload.single('image'), (req, res) => {
       return res.json(err)
     }
     else {
-      return res.json(data)
-    }
-  })
-})
-
-app.post('/add_service', upload.single('image'), (req, res) => {
-  const category = req.body.category;
-  const service = req.body.service;
-  const address = req.body.address;
-  let imagepath = req.file.filename;
-  const description = req.body.description;
-  const user_id = req.body.user_id
-  const daysJSON = req.body.days;
-  const days = JSON.parse(daysJSON);
-
-  const created_date = new Date()
-
-  // Insert data into the main table
-  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image, description , created_date , created_by) VALUES (?, ?, ?, ?, ?,?,?)';
-  const mainValues = [category, service, address, imagepath, description, created_date, user_id];
-
-  con.query(insertMainQuery, mainValues, (err, mainResult) => {
-    if (err) {
-      console.error('Error inserting data into main table:', err);
-      return res.json(err);
-    }
-
-    const insertedId = mainResult.insertId;
-
-    // Now, insert 'days' data into another table
-    const insertDaysQuery = 'INSERT INTO awt_service_time (service_id, day, starttime, endtime, closed , created_date , created_by) VALUES ?';
-    const daysValues = days.map(day => [insertedId, day.name, day.start, day.end, day.chaeckval, created_date, user_id]);
-
-    con.query(insertDaysQuery, [daysValues], (daysErr, daysResult) => {
-      if (daysErr) {
-        console.error('Error inserting data into days table:', daysErr);
-        return res.json(daysErr);
-      }
-      else {
-
-        return res.json({ hii: 'Service Added Successfully' });
-      }
-
-    });
-  });
-});
-
-app.post('/service_listing', (req, res) => {
-
-  let user_id = req.body.user_id
-
-  const sql = "select * from awt_add_services where created_by = ? and deleted = 0 order by id desc";
-
-  con.query(sql, [user_id], (err, data) => {
-    if (err) {
-      return res.json(err)
-    } else {
-      return res.json(data)
-    }
-  })
-})
-
-app.post('/add_product', upload.fields([
-  { name: 'image', maxCount: 1 },
-  { name: 'image2', maxCount: 1 },
-  { name: 'image3', maxCount: 1 }
-]), (req, res) => {
-  let user_id = req.body.user_id
-  let title = req.body.title
-  let description =req.body.description;
-  const image1 = req.files['image'];
-  const image2 = req.files['image2'];
-  const image3 = req.files['image3'];
-
-  let img1 = image1[0].filename
-  let img2 = image2[0].filename
-  let img3 = image3[0].filename
-  let date = new Date()
-
-  console.log(img1)
-
-
-  const sql = "insert into awt_add_product(`title`,`description`,`upload_image`,`upload_image2`,`upload_image3`,`created_date`,`created_by`) values(?,?,?,?,?,?,?)";
-
-  con.query(sql, [title,description,img1,img2,img3,date,user_id], (err, data) => {
-    if (err) {
-      return res.json(err)
-    } else {
-      return res.json(data)
-    }
-  })
-})
-
-app.post('/product_listing', (req, res) => {
-
-  let user_id = req.body.user_id
-
-  const sql = "select * from awt_add_product where created_by = ? and deleted = 0 order by id desc";
-
-  con.query(sql, [user_id], (err, data) => {
-    if (err) {
-      return res.json(err)
-    } else {
       return res.json(data)
     }
   })
