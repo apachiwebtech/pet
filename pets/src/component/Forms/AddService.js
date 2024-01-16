@@ -29,6 +29,7 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
 } from "react-places-autocomplete";
+import { TimePicker } from '@mui/x-date-pickers';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -111,7 +112,8 @@ const AddService = () => {
         setSelectedTime13(newTime);
     };
     const handleTimeChange14 = (newTime) => {
-        setSelectedTime14(newTime);
+        const isoFormattedTime = newTime.toISOString();
+        setSelectedTime14(isoFormattedTime);
     };
 
 
@@ -242,7 +244,7 @@ const AddService = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqdnE5M-UzB69n455IQ5GPCmsdIXIfBQ&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ_cnRTD-5PpbUtXTpKFLqVYbwDremSLs&libraries=places`;
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));
@@ -674,7 +676,8 @@ const AddService = () => {
                                                     <TableCell align="left">{day.name}</TableCell>
                                                     <TableCell align="left">
                                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} />
+                                                            {/* <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} /> */}
+                                                            <TimePicker label="Basic time picker"  onChange={(newTime) => day.handler(newTime)} />
                                                         </LocalizationProvider>
                                                     </TableCell>
                                                     <TableCell align="left">

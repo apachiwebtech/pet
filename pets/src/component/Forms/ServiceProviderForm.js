@@ -62,7 +62,7 @@ const ServiceProviderForm = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqdnE5M-UzB69n455IQ5GPCmsdIXIfBQ&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ_cnRTD-5PpbUtXTpKFLqVYbwDremSLs&libraries=places`;
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));

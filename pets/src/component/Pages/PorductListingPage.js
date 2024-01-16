@@ -9,15 +9,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import PrimaryButton from '../UI/PrimaryButton';
 import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
@@ -32,6 +26,7 @@ const ProductListingPage = () => {
     const [image2, setImage2] = useState(null);
     const [image3, setImage3] = useState(null);
     const [cat, setCat] = useState([])
+    const [pro_data, setProData] = useState([])
 
     const [value, setValue] = useState({
         category: '',
@@ -44,9 +39,37 @@ const ProductListingPage = () => {
     })
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (id) => {
         setOpen(true);
+        const data = {
+            product_id: id
+        }
+        axios.post(`${BASE_URL}/product_data`, data)
+            .then((res) => {
+                console.log(res)
+                setProData(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     };
+
+    const handleDelete  = (id) =>{
+
+        const data = {
+            product_id : id
+        }
+        axios.post(`${BASE_URL}/delete_product`, data)
+        .then((res) => {
+            console.log(res)
+            getlisitngdetail()
+            setOpen(false);
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -138,7 +161,10 @@ const ProductListingPage = () => {
     }
 
 
-    const handleSubmit = (e) => {
+
+
+
+    const handleSubmit = (e, pro_id) => {
         e.preventDefault()
 
         const formData = new FormData();
@@ -148,19 +174,20 @@ const ProductListingPage = () => {
         formData.append('image2', image2)
         formData.append('image3', image3)
         formData.append('description', value.description)
-        formData.append('user_id', localStorage.getItem("pet_id"))
+        formData.append('product_id', pro_id)
 
 
 
-        fetch(`${BASE_URL}/add_product`, {
+        fetch(`${BASE_URL}/update_product`, {
             method: 'POST',
             body: formData,
         })
             .then((res) => {
                 // console.log(res)
                 if (res) {
-                    navigate('/productlistingpage')
-
+                    getlisitngdetail()
+                    setOpen(false);
+                   window.location.pathname = '/productlistingpage'
                 }
             })
             .catch((err) => {
@@ -202,15 +229,13 @@ const ProductListingPage = () => {
                         <div className='service-card card p-3 my-2' key={index}>
                             <div className='d-flex justify-content-between ' style={{ borderBottom: "1px solid lightgrey" }}>
                                 <h5>{item.title}</h5>
-                                <span className='service-list-edit' onClick={handleClickOpen}>Edit Product</span>
+                                <span className='service-list-edit' onClick={() => handleClickOpen(item.id)}>Edit Product</span>
                             </div>
                             <div className='d-flex justify-content-between'>
                                 <div>
                                     <p>Service Title: <span>{item.title}</span></p>
                                     <p>Date: <span>{item.created_date}</span></p>
                                 </div>
-
-
                             </div>
                             <React.Fragment >
 
@@ -239,67 +264,72 @@ const ProductListingPage = () => {
                                             </Button>
                                         </Toolbar>
                                     </AppBar>
-                                    <div className='mx-2'>
-                                         <button className='btn btn-danger btn-sm w-100 my-2'>Delete Product</button>
-                                        <form onSubmit={handleSubmit} method='POST'>
+                                    {
+                                        pro_data?.data?.map((item) => {
+                                            return (
+                                                <div className='mx-2'>
+                                                    <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(item.id)}>Delete Product</button>
+                                                    <form onSubmit={(e) => handleSubmit(e, item.id)} method='POST'>
 
-                                            <div className='my-2'>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={cat}
-                                                    getOptionLabel={(option) => option.title}
-                                                    getOptionSelected={(option, value) => option.id === value.id}
-                                                    sx={{
-                                                        width: "100%",
-                                                        borderRadius: "8px",
-                                                        border: "1px solid #757575",
-                                                        boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
-                                                    }}
-                                                    className='my-2'
-                                                    renderInput={(params) => <TextField {...params} label="Category" />}
-                                                    name="category"
-                                                    onChange={(event, value) => HandleChange(value)} // Pass only the value
-                                                />
-                                                {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
-                                            </div>
+                                                        <div className='my-2'>
+                                                            <Autocomplete
+                                                                disablePortal
+                                                                id="combo-box-demo"
+                                                                options={cat}
+                                                                getOptionLabel={(option) => option.title}
+                                                                getOptionSelected={(option, value) => option.id === value.id}
+                                                                sx={{
+                                                                    width: "100%",
+                                                                    borderRadius: "8px",
+                                                                    border: "1px solid #757575",
+                                                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                                                }}
+                                                                className='my-2'
+                                                                renderInput={(params) => <TextField {...params} label="Category" />}
+                                                                name="category"
+                                                                onChange={(event, value) => HandleChange(value)} // Pass only the value
+                                                            />
+                                                            {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                                                        </div>
 
-                                            <div className='my-2'>
-                                                <CustomInput name="productname" placeholder="Product Title" onChange={onHandleChange} />
-                                            </div>
+                                                        <div className='my-2'>
+                                                            <CustomInput name="productname" placeholder={item.title} onChange={onHandleChange} />
+                                                        </div>
 
 
-                                            <div className='row text-center my-4'>
-                                                <p>Product Images</p>
-                                                <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                    <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
-                                                    <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                    <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                                        <div className='row text-center my-4'>
+                                                            <p>Product Images</p>
+                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                                <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
+                                                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                                <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                                            </div>
+                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                                <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                                                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                                <input type='file' placeholder='upload' onChange={handleUpload2} />
+                                                            </div>
+                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                                <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                                                                <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                                <input type='file' placeholder='upload' onChange={handleUpload3} />
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div>
+                                                            <CustomTextarea className="my-2" placeholder={item.description} name="description" onChange={onHandleChange} />
+                                                        </div>
+                                                        <div>
+                                                            <PrimaryButton children="submit" type="submit" />
+                                                        </div>
+                                                    </form>
+
                                                 </div>
-                                                <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                    <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
-                                                    <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                    <input type='file' placeholder='upload' onChange={handleUpload2} />
-                                                </div>
-                                                <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                    <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
-                                                    <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                    <input type='file' placeholder='upload' onChange={handleUpload3} />
-                                                </div>
-                                            </div>
+                                            )
+                                        })
+                                    }
 
-
-                                            <div>
-                                                <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />
-                                            </div>
-                                            <div>
-                                                <PrimaryButton children="submit" type="submit" />
-                                            </div>
-                                        </form>
-                                        <div className='text-center py-3'>
-                                            <Link to="/productlistingpage" className='text-success'>View All Product</Link>
-                                        </div>
-                                    </div>
                                 </Dialog>
                             </React.Fragment>
 
