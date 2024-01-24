@@ -539,15 +539,15 @@ app.get('/detailPage/:id', (req, res, next) => {
   })
 })
 
-app.get('/recommendedFor/:id', (req, res, next)=>{
+app.get('/recommendedFor/:id', (req, res, next) => {
   const id = req.params.id;
 
   const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
 
-  con.query(sql,[id], (err, data)=>{
-    if(err){
+  con.query(sql, [id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
@@ -566,7 +566,7 @@ app.get('/get_category', (req, res, next) => {
   })
 })
 
-app.post('/provider_details', upload.single('image'),  (req, res) => {
+app.post('/provider_details', upload.single('image'), (req, res) => {
   let pet_id = req.body.pet_id;
   let imagepath = req.file.filename;
   let fullname = req.body.fullname;
@@ -631,11 +631,11 @@ app.post('/add_service', upload.single('image'), (req, res) => {
   });
 });
 
-app.post('/service_data',  (req, res) => {
+app.post('/service_data', (req, res) => {
   const service_id = req.body.service_id;
 
   const sql = "select * from awt_add_services where id = ? and deleted = 0"
-  
+
   con.query(sql, [service_id], (err, data) => {
     if (err) {
       console.error('Error inserting data into days table:', err);
@@ -649,11 +649,11 @@ app.post('/service_data',  (req, res) => {
   });
 });
 
-app.post('/delete_service',  (req, res) => {
+app.post('/delete_service', (req, res) => {
   const product_id = req.body.product_id;
 
   const sql = "update awt_add_services set deleted = 1 where id = ?"
-  
+
   con.query(sql, [product_id], (err, data) => {
     if (err) {
       console.error('Error inserting data into days table:', err);
@@ -678,7 +678,7 @@ app.post('/update_service', upload.single('image'), (req, res) => {
   const days = JSON.parse(daysJSON);
 
   const updated_date = new Date()
-  
+
   // Insert data into the main table
   const insertMainQuery = 'update awt_add_services set catid = ? ,title= ?,address = ?,upload_image = ? ,description = ?, updated_date = ? where id = ? ';
   const mainValues = [category, service, address, imagepath, description, updated_date, service_id];
@@ -704,11 +704,11 @@ app.post('/update_service', upload.single('image'), (req, res) => {
     ]);
 
 
-    
+
     async.eachSeries(daysValues, (dayValue, callback) => {
       con.query(insertDaysQuery, dayValue, (err, result) => {
         if (err) {
-          
+
           console.error('Error updating data in awt_service_time:', err);
           callback(err); // Stops the loop on error
         } else {
@@ -717,7 +717,7 @@ app.post('/update_service', upload.single('image'), (req, res) => {
           return res.json(result)
         }
       });
-    }, (err,data) => {
+    }, (err, data) => {
       if (err) {
         return res.json({ error: err });
       } else {
@@ -725,8 +725,8 @@ app.post('/update_service', upload.single('image'), (req, res) => {
       }
     });
 
-    
-    
+
+
   });
 });
 
@@ -766,7 +766,7 @@ app.post('/add_product', upload.fields([
 ]), (req, res) => {
   let user_id = req.body.user_id
   let title = req.body.title
-  let description =req.body.description;
+  let description = req.body.description;
   const image1 = req.files['image'];
   const image2 = req.files['image2'];
   const image3 = req.files['image3'];
@@ -781,7 +781,7 @@ app.post('/add_product', upload.fields([
 
   const sql = "insert into awt_add_product(`title`,`description`,`upload_image`,`upload_image2`,`upload_image3`,`created_date`,`created_by`) values(?,?,?,?,?,?,?)";
 
-  con.query(sql, [title,description,img1,img2,img3,date,user_id], (err, data) => {
+  con.query(sql, [title, description, img1, img2, img3, date, user_id], (err, data) => {
     if (err) {
       return res.json(err)
     } else {
@@ -790,11 +790,11 @@ app.post('/add_product', upload.fields([
   })
 })
 
-app.post('/product_data',  (req, res) => {
+app.post('/product_data', (req, res) => {
   const product_id = req.body.product_id;
 
   const sql = "select * from awt_add_product where id = ? and deleted = 0"
-  
+
   con.query(sql, [product_id], (err, data) => {
     if (err) {
       console.error('Error inserting data into days table:', err);
@@ -808,11 +808,11 @@ app.post('/product_data',  (req, res) => {
   });
 });
 
-app.post('/delete_product',  (req, res) => {
+app.post('/delete_product', (req, res) => {
   const product_id = req.body.product_id;
 
   const sql = "update awt_add_product set deleted = 1 where id = ?"
-  
+
   con.query(sql, [product_id], (err, data) => {
     if (err) {
       console.error('Error inserting data into days table:', err);
@@ -834,7 +834,7 @@ app.post('/update_product', upload.fields([
 
   let product_id = req.body.product_id
   let title = req.body.title
-  let description =req.body.description;
+  let description = req.body.description;
   const image1 = req.files['image'];
   const image2 = req.files['image2'];
   const image3 = req.files['image3'];
@@ -848,7 +848,7 @@ app.post('/update_product', upload.fields([
 
   const sql = "update awt_add_product set title = ?, description = ? ,upload_image = ? , upload_image2 = ? , upload_image3 = ? where id = ? ";
 
-  con.query(sql, [title,description,img1,img2,img3,product_id], (err, data) => {
+  con.query(sql, [title, description, img1, img2, img3, product_id], (err, data) => {
     if (err) {
       return res.json(err)
     } else {
