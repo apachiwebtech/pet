@@ -169,12 +169,14 @@ function App() {
     getUserName();
   }, [navigate]);
 
+
+
   // console.log(packageJson.version, "this is the app version");
   return (
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' && <Footer />}
+      {window.location.pathname !== '/splash' && window.location.pathname !== '/reg' && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && <Footer />}
     </>
 
   );

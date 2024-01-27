@@ -451,14 +451,18 @@ const ServiceListingPage = () => {
             body: formData,
         })
             .then((res) => {
-               
+                getlisitngdetail()
                     navigate('/servicelistingpage')
 
             })
             .catch((err) => {
                 console.log(err)
             })
+            .finally(()=>{
+                setOpen2(false);
+            })
     }
+
 
     async function getcategory() {
         axios.get(`${BASE_URL}/get_category`)

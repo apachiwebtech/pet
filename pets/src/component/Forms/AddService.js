@@ -22,7 +22,7 @@ import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
 import PlacesAutocomplete, {
@@ -40,6 +40,7 @@ const AddService = () => {
     const [open, setOpen] = React.useState(false);
     const [image, setImage] = useState(null);
     const [image2, setImage2] = useState(null);
+    const [errors, setErrors] = useState({});
     const [image3, setImage3] = useState(null);
     const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
@@ -69,6 +70,44 @@ const AddService = () => {
         day2: '',
         ischeked2: '',
     })
+
+    
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Validate category, servicename, and other fields as needed
+        if (!value.category) {
+            newErrors.category = 'Category is required';
+        }
+
+        if (!value.servicename) {
+            newErrors.servicename = 'Service Name is required';
+        }
+        if (!value.address) {
+            newErrors.address = 'address is required';
+        }
+        if (!value.image) {
+            newErrors.image = ' is required';
+        }
+        if (!value.image2) {
+            newErrors.image2 = ' required';
+        }
+        if (!value.image3) {
+            newErrors.image3 = ' required';
+        }
+      
+        if (!value.description) {
+            newErrors.description = 'description is required';
+        }
+
+        // Add more validations for other fields
+
+        setErrors(newErrors);
+
+        // Return true if there are no errors, otherwise false
+        return Object.keys(newErrors).length === 0;
+    };
 
     const navigate = useNavigate();
 
@@ -207,7 +246,7 @@ const AddService = () => {
     };
 
     const [address, setAddress] = useState('');
-    const [errors, setError] = useState({});
+    // const [errors, setError] = useState({});
     const [scriptLoaded, setScriptLoaded] = useState(false);
 
 
@@ -248,13 +287,13 @@ const AddService = () => {
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));
-    
+
         document.head.appendChild(script);
-    
+
         return () => {
-          document.head.removeChild(script);
+            document.head.removeChild(script);
         };
-      }, []);
+    }, []);
 
 
 
@@ -328,33 +367,39 @@ const AddService = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const isValid = validateForm();
 
-        const formData = new FormData();
-        formData.append('category', value.category)
-        formData.append('service', value.servicename)
-        formData.append('address', value.address)
-        formData.append('image', image)
-        // formData.append('image2', image2)
-        // formData.append('image3', image3)
-        formData.append('description', value.description)
-        formData.append('user_id', localStorage.getItem("pet_id"))
+        
+        if (isValid) {
+            const formData = new FormData();
+            formData.append('category', value.category)
+            formData.append('service', value.servicename)
+            formData.append('address', value.address)
+            formData.append('image', image)
+            // formData.append('image2', image2)
+            // formData.append('image3', image3)
+            formData.append('description', value.description)
+            formData.append('user_id', localStorage.getItem("pet_id"))
 
-        formData.append('days', JSON.stringify(days));
+            formData.append('days', JSON.stringify(days));
 
-        fetch(`${BASE_URL}/add_service`, {
-            method: 'POST',
-            body: formData,
-        })
-            .then((res) => {
-                // console.log(res)
-                if (res) {
-                    navigate('/servicelistingpage')
-
-                }
+            fetch(`${BASE_URL}/add_service`, {
+                method: 'POST',
+                body: formData,
             })
-            .catch((err) => {
-                console.log(err)
-            })
+                .then((res) => {
+                    // console.log(res)
+                    if (res) {
+                        navigate('/servicelistingpage')
+
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        } else {
+            console.log('Form validation failed');
+        }
     }
 
     async function getcategory() {
@@ -408,60 +453,63 @@ const AddService = () => {
                                 onChange={(event, value) => HandleChange(value)} // Pass only the value
                             />
                             {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                        {errors.category && <p className="text-danger">{errors.category}</p>}
                         </div>
 
                         <div className='my-2'>
                             <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
+                            {errors.servicename && <p className="text-danger">{errors.servicename}</p>}
                         </div>
-                            <PlacesAutocomplete
+                        <PlacesAutocomplete
 
-                                value={address}
-                                onChange={setAddress}
-                                onSelect={handleSelect}
-                                searchOptions={{
-                                    bounds: MaharashtraBounds,
-                                }}
-                            >
-                                {({
-                                    getInputProps,
-                                    suggestions,
-                                    getSuggestionItemProps,
-                                    loading,
-                                }) => (
-                                    <div className="col-md-12">
-                        
-                                        <input
-                                            {...getInputProps({
-                                                className: "location-search-input form-control",
-                                                autoComplete: "on",
-                                            })}
-                                        />
-                                        <div className="autocomplete-dropdown-container">
-                                            {loading && <div>Loading...</div>}
-                                            {/* {console.log(suggestions, "sugge")} */}
-                                            {suggestions.map((suggestion,index) => {
-                                                const style = {
-                                                    backgroundColor: suggestion.active
-                                                        ? "#41b6e6"
-                                                        : "#fff",
-                                                };
-                                                return (
-                                                    <div
-                                                        {...getSuggestionItemProps(suggestion, {
-                                                            style,
-                                                        })}
-                                                        key={index}
-                                                    >
-                                                        {suggestion.description}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                            value={address}
+                            onChange={setAddress}
+                            onSelect={handleSelect}
+                            searchOptions={{
+                                bounds: MaharashtraBounds,
+                            }}
+                        >
+                            {({
+                                getInputProps,
+                                suggestions,
+                                getSuggestionItemProps,
+                                loading,
+                            }) => (
+                                <div className="col-md-12">
+
+                                    <input
+                                        {...getInputProps({
+                                            className: "location-search-input form-control",
+                                            autoComplete: "on",
+                                        })}
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {/* {console.log(suggestions, "sugge")} */}
+                                        {suggestions.map((suggestion, index) => {
+                                            const style = {
+                                                backgroundColor: suggestion.active
+                                                    ? "#41b6e6"
+                                                    : "#fff",
+                                            };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        style,
+                                                    })}
+                                                    key={index}
+                                                >
+                                                    {suggestion.description}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                )}
-                            </PlacesAutocomplete>
+                                </div>
+                            )}
+                        </PlacesAutocomplete>
                         <div className='my-2'>
                             <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
+                            {errors.address && <span className="text-danger">{errors.address}</span>}
                         </div>
                         <div className='row text-center my-4'>
                             <p>Service Images</p>
@@ -469,16 +517,19 @@ const AddService = () => {
                                 <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
                                 <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                {errors.image && <span className="text-danger">{errors.image}</span>}
                             </div>
                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                 <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
                                 <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload2} />
+                                {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                             </div>
                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                 <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
                                 <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload3} />
+                                {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                             </div>
                         </div>
 
@@ -490,7 +541,7 @@ const AddService = () => {
                                 onClose={handleClose}
                                 TransitionComponent={Transition}
                             >
-                                <AppBar sx={{ position: 'relative' ,background :"green"}}>
+                                <AppBar sx={{ position: 'relative', background: "green" }}>
                                     <Toolbar>
                                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                             Select Time
@@ -516,168 +567,14 @@ const AddService = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {/* 
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Monday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                                                <MobileTimePicker defaultValue={days.state} onChange={(newTime) => days.handler(newTime)}  />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange2} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' onChange={handleCheckboxChange} />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Tuesday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange3} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange4} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Wednesday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange5} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange6} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Thursday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange7} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange8} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Friday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange9} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange10} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Saturday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange11} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange12} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell align="left">Sunday</TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange13} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileTimePicker defaultValue={dayjs('2022-04-17T15:30')} onChange={handleTimeChange14} />
-
-                                            </LocalizationProvider>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <Checkbox {...label} defaultChecked className='text-danger' />
-                                        </TableCell>
-                                    </TableRow> */}
                                             {days.map((day, index) => (
                                                 <TableRow key={index}>
                                                     <TableCell align="left">{day.name}</TableCell>
                                                     <TableCell align="left">
                                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                             {/* <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} /> */}
-                                                            <TimePicker label="Basic time picker"  onChange={(newTime) => day.handler(newTime)} />
+                                                            <TimePicker label="Basic time picker" onChange={(newTime) => day.handler(newTime)} />
                                                         </LocalizationProvider>
                                                     </TableCell>
                                                     <TableCell align="left">
@@ -697,6 +594,7 @@ const AddService = () => {
                         </div>
                         <div>
                             <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />
+                            {errors.address && <span className="text-danger">{errors.address}</span>}
                         </div>
                         <div>
                             <PrimaryButton children="submit" type="submit" />

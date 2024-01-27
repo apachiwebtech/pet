@@ -22,14 +22,18 @@ const Header = () => {
       return 'Services'  
       case '/productmanaging' : 
       return 'Manage Product'  
-      case `/addservice/id` : 
+      case location.pathname.match(/^\/addservice\/\d+$/) ? location.pathname : '': 
       return 'Add Service'
+      case location.pathname.match(/^\/addproduct\/\d+$/) ? location.pathname : '': 
+      return 'Add Product'
       case '/servicelistingpage' : 
       return 'Service Listing'  
       case '/servicerequest' : 
       return 'Service Request' 
       case '/productrequest' : 
-      return 'Product Request'     
+      return 'Product Request'
+      case '/productlistingpage':
+        return 'Product Listing'     
       default:
         return '';
     }
