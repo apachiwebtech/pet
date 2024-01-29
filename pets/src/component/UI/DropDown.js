@@ -5,23 +5,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchField from "./SearchField";
 import classes from './DropDown.module.css'
-const data = [
-  "Affenpinscher",
-  "Afghan Hound",
-  "Akita Inu",
-  "Alaskan Malamute",
-  "American Staffordshire Terrier",
-  "Basset Hound",
-  "Beagle",
-  "Bernese Mountain Dog",
-  "Bichon Frise",
-  "Bloodhound",
-];
-
 const DropDown = (props) => {
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState(""); // New state to hold selected option
-
+  
   const style = {
     position: "absolute",
     top: "50%",
@@ -74,13 +61,13 @@ const DropDown = (props) => {
             padding: "5px 0",
           }}
         >
-          {data.filter((item) => (item.toLowerCase()).includes(search.toLowerCase())).map((item) => {
+          {props.options?.map((item) => {
             return (
               <li
-              key={item}
+              key={item.item}
               className={classes.listStyle}
-               onClick={() => handleItemClick(item)}           >
-                {item}
+               onClick={() => handleItemClick(item.item)}           >
+                {item.item}
               </li>
             );
           })}
