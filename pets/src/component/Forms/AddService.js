@@ -39,6 +39,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const AddService = () => {
     const [open, setOpen] = React.useState(false);
     const [image, setImage] = useState(null);
+    const [catid, setCatid] = useState("");
     const [image2, setImage2] = useState(null);
     const [errors, setErrors] = useState({});
     const [image3, setImage3] = useState(null);
@@ -71,13 +72,13 @@ const AddService = () => {
         ischeked2: '',
     })
 
-    
+
 
     const validateForm = () => {
         const newErrors = {};
 
         // Validate category, servicename, and other fields as needed
-        if (!value.category) {
+        if (!catid) {
             newErrors.category = 'Category is required';
         }
 
@@ -88,7 +89,7 @@ const AddService = () => {
             newErrors.address = 'address is required';
         }
         if (!value.image) {
-            newErrors.image = ' is required';
+            newErrors.image = ' required';
         }
         if (!value.image2) {
             newErrors.image2 = ' required';
@@ -96,7 +97,7 @@ const AddService = () => {
         if (!value.image3) {
             newErrors.image3 = ' required';
         }
-      
+
         if (!value.description) {
             newErrors.description = 'description is required';
         }
@@ -369,15 +370,15 @@ const AddService = () => {
         e.preventDefault()
         const isValid = validateForm();
 
-        
+
         if (isValid) {
             const formData = new FormData();
             formData.append('category', value.category)
             formData.append('service', value.servicename)
             formData.append('address', value.address)
             formData.append('image', image)
-            // formData.append('image2', image2)
-            // formData.append('image3', image3)
+             formData.append('image2', image2)
+             formData.append('image3', image3)
             formData.append('description', value.description)
             formData.append('user_id', localStorage.getItem("pet_id"))
 
@@ -420,6 +421,7 @@ const AddService = () => {
         if (selectedValue) {
             const selectedId = selectedValue.id;
             console.log(selectedId, "ser");
+            setCatid(selectedId)
             // Now you have the selected id, you can use it in your application logic
         }
     };
@@ -453,7 +455,7 @@ const AddService = () => {
                                 onChange={(event, value) => HandleChange(value)} // Pass only the value
                             />
                             {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
-                        {errors.category && <p className="text-danger">{errors.category}</p>}
+                            {errors.category && <p className="text-danger">{errors.category}</p>}
                         </div>
 
                         <div className='my-2'>
@@ -594,7 +596,7 @@ const AddService = () => {
                         </div>
                         <div>
                             <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />
-                            {errors.address && <span className="text-danger">{errors.address}</span>}
+                            {errors.description && <span className="text-danger">{errors.description}</span>}
                         </div>
                         <div>
                             <PrimaryButton children="submit" type="submit" />

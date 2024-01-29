@@ -64,6 +64,9 @@ const ServiceListingPage = () => {
     const handleClose3 = () => setOpen3(false);
 
 
+
+
+
     const handleClickOpen2 = (id) => {
         setOpen2(true);
 
@@ -73,6 +76,7 @@ const ServiceListingPage = () => {
         axios.post(`${BASE_URL}/service_data`, data)
             .then((res) => {
                 setserviceData(res.data)
+           
             })
             .catch((err) => {
                 console.log(err)
@@ -143,9 +147,46 @@ const ServiceListingPage = () => {
 
     }
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Validate category, servicename, and other fields as needed
+        if (!catid) {
+            newErrors.category = 'Category is required';
+        }
+
+        if (!value.servicename) {
+            newErrors.servicename = 'Service Name is required';
+        }
+        if (!value.address) {
+            newErrors.address = 'address is required';
+        }
+        if (!value.image) {
+            newErrors.image = ' required';
+        }
+        if (!value.image2) {
+            newErrors.image2 = ' required';
+        }
+        if (!value.image3) {
+            newErrors.image3 = ' required';
+        }
+
+        if (!value.description) {
+            newErrors.description = 'description is required';
+        }
+
+        // Add more validations for other fields
+
+        setErrors(newErrors);
+
+        // Return true if there are no errors, otherwise false
+        return Object.keys(newErrors).length === 0;
+    };
+
     const [image, setImage] = useState(null);
     const [image2, setImage2] = useState(null);
     const [image3, setImage3] = useState(null);
+    const [errors, setErrors] = useState({});
     const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTime2, setSelectedTime2] = useState(null);
@@ -161,6 +202,7 @@ const ServiceListingPage = () => {
     const [selectedTime12, setSelectedTime12] = useState(null);
     const [selectedTime13, setSelectedTime13] = useState(null);
     const [selectedTime14, setSelectedTime14] = useState(null);
+
     const [value, setValue] = useState({
         category: '',
         servicename: '',
@@ -171,6 +213,12 @@ const ServiceListingPage = () => {
         image3: '',
 
     })
+
+  
+    
+
+
+   
 
 
 
@@ -309,7 +357,7 @@ const ServiceListingPage = () => {
     };
 
     const [address, setAddress] = useState('');
-    const [errors, setError] = useState({});
+ 
     const [scriptLoaded, setScriptLoaded] = useState(false);
 
 
@@ -423,6 +471,10 @@ const ServiceListingPage = () => {
         });
     };
 
+    // const onHandleChange = (e) => {
+    //     setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    // }
+
     const onHandleChange = (e) => {
         setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
@@ -434,6 +486,11 @@ const ServiceListingPage = () => {
 
     const handleSubmit = (e, ser_id) => {
         e.preventDefault()
+
+
+        if(validateForm()){
+
+        
         const formData = new FormData();
         formData.append('category', catid)
         formData.append('service', value.servicename)
@@ -460,7 +517,7 @@ const ServiceListingPage = () => {
             })
             .finally(()=>{
                 setOpen2(false);
-            })
+            })}
     }
 
 
@@ -469,6 +526,7 @@ const ServiceListingPage = () => {
             .then((res) => {
                 setCat(res.data)
             })
+
             .catch((err) => {
                 console.log(err)
             })
@@ -481,7 +539,7 @@ const ServiceListingPage = () => {
     const HandleChange = (selectedValue) => {
         if (selectedValue) {
             const selectedId = selectedValue.id;
-            console.log(selectedId, "ser");
+          
             setCatId(selectedId)
             // Now you have the selected id, you can use it in your application logic
         }
@@ -566,10 +624,12 @@ const ServiceListingPage = () => {
                                                                     onChange={(event, value) => HandleChange(value)} // Pass only the value
                                                                 />
                                                                 {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                                                                {errors.category && <p className="text-danger">{errors.category}</p>}
                                                             </div>
 
                                                             <div className='my-2'>
-                                                                <CustomInput name="servicename" placeholder={item.title} onChange={onHandleChange} />
+                                                                <CustomInput name="servicename"  value={value.servicename} onChange={(e) =>onHandleChange(e,index)} />
+                                                                {errors.servicename && <p className="text-danger">{errors.servicename}</p>}
                                                             </div>
                                                             <PlacesAutocomplete
 
@@ -619,6 +679,7 @@ const ServiceListingPage = () => {
                                                             </PlacesAutocomplete>
                                                             <div className='my-2'>
                                                                 <CustomInput name="address" placeholder={item.address} onChange={onHandleChange} />
+                                                                {errors.address && <span className="text-danger">{errors.address}</span>}
                                                             </div>
                                                             <div className='row text-center my-4'>
                                                                 <p>Service Images</p>
@@ -626,16 +687,19 @@ const ServiceListingPage = () => {
                                                                     <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
                                                                     <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                     <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                                                    {errors.image && <span className="text-danger">{errors.image}</span>}
                                                                 </div>
                                                                 <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                     <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
                                                                     <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                     <input type='file' placeholder='upload' onChange={handleUpload2} />
+                                                                    {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                                                                 </div>
                                                                 <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                     <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
                                                                     <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                     <input type='file' placeholder='upload' onChange={handleUpload3} />
+                                                                    {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                                 </div>
                                                             </div>
 
@@ -741,6 +805,7 @@ const ServiceListingPage = () => {
                                                             </div>
                                                             <div>
                                                                 <CustomTextarea className="my-2" placeholder={item.description} name="description" onChange={onHandleChange} />
+                                                                {errors.description && <span className="text-danger">{errors.description}</span>}
                                                             </div>
                                                             <div>
                                                                 <PrimaryButton children="submit" type="submit" />

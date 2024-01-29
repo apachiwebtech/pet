@@ -27,6 +27,8 @@ const ProductListingPage = () => {
     const [image3, setImage3] = useState(null);
     const [cat, setCat] = useState([])
     const [pro_data, setProData] = useState([])
+    const [catid, setCatid] = useState("");
+    const [errors, setErrors] = useState({});
 
     const [value, setValue] = useState({
         category: '',
@@ -54,20 +56,20 @@ const ProductListingPage = () => {
             })
     };
 
-    const handleDelete  = (id) =>{
+    const handleDelete = (id) => {
 
         const data = {
-            product_id : id
+            product_id: id
         }
         axios.post(`${BASE_URL}/delete_product`, data)
-        .then((res) => {
-            console.log(res)
-            getlisitngdetail()
-            setOpen(false);
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            .then((res) => {
+                console.log(res)
+                getlisitngdetail()
+                setOpen(false);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 
     }
 
@@ -98,7 +100,39 @@ const ProductListingPage = () => {
 
     const navigate = useNavigate();
 
+    const validateForm = () => {
+        const newErrors = {};
 
+        // Validate category, servicename, and other fields as needed
+        if (!catid) {
+            newErrors.category = 'Category is required';
+        }
+
+        if (!value.productname) {
+            newErrors.productname = 'Productname Name is required';
+        }
+
+        if (!value.image) {
+            newErrors.image = ' required';
+        }
+        if (!value.image2) {
+            newErrors.image2 = ' required';
+        }
+        if (!value.image3) {
+            newErrors.image3 = ' required';
+        }
+
+        if (!value.description) {
+            newErrors.description = 'description is required';
+        }
+
+        // Add more validations for other fields
+
+        setErrors(newErrors);
+
+        // Return true if there are no errors, otherwise false
+        return Object.keys(newErrors).length === 0;
+    };
 
 
 
@@ -169,30 +203,34 @@ const ProductListingPage = () => {
 
         const formData = new FormData();
 
-        formData.append('title', value.productname)
-        formData.append('image', image)
-        formData.append('image2', image2)
-        formData.append('image3', image3)
-        formData.append('description', value.description)
-        formData.append('product_id', pro_id)
+
+        if (validateForm()) {
+
+            formData.append('title', value.productname)
+            formData.append('image', image)
+            formData.append('image2', image2)
+            formData.append('image3', image3)
+            formData.append('description', value.description)
+            formData.append('product_id', pro_id)
 
 
 
-        fetch(`${BASE_URL}/update_product`, {
-            method: 'POST',
-            body: formData,
-        })
-            .then((res) => {
-                // console.log(res)
-                if (res) {
-                    getlisitngdetail()
-                    setOpen(false);
-                   window.location.pathname = '/productlistingpage'
-                }
+            fetch(`${BASE_URL}/update_product`, {
+                method: 'POST',
+                body: formData,
             })
-            .catch((err) => {
-                console.log(err)
-            })
+                .then((res) => {
+                    // console.log(res)
+                    if (res) {
+                        getlisitngdetail()
+                        setOpen(false);
+                        window.location.pathname = '/productlistingpage'
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
     }
 
     async function getcategory() {
@@ -290,10 +328,12 @@ const ProductListingPage = () => {
                                                                 onChange={(event, value) => HandleChange(value)} // Pass only the value
                                                             />
                                                             {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                                                            {errors.category && <span className="text-danger">{errors.category}</span>}
                                                         </div>
 
                                                         <div className='my-2'>
                                                             <CustomInput name="productname" placeholder={item.title} onChange={onHandleChange} />
+                                                            {errors.productname && <p className="text-danger">{errors.productname}</p>}
                                                         </div>
 
 
@@ -303,22 +343,26 @@ const ProductListingPage = () => {
                                                                 <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
                                                                 <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                                                {errors.image && <span className="text-danger">{errors.image}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                 <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
                                                                 <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload2} />
+                                                                {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                 <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
                                                                 <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload3} />
+                                                                {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                             </div>
                                                         </div>
 
 
                                                         <div>
                                                             <CustomTextarea className="my-2" placeholder={item.description} name="description" onChange={onHandleChange} />
+                                                            {errors.description && <span className="text-danger">{errors.description}</span>}
                                                         </div>
                                                         <div>
                                                             <PrimaryButton children="submit" type="submit" />

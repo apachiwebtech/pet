@@ -873,3 +873,16 @@ app.post('/product_listing', (req, res) => {
     }
   })
 })
+app.post('/getUserName', (req, res, next)=>{
+  const {user_id} = req.body;
+
+  const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
+
+  con.query(sql, [user_id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
