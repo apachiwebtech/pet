@@ -675,7 +675,9 @@ app.post('/update_service', upload.single('image'), (req, res) => {
   const description = req.body.description;
   const service_id = req.body.service_id;
   const daysJSON = req.body.days;
+
   const days = JSON.parse(daysJSON);
+
 
   const updated_date = new Date()
 
@@ -729,6 +731,25 @@ app.post('/update_service', upload.single('image'), (req, res) => {
 
   });
 });
+
+exports.markAttendance = async (req, res) => {
+  const { attendance } = req.body;
+  
+  try {
+    for (const studentData of attendance) {
+      const { studentName, status, date } = studentData;
+
+      const insertQuery = 'INSERT INTO attendance (name, status, date) VALUES (?, ?, ?)';
+      await connection.query(insertQuery, [studentName, status, date]);
+    }
+
+    res.status(200).json({ message: 'Attendance marked successfully' });
+  } catch (err) {
+    console.error('Error marking attendance:', err);
+    res.status(500).json({ error: 'Failed to mark attendance' });
+  }
+};
+
 
 app.post('/service_listing', (req, res) => {
 

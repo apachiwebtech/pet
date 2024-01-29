@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Search from '../UI/SearchField';
 import { BASE_URL } from '../Utils/BaseUrl';
+import appo from '../icon/cal.png'
+import order from '../icon/order.png'
+import service from '../icon/service.png'
+import product from '../icon/product.png'
 const Dash = () => {
   const [feild, setfeild] = useState([])
   const [search, setSearch] = useState('')
@@ -45,7 +49,7 @@ const Dash = () => {
           feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item, index) => {
             return (
               <div className='col-4 py-2'>
-                <Link to={`/${item.link}/${item.id}`}><img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
+                <Link to={`/${item.link}/${item.id}`}><img src={`https://thetalentclub.co.in/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
                 {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
                 <p>{item.title}</p>
               </div>
@@ -60,22 +64,22 @@ const Dash = () => {
         {
           localStorage.getItem("pet_role") == 2 ?
            <Link to="/servicerequest"><div className=''>
-           <StoreIcon className='dash-icon' />
-           <p>service <br />Request</p>
+           <img className='dash-icon' src={service} alt='' />
+           <p>Service <br />Request</p>
          </div></Link>  :
             <div className=''>
-              <StoreIcon className='dash-icon' />
+              <img className='dash-icon' src={appo} alt=''/>
               <p>My <br />Appointment</p>
             </div>
         }
         {
           localStorage.getItem("pet_role") == 2 ?
           <div className=' '><Link to="/productrequest">
-              <StoreIcon className='dash-icon' />
+              <img className='dash-icon' src={order} alt='' />
               <p>Product  <br /> Request</p>
               </Link> </div>:
             <div className=' '>
-              <StoreIcon className='dash-icon' />
+              <img className='dash-icon' src={order} alt='' />
               <p>My Order <br /> Booking</p>
             </div>
         }
