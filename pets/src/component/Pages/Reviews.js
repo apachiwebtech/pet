@@ -93,7 +93,7 @@ const Reviews = () => {
   const totalRating = Number(
     commentData.reduce((accumulator, review) => accumulator + review.rating, 0)
   );
-  const average = Number(totalRating / commentData.length);
+  let average = Number(totalRating / commentData.length);
   console.log(average.toFixed(1));
 
   const ratingCalc = (data) => {
@@ -120,6 +120,9 @@ const Reviews = () => {
     ratingCalc(commentData);
   }, [commentData]);
 
+  if(average > 5){
+    average = 5;
+  }
   const style = {
     position: "absolute",
     top: "50%",
@@ -149,7 +152,7 @@ const Reviews = () => {
 
               <Typography variant="p">
                 {`Based on ${commentData.length} reviews`}
-              </Typography>
+              </Typography> 
             </>
           )
         }
