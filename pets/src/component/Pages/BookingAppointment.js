@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PrimaryButton from "../UI/PrimaryButton";
 import classes from "./BookingAppointment.module.css";
 import dayjs from "dayjs";
+import { StaticDatePicker } from "@mui/x-date-pickers";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -10,7 +11,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
 import Card from "../UI/Card";
-import { StaticDatePicker } from "@mui/x-date-pickers";
 
 const timing = [
   "9:00",
