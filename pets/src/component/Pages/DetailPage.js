@@ -56,7 +56,7 @@ const DetailPage = () => {
     }).catch((err)=>{
       console.log(err);
     })
-  },[])
+  },[id])
 
   useEffect(()=>{
     axios.get(`${BASE_URL}/recommendedFor/${id}`)
@@ -66,7 +66,7 @@ const DetailPage = () => {
     }).catch((err)=>{
       console.log(err);
     })
-  }, [])
+  }, [id])
   console.log(detail.address)
 
   const handleCommentSubmuit=(event)=>{
@@ -111,12 +111,11 @@ const DetailPage = () => {
             justifyContent: "space-between",
             zIndex: "1",
           }}
-        ><NavLink to='/reviews' style={{textDecoration:"none", color:"black"}}>
+        >
 
           <h3 style={{ padding: "0", margin: "0", fontWeight: "bold" }}>
             {detail.title}
           </h3>
-        </NavLink>
 
           <h5 style={{ padding: "0", margin: "0", color: "#006699" }}>
             {detail.designation}
@@ -211,7 +210,7 @@ const DetailPage = () => {
             <h6>Recommended for :</h6>
             <div className={classes.tags}>
               {recommenderFor.map((item) => {
-                return <span>{item.recommended_for}</span>;
+                return <span key={item.id}>{item.recommended_for}</span>;
                 // console.log(item.recommended_for)
               })}
             </div>
