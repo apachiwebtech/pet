@@ -31,8 +31,15 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage: storage });
 
+const storage2 = multer.diskStorage({
+  destination : 'uploads/lost_found/',
+  filename: (req, file, cb)=>{
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+})
+const upload = multer({ storage: storage });
+const upload2 = multer({storage: storage2});
 app.get('/', (req, res) => {
   return res.json("this is from backend")
 });
@@ -480,14 +487,26 @@ app.post('/dashboard', (req, res) => {
 })
 
 app.post('/petProfile', (req, res) => {
-  const userId = req.body.userId;
-  const state = req.body.state;
-  const city = req.body.city;
-  const pincode = req.body.pincode;
+    
+  const {
+    userId,
+    state,
+    city,
+    pincode,
+    parent,
+    address,
+    pet,
+    image,
+    breed,
+    color,
+    height,
+    weight,
+    date
+  } = req.body;
 
-  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
+  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`, `parent_name`, `address`, `pet_name`, `profile_image`, `breed`, `color`, `height`, `weight`, `dob`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'
 
-  con.query(sql, [userId, state, city, pincode], (err, data) => {
+  con.query(sql, [userId, state, city, pincode, parent, address, pet, image, breed, color, height, weight, date], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
@@ -496,6 +515,19 @@ app.post('/petProfile', (req, res) => {
   })
 })
 
+app.post('/getPetProfile', (req, res)=>{
+
+  const userid = req.body.userId;
+  const sql = 'SELECT * FROM awt_userprofile WHERE userid  = ?';
+
+  con.query(sql,[userid], (err, data)=>{
+    if(err){  
+      res.json(err);
+    }else{
+      res.json(data);
+    }
+  })
+})
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
@@ -540,7 +572,7 @@ app.get('/detailPage/:id', (req, res, next) => {
 app.get('/recommendedFor/:id', (req, res, next)=>{
   const id = req.params.id;
 
-  const sql = 'SELECT recommended_for FROM awt_amenities WHERE s_id = ?'
+  const sql = 'SELECT recommended_for, id FROM awt_amenities WHERE s_id = ?'
 
   con.query(sql,[id], (err, data)=>{
     if(err){
@@ -550,7 +582,36 @@ app.get('/recommendedFor/:id', (req, res, next)=>{
     }
   })
 })
+app.post('/addComment', (req, res, next)=>{
+  const {pet_id, serviceProviderId, comment, rating} = req.body;
+  const currentDate = new Date();
+  const sql = 'INSERT INTO awt_comments (`user_id`,`service_provider_id`,`comment`, `rating`, `created_at`) VALUES (?,?,?,?,?)'
 
+  con.query(sql,[pet_id, serviceProviderId, comment, rating, currentDate], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.status(200).json({message: "Comment added successfully", status: 201})
+
+    }
+  })
+
+})
+
+app.get('/getComments/:id', (req, res, next)=>{
+  const id = req.params.id;
+
+  const sql = 'SELECT * FROM awt_comments WHERE service_provider_id = ? AND deleted = 0'
+  con.query(sql,[id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.status(200).json(data)
+
+    }
+  })
+
+})
 app.get('/get_category', (req, res, next) => {
 
   const sql = 'SELECT * FROM awt_dashboard where deleted = 0 and status = 1'
@@ -563,7 +624,19 @@ app.get('/get_category', (req, res, next) => {
     }
   })
 })
+app.post('/getUserName', (req, res, next)=>{
+  const {user_id} = req.body;
 
+  const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
+
+  con.query(sql, [user_id], (err, data)=>{
+    if(err){
+      return res.json(err);
+    }else{
+      return res.json(data);
+    }
+  })
+})
 app.post('/provider_details', upload.single('image'),  (req, res) => {
   let pet_id = req.body.pet_id;
   let imagepath = req.file.filename;
@@ -583,6 +656,112 @@ app.post('/provider_details', upload.single('image'),  (req, res) => {
     }
     else {
       return res.json(data)
+    }
+  })
+})
+
+
+app.get('/get_breeds', (req, res, next)=>{
+
+  const sql = 'SELECT breed as item from awt_breeds where deleted = 0'
+
+  con.query(sql, (err, data)=>{
+
+    if(err){
+      res.json({message : "Could'nt fetch breeds at the moment"});
+    }else{
+      res.json(data);
+    }
+  })
+})
+app.get('/get_color', (req, res, next)=>{
+
+  const sql = 'SELECT color as item from awt_colors where deleted = 0'
+
+  con.query(sql, (err, data)=>{
+
+    if(err){
+      res.json({message : "Could'nt fetch colors at the moment"});
+    }else{
+      res.json(data);
+    }
+  })
+})
+app.put('/updatePetProfile',(req, res, next)=>{
+  const {status, userid} = req.body.data;
+  const sql = 'UPDATE awt_userprofile SET community_status = ? WHERE userid = ?'
+console.log(status, userid)
+  con.query(sql,[status, userid], (err, data)=>{
+    if(err){
+      return res.status(500).json(err);
+    }else{
+      return res.status(200).json(data);
+    }
+  })
+})
+
+app.post('/getPetProfiledata', (req, res, next) => {
+  const { userId } = req.body; // Destructure the userid from req.body
+  const sql = 'SELECT * FROM awt_userprofile WHERE userid = ? AND deleted = 0 ORDER BY created_date DESC';
+  console.log(userId, "nai mili");
+
+  con.query(sql, [userId], (err, data) => {
+    if (err) {
+      return res.status(404).json({ msg: "cannot fetch data" });
+    } else {
+      return res.json(data);
+    }
+  });
+});
+
+app.put(('/putGender'), (req, res, next)=>{
+  const gender = req.body.gender;
+  const userid = req.body.userid;
+  let newGender = '';
+  if(gender === 'male'){
+    newGender = "M";
+  }else{
+    newGender = 'F';
+  }
+  console.log(newGender, userid);
+
+  const sql2 = "UPDATE awt_userprofile SET gender = ? WHERE userid = ? AND deleted = 0";
+
+  con.query(sql2, [newGender, userid], (error, data)=>{
+    if(error){
+      res.status(500).json({error : "could not update gender."});
+    }else{
+      res.status(200).json({message : "Gender Updated successfully", gender : newGender});
+    }
+  })
+})
+
+
+app.post('/addLostFound',upload2.single('image'), (req, res) => {
+  const data = req.body;
+  console.log(data, "message")
+  const image = req.file.fieldname;
+  const {userid,petName, breed, color, mobile, message, last_location } = data;
+
+  const sql = 'INSERT INTO awt_lost_found (`user_id`, `pet_name`, `breed`, `color`, `contact`, `message`, `image`, `last_location`)  VALUES(?,?,?,?,?,?,?,?)';
+
+  con.query(sql, [userid,petName, breed, color, mobile, message, image, last_location], (error, data)=>{
+    if(error){
+      res.json(error);
+    }else{
+      res.json(data);
+    }
+  })
+})
+
+app.get('/getLostFound', (req, res, next)=>{
+  const sql = 'SELECT * FROM awt_lost_found WHERE deleted = 0';
+
+  con.query(sql, (error, data)=>{
+    if(error){
+      res.json(err);
+    }else{
+      res.json(data);
     }
   })
 })

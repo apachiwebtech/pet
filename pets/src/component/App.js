@@ -32,6 +32,10 @@ import AddProduct from './Forms/AddProduct';
 import ProductListingPage from './Pages/PorductListingPage';
 import ServiceRequest from './Pages/ServiceRequest';
 import ProductRequest from './Pages/ProductRequest';
+import LostAndFound from './Pages/LostAndFound';
+import LostAndFoundForm from './Forms/LostAndFoundForm';
+import Community from './Pages/Community';
+import CircularNav from './UI/CircularNav';
 
 
 const routing = createBrowserRouter([
@@ -114,6 +118,22 @@ const routing = createBrowserRouter([
       {
         path : "/productrequest",
         element: <ProductRequest />
+      },
+      {
+        path : '/lostAndFound',
+        element:<LostAndFound/>
+      },
+      {
+        path : '/lostFOundForm',
+        element : <LostAndFoundForm/>
+      },
+      {
+        path : '/community',
+        element : <Community/>
+      },
+      {
+        path : '/circuleNav',
+        element : <CircularNav/>
       }
 
     ]
