@@ -48,7 +48,7 @@ const Footer = () => {
         />
         <BottomNavigationAction
         component={Link}
-        to='/pet'
+        to='/pet/4'
           label="Profile"
           value="profile"
           icon={<PetsOutlinedIcon />}
@@ -59,6 +59,9 @@ const Footer = () => {
           icon={<LocationOnOutlinedIcon />}
         />
          <BottomNavigationAction
+                 component={Link}
+                 to='/settings'
+
         label="Setting"
           value="setting"
           icon={<SettingsOutlinedIcon />}
