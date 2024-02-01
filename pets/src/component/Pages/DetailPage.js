@@ -93,7 +93,7 @@ const DetailPage = () => {
     <div className={classes.Container}>
       <div className={classes.imageContainer}>
         <img
-          src={serviceProvider.imageSrc}
+          src={`http://thetalentclub.co.in/pet-app/upload/subcategory/`  +  detail.upload_image}
           width="100%"
           alt="DetailImage"
           style={{ objectFit: "contian" }}
@@ -133,7 +133,7 @@ const DetailPage = () => {
             <Rating
               name="half-rating"
               defaultValue={0}
-              value={serviceProvider.rating}
+              value={detail.rating}
               precision={0.5}
               readOnly
             />
@@ -196,7 +196,7 @@ const DetailPage = () => {
                 <FavoriteIcon sx={{ color: "#cc2944" }} />
               </span>
               <p style={{ margin: "0", fontSize: "" }}>
-                <NavLink to={`/reviews/${serviceProvider.id}`} style={{color:"#757575"}}>
+                <NavLink to={`/reviews/${detail.id}`} style={{color:"#757575"}}>
 
                 <ModeCommentOutlinedIcon/>
                 </NavLink>

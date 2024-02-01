@@ -37,7 +37,7 @@ const Footer = () => {
     //   </div>
     // </div>
     <div className='footer py-1'>
-      <BottomNavigation sx={{ width: "100%" ,background : "green" }} value={value} onChange={handleChange}>
+      <BottomNavigation sx={{ width: "100%", background: "green" }} value={value} onChange={handleChange}>
         <BottomNavigationAction
           component={Link}
           to='/'
@@ -47,8 +47,8 @@ const Footer = () => {
           selected
         />
         <BottomNavigationAction
-        component={Link}
-        to='/pet/:id'
+          component={Link}
+          to='/pet/:id'
           label="Profile"
           value="profile"
           icon={<PetsOutlinedIcon />}
@@ -58,8 +58,10 @@ const Footer = () => {
           value="location"
           icon={<LocationOnOutlinedIcon />}
         />
-         <BottomNavigationAction
-        label="Setting"
+        <BottomNavigationAction
+          component={Link}
+          to='/setting'
+          label="Setting"
           value="setting"
           icon={<SettingsOutlinedIcon />}
         />

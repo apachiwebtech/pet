@@ -40,7 +40,7 @@ const Otp = () => {
         setOtp(localStorage.getItem('otp'));
         setTimeout(() => {
             setShowOtp(false);
-        }, 5000)
+        }, 10000)
 
     }, []);
     const onHandleChange = (e) => {

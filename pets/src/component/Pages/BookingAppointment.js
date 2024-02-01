@@ -8,7 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 
@@ -115,7 +115,7 @@ const BookingAppointment = () => {
           hide ? <Alert style={{ height: "50px" }} variant="filled" severity="success">
             <div className="d-flex justify-content-between">
               {msg}
-              <p className="px-5 text-light" style={{ textDecoration: "underline" }}> Details <i class="bi bi-arrow-right"></i></p>
+              <p className="px-5 text-light" style={{ textDecoration: "underline" }}> <Link to="/myappointment">Details <i class="bi bi-arrow-right"></i></Link></p>
             </div>
           </Alert> : null
         }
