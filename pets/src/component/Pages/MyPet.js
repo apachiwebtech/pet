@@ -6,29 +6,27 @@ import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import DropDown from "../UI/DropDown";
 import axios from 'axios';
-import { DropDownActions } from "../../Store/DropDownSlice";
 import { getColors, getBreeds } from "../../Store/DropDownActions";
 import { useSelector, useDispatch } from 'react-redux'
 import WeightHeightCal from "../UI/WeightHeightCal";
 import { DateCalc } from "../UI/WeightHeightCal";
-import { PetFormActions } from "../../Store/PetFormSlice";
-import { putPetGender } from "../../Store/PetFormActions";
+import { putPetGender, getProfileData } from "../../Store/PetFormActions";
+import { AgeCalculator } from "../Utils/AgeCalculator";
 import { BASE_URL } from "../Utils/BaseUrl";
 const MyPet = () => {
-
+  const userid = localStorage.getItem("pet_id")
   const dispatch = useDispatch();
   useEffect(()=>{
-    console.log('insideuseffexr')
     dispatch(getBreeds());
 
     dispatch(getColors());
-  }, [dispatch])
+
+    dispatch(getProfileData({id : userid}))
+  }, [dispatch, userid])
 
   const breeds = useSelector((state)=> state.dropdown.breeds);
   const colors = useSelector((state)=> state.dropdown.colors);
   const genderState = useSelector((state)=> state.petform);
-console.log(genderState.gender)
-  console.log(genderState, "esnkdjd");
   const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false);
   const [openWeightHeightModal, setOpenWeightHeight] = useState(false);
@@ -48,15 +46,18 @@ console.log(genderState.gender)
     fileInputRef.current.click();
   };
 
-  const [petObject, setPetObject] = useState({});
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImageToSend(file.name);
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
-    }
+  const initialPetObject = {
+    pet_name: "",
+    breed: "",
+    color: "",
+    height: "",
+    weight: "",
+    gender: ""
   };
+  
+  const [petObject, setPetObject] = useState(initialPetObject);
+  
+  
   const handleOpen = (type) => {
     setOpen(true);
     if(type === 'breeds'){
@@ -116,13 +117,30 @@ const openDateCalc = ()=>{
     const getData = (userid)=>{
       axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid })
   .then((res)=>{
-    console.log(res.data[0], "ha bhai");
     setPetObject(res.data[0]);
+    console.log(res.data[0])
   }).catch((error)=>{
     console.warn(error);
   })
     }
-
+   
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+    
+      if (file) {
+        const reader = new FileReader();
+    
+        reader.onloadend = () => {
+          setSelectedImage(reader.result);
+          // Use reader.result directly without splitting for base64 data
+          setSelectedImageToSend(reader.result);
+        };
+    
+        reader.readAsDataURL(file);
+        setImage(file);
+      }
+    };
+    
     async function ImageBase64(file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -135,31 +153,56 @@ const openDateCalc = ()=>{
       return data;
     }
     const handleUpload = async (e) => {
-      document.getElementById("uptext1").style.display = "none";
-      const data = await ImageBase64(e.target.files[0]);
       const file = e.target.files[0];
-      setImage(file);
-      
+    
+      if (file) {
+        try {
+          const data = await ImageBase64(file);
+          console.log(data);
+          setImage(file);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     };
-    const ageCalculator= (date)=>{
-       // Assuming petObject.dob is in the format "2022-04-16T18:30:00.000Z"
-const petDob = new Date(date);
-
-const currentDate = new Date();
-
-// Calculate the difference in months
-const monthsDifference = (currentDate.getMonth() - petDob.getMonth()) + 12 * (currentDate.getFullYear() - petDob.getFullYear());
-
-// Convert months to decimal years
-const ageInYears = monthsDifference / 12;
-setAge(ageInYears.toFixed(1))
-console.log("Age in years:", ageInYears.toFixed(1));
-    }
     useEffect(()=>{
       const userid = localStorage.getItem("pet_id")
-      getData(userid);
-      ageCalculator(petObject.dob);
-    }, [petObject.dob, petObject.gender]);
+      if(petObject.dob!== ""){
+        setAge(AgeCalculator(petObject.dob))
+
+      }else{
+        return;
+      }
+      getData(userid)
+    }, []);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.post(
+            "http://localhost:8081/getPetProfiledata",
+            { userId: userid }
+          );
+    
+          if (response.data && response.data.length > 0) {
+            setPetObject(response.data[0]);
+            setAge(AgeCalculator(response.data[0].dob));
+          } else {
+            // Set default values if no data is available
+            setPetObject(initialPetObject);
+            setAge(0); // Set default age
+          }
+        } catch (error) {
+          console.warn(error);
+        }
+      };
+    
+      if (userid) {
+        fetchData();
+      }
+    
+    }, [userid]);
+    
   return (
     <div className="main" style={{ position: "relative", paddingBottom: "50px" }}>
       <div className="pet-img" style={{position:"relative", height:"220px"}} onClick={handleImageClick}>
@@ -186,7 +229,7 @@ console.log("Age in years:", ageInYears.toFixed(1));
           }}
         >
           <div>
-            <h3 style={{ color: "white" }}>{petObject.pet_name}</h3>
+            <h3 style={{ color: "white" }}>{petObject.pet_name || "Add your pet's name"}</h3>
             <p style={{ color: "#22a36b", fontWeight: "bold", fontSize: "1.2rem" }}>
               {petObject.breed}
             </p>
@@ -202,7 +245,7 @@ console.log("Age in years:", ageInYears.toFixed(1));
         <div style={{ position: "relative", top: "3em", padding: "0 10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
           <div style={{ display: "flex", justifyItems: "center", gap: "1em" }}>
             <span><PetsIcon style={{ padding: "0" }} /></span>
-            <h4 >About {petObject.pet_name}</h4>
+            <h4 >About {petObject.pet_name || ""}</h4>
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "row", padding: "10px", gap: "10px", flexWrap: "", marginTop: "", justifyContent: "center" }}>
@@ -213,38 +256,38 @@ console.log("Age in years:", ageInYears.toFixed(1));
           <div onClick={()=>handleOpen('breeds')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Species</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.breed}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.breed || ""}</span>
 
           </div>
           <div onClick={openDateCalc} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Age</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{age}y</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{age || "years"}</span>
 
           </div>
           <div onClick={()=>{openWeightHeight('weight')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Weight</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.weight} kg</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.weight || ""} kg</span>
 
           </div>
           <div onClick={()=>{openWeightHeight('height')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Height</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.height} cm</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.height || ""} cm</span>
 
           </div>
           <div onClick={()=>handleOpen('colors')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Color</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.color}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.color || ""}</span>
 
           </div>
 
 
         </div>
         <PetProfileForm 
-          image={imageToSend}
+          image={image}
           breed={selectedBreed}
           color={selectedColor}
           height={height}
@@ -265,8 +308,6 @@ console.log("Age in years:", ageInYears.toFixed(1));
            options={options}
            onSelect={(option) => handleSelectedOption(option, options === breeds ? 'breeds' : 'colors')}
         ></DropDown>
-        {/* <WeightHeightCal open = {openWeightHeightModal} onClose={handleClose}/> */}
-        {/* <WeightHeightCal open={openWeightHeightModal} onClose={handleClose} step={stepType === 'weight' ? 5 : 20} type={stepType === 'weight' ? 'weight' : 'height'}/> */}
         <WeightHeightCal open={openWeightHeightModal} onClose={handleClose} step={stepType === 'weight' ? 5 : 20} type={stepType === 'weight' ? 'weight' : 'height'} onSave={stepType === 'weight' ? handleWeightSave : handleHeightSave} />
         <DateCalc 
             onSave={handleDateSave}
