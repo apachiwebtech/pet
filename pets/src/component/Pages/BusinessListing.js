@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DUMMY_DATA } from '../../Dummy_Data';
+import CircularProgress from '@mui/material/CircularProgress';
 import ListingCard from "../SubComponents/LisitingCard";
 import SearchField from "../UI/SearchField";
 import axios from "axios";
+import { BASE_URL } from "../Utils/BaseUrl";
 const BusinessListing = () => {
   const [search, setSearch] = useState('')
   const [listData, setListData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const {link, id } = useParams();
   console.log(link)
   console.log(id)
@@ -34,10 +36,11 @@ const BusinessListing = () => {
 
   
   useEffect(()=>{
-    axios.get(`http://localhost:8081/listing/${id}`)
+    axios.get(`${BASE_URL}/listing/${id}`)
     .then((res)=>{
       console.log(res.data);
       setListData(res.data);
+      setLoading(false);
     }).catch((err)=>{
       console.log(err);
     })
@@ -56,6 +59,9 @@ const BusinessListing = () => {
           position: "relative",
         }}
       >
+        {loading && <div style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)"}}>
+          <CircularProgress color="success"/>
+        </div>}
         <div
           style={{
             overflowY: "scroll",
@@ -75,173 +81,7 @@ const BusinessListing = () => {
           >
             {listData?.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
               return (
-                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading  || `${heading}`} date={item.date || ''} img={item.upload_image} altText={item.alt || "alternate image"} id={item.id}/>
-                // <Card
-                //   style={{
-                //     width: "100%",
-                //     height: "300px",
-                //     padding: "20px",
-                //     boxSizing: "border-box",
-                //     marginBottom: "25px",
-                //   }}
-                // >
-                //   <div
-                //     style={{
-                //       display: "flex",
-                //       flexDirection: "row",
-                //       alignItems: "center",
-                //       gap: "10px",
-                //       alignContent: "center",
-                //       marginBottom: "10px",
-                //       fontWeight: "bold",
-                //     }}
-                //   >
-                //     <span>
-                //       <PetsIcon sx={{ color: "#454545" }}></PetsIcon>
-                //     </span>
-                //     <h4
-                //       style={{
-                //         margin: "0",
-                //         padding: "0",
-                //         fontWeight: "bold",
-                //         color: "#454545",
-                //       }}
-                //     >
-                //       {item.heading}
-                //     </h4>
-                //   </div>
-                //   <Card
-                //     style={{
-                //       height: "80%",
-                //       padding: "20px",
-                //       display: "grid",
-                //       gridTemplateColumns: "0.7fr 1fr",
-                //       gridTemplateRows: "1fr 0.4fr",
-                //       gap: "10px",
-                //       gridRowGap: "15px",
-                //     }}
-                //   >
-                //     <div
-                //       style={{
-                //         backgroundColor: "",
-                //         display: "flex",
-                //         alignItems: "center",
-                //         justifyContent: "center",
-                //       }}
-                //     >
-                //       <img
-                //         src={dog}
-                //         alt="dog"
-                //         style={{
-                //           objectFit: "contain",
-                //           height: "100px",
-                //           width: "100%",
-                //         }}
-                //       />
-                //     </div>
-                //     <div
-                //       style={{
-                //         backgroundColor: "",
-                //         lineHeight: "1rem",
-                //         padding: "5px",
-                //         position: "relative",
-                //       }}
-                //     >
-                //       <h5 style={{ margin: "0 0 0px 0", color: "#454545" }}>
-                //         {item.title}
-                //       </h5>
-                //       <p
-                //         style={{
-                //           fontSize: "0.8rem",
-                //           margin: "0 0 10px 0",
-                //           color: "#adadad",
-                //         }}
-                //       >
-                //         something about him
-                //       </p>
-                //       <div
-                //         style={{
-                //           display: "flex",
-                //           flexDirection: "column",
-                //           margin: " 0 0 0",
-                //           gap: "5px",
-                //           width: "90%",
-                //           position: "absolute",
-                //           bottom: "",
-                //         }}
-                //       >
-                //         <div
-                //           style={{
-                //             display: "flex",
-                //             flexDirection: "row",
-                //             justifyContent: "space-between",
-                //             padding: "0",
-                //           }}
-                //         >
-                //           <div>
-                //             <Rating
-                //               name="read-only"
-                //               value={item.rating}
-                //               size="small"
-                //               readOnly
-                //             />
-                //           </div>
-                //           <div>reviews</div>
-                //         </div>
-                //         <div
-                //           style={{
-                //             display: "flex",
-                //             flexDirection: "row",
-                //             justifyContent: "space-between",
-                //             padding: "0",
-                //           }}
-                //         >
-                //           <button
-                //             style={{
-                //               border: "1px solid black",
-                //               backgroundColor: "transparent",
-                //               borderRadius: "20px",
-                //               padding: "3px 10px",
-                //               textAlign: "center",
-                //               display: "inline-block",
-                //               width: "fit-content",
-                //               fontSize: "0.9rem",
-                //             }}
-                //           >
-                //             icon1
-                //           </button>
-                //           <div>icons</div>
-                //         </div>
-                //       </div>
-                //     </div>
-                //     <div
-                //       style={{
-                //         backgroundColor: "",
-                //         fontSize: "0.9rem",
-                //         padding: "0",
-                //         display: "flex",
-                //         justifyContent: "flex-start",
-                //         alignItems: "center",
-                //         color: "#adadad",
-                //       }}
-                //     >
-                //       {`Last visit` + " " + item.date}
-                //     </div>
-                //     <PrimaryButton
-                //       style={{
-                //         backgroundColor: "transparent",
-                //         padding: "0",
-                //         display: "flex",
-                //         justifyContent: "flex-end",
-                //         alignItems: "center",
-                //         border: "none",
-                //       }}
-                //     >
-                //       Book Appointment
-                //       <NavigateNextIcon />
-                //     </PrimaryButton>
-                //   </Card>
-                // </Card>
+                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading  || `${heading}`} date={item.date || ''} img={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} altText={item.alt || "alternate image"} id={item.id}/>
               );
             })}
           </div>

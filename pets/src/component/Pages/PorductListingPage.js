@@ -251,6 +251,7 @@ const ProductListingPage = () => {
         if (selectedValue) {
             const selectedId = selectedValue.id;
             console.log(selectedId, "ser");
+            setCatid(selectedId)
             // Now you have the selected id, you can use it in your application logic
         }
     };

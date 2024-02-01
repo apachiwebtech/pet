@@ -8,7 +8,7 @@ const multer = require('multer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const async = require('async');
-
+const moment = require('moment')
 dotenv.config();
 
 app.use(
@@ -28,19 +28,22 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
-  destination: 'uploads/', // 
+  destination: '../public_html/pet-app/upload/subcategory/', // 
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
 const storage2 = multer.diskStorage({
-  destination : 'uploads/lost_found/',
-  filename: (req, file, cb)=>{
+  destination: 'uploads/lost_found/',
+  filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 })
 const upload = multer({ storage: storage });
-const upload2 = multer({storage: storage2});
+const upload2 = multer({ storage: storage2 });
+
+
+
 app.get('/', (req, res) => {
   return res.json("this is from backend")
 });
@@ -200,13 +203,14 @@ app.post('/otp', (req, res) => {
 
 
   if (value == 1) {
-    const sql = "SELECT * from awt_registeruser where email = ? and otp = ? and deleted = 0 ";
+    const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id where ar.email =?  and ar.otp = ? and ar.deleted = 0 ";
     params = [email, otp]
     con.query(sql, params, (err, data) => {
       if (err) {
         return res.json(err)
       } else {
 
+        console.log(data,"otp")
         return res.json(data)
       }
     })
@@ -228,7 +232,7 @@ app.post('/otp', (req, res) => {
               return res.json(err)
             } else {
               const insertedId = data.insertId;
-              const sql = "SELECT * from awt_registeruser WHERE id = ? and deleted = 0";
+              const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id WHERE ar.id = ? and ar.deleted = 0";
 
               con.query(sql, [insertedId], (err, data) => {
                 if (err) {
@@ -487,15 +491,45 @@ app.post('/dashboard', (req, res) => {
   })
 })
 
+// app.post('/petProfile', (req, res) => {
+//   const userId = req.body.userId;
+//   const state = req.body.state;
+//   const city = req.body.city;
+//   const pincode = req.body.pincode;
+
+//   const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
+
+//   con.query(sql, [userId, state, city, pincode], (err, data) => {
+//     if (err) {
+//       return res.json(err);
+//     } else {
+//       return res.json(data);
+//     }
+//   })
+// })
+
 app.post('/petProfile', (req, res) => {
-  const userId = req.body.userId;
-  const state = req.body.state;
-  const city = req.body.city;
-  const pincode = req.body.pincode;
+    
+  const {
+    userId,
+    state,
+    city,
+    pincode,
+    parent,
+    address,
+    pet,
+    image,
+    breed,
+    color,
+    height,
+    weight,
+    date, 
+    mobile
+  } = req.body;
 
-  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`) VALUES (?,?,?,?)'
+  const sql = 'INSERT INTO awt_userprofile (`userid`, `state`, `city`, `pincode`, `parent_name`, `address`, `pet_name`, `profile_image`, `breed`, `color`, `height`, `weight`, `dob`, `mobile`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 
-  con.query(sql, [userId, state, city, pincode], (err, data) => {
+  con.query(sql, [userId, state, city, pincode, parent, address, pet, image, breed, color, height, weight, date, mobile], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
@@ -520,7 +554,7 @@ const transporter = nodemailer.createTransport({
 app.get('/listing/:id', (req, res, next) => {
 
   const id = req.params.id;
-  const sql = 'SELECT * FROM awt_add_services WHERE scatid = ?'
+  const sql = 'SELECT * FROM awt_add_services WHERE catid = ?'
 
   con.query(sql, [id], (err, data) => {
     if (err) {
@@ -595,21 +629,35 @@ app.post('/provider_details', upload.single('image'), (req, res) => {
   })
 })
 
-app.post('/add_service', upload.single('image'), (req, res) => {
+app.post('/add_service', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 }
+]), (req, res) => {
   const category = req.body.category;
   const service = req.body.service;
   const address = req.body.address;
-  let imagepath = req.file.filename;
+  // let imagepath = req.file.filename;
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
   const description = req.body.description;
   const user_id = req.body.user_id
   const daysJSON = req.body.days;
   const days = JSON.parse(daysJSON);
 
+  const image1 = req.files['image'];
+  const image2 = req.files['image2'];
+  const image3 = req.files['image3'];
+
+  let img1 = image1[0].filename
+  let img2 = image2[0].filename
+  let img3 = image3[0].filename
+
   const created_date = new Date()
 
   // Insert data into the main table
-  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image, description , created_date , created_by) VALUES (?, ?, ?, ?, ?,?,?)';
-  const mainValues = [category, service, address, imagepath, description, created_date, user_id];
+  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image,upload_image2,upload_image3, description , created_date , created_by,longitude,latitude) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?)';
+  const mainValues = [category, service, address, img1, img2, img3, description, created_date, user_id,longitude,latitude];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
     if (err) {
@@ -673,7 +721,11 @@ app.post('/delete_service', (req, res) => {
   });
 });
 
-app.post('/update_service', upload.single('image'), (req, res) => {
+app.post('/update_service',  upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 }
+]), (req, res) => {
   const category = req.body.category;
   const service = req.body.service;
   const address = req.body.address;
@@ -681,15 +733,23 @@ app.post('/update_service', upload.single('image'), (req, res) => {
   const description = req.body.description;
   const service_id = req.body.service_id;
   const daysJSON = req.body.days;
-
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
   const days = JSON.parse(daysJSON);
 
+  const image1 = req.files['image'];
+  const image2 = req.files['image2'];
+  const image3 = req.files['image3'];
+
+  let img1 = image1[0].filename
+  let img2 = image2[0].filename
+  let img3 = image3[0].filename
 
   const updated_date = new Date()
 
   // Insert data into the main table
-  const insertMainQuery = 'update awt_add_services set catid = ? ,title= ?,address = ?,upload_image = ? ,description = ?, updated_date = ? where id = ? ';
-  const mainValues = [category, service, address, imagepath, description, updated_date, service_id];
+  const insertMainQuery = 'update awt_add_services set catid = ? ,title= ?, address = ?, upload_image = ?,upload_image2 = ?,upload_image3 = ? , description = ?, updated_date = ? ,longitude = ? ,latitude = ? where id = ? ';
+  const mainValues = [category, service, address, img1,img2,img3, description, updated_date,longitude ,latitude, service_id];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
     if (err) {
@@ -740,7 +800,7 @@ app.post('/update_service', upload.single('image'), (req, res) => {
 
 exports.markAttendance = async (req, res) => {
   const { attendance } = req.body;
-  
+
   try {
     for (const studentData of attendance) {
       const { studentName, status, date } = studentData;
@@ -900,44 +960,44 @@ app.post('/product_listing', (req, res) => {
     }
   })
 })
-app.post('/getUserName', (req, res, next)=>{
-  const {user_id} = req.body;
+app.post('/getUserName', (req, res, next) => {
+  const { user_id } = req.body;
 
   const sql = 'SELECT parent_name from awt_userprofile WHERE userid = ?';
 
-  con.query(sql, [user_id], (err, data)=>{
-    if(err){
+  con.query(sql, [user_id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.json(data);
     }
   })
 })
 
-app.post('/addComment', (req, res, next)=>{
-  const {pet_id, serviceProviderId, comment, rating} = req.body;
+app.post('/addComment', (req, res, next) => {
+  const { pet_id, serviceProviderId, comment, rating } = req.body;
   const currentDate = new Date();
   const sql = 'INSERT INTO awt_comments (`user_id`,`service_provider_id`,`comment`, `rating`, `created_at`) VALUES (?,?,?,?,?)'
 
-  con.query(sql,[pet_id, serviceProviderId, comment, rating, currentDate], (err, data)=>{
-    if(err){
+  con.query(sql, [pet_id, serviceProviderId, comment, rating, currentDate], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
-      return res.status(200).json({message: "Comment added successfully", status: 201})
+    } else {
+      return res.status(200).json({ message: "Comment added successfully", status: 201 })
 
     }
   })
 
 })
 
-app.get('/getComments/:id', (req, res, next)=>{
+app.get('/getComments/:id', (req, res, next) => {
   const id = req.params.id;
 
   const sql = 'SELECT * FROM awt_comments WHERE service_provider_id = ? AND deleted = 0'
-  con.query(sql,[id], (err, data)=>{
-    if(err){
+  con.query(sql, [id], (err, data) => {
+    if (err) {
       return res.json(err);
-    }else{
+    } else {
       return res.status(200).json(data)
 
     }
@@ -958,45 +1018,190 @@ app.get('/get_category', (req, res, next) => {
 })
 
 
-app.get('/get_breeds', (req, res, next)=>{
+app.get('/get_breeds', (req, res, next) => {
 
   const sql = 'SELECT breed as item from awt_breeds where deleted = 0'
 
-  con.query(sql, (err, data)=>{
+  con.query(sql, (err, data) => {
 
-    if(err){
-      res.json({message : "Could'nt fetch breeds at the moment"});
-    }else{
+    if (err) {
+      res.json({ message: "Could'nt fetch breeds at the moment" });
+    } else {
       res.json(data);
     }
   })
 })
-app.get('/get_color', (req, res, next)=>{
+app.get('/get_color', (req, res, next) => {
 
   const sql = 'SELECT color as item from awt_colors where deleted = 0'
 
-  con.query(sql, (err, data)=>{
+  con.query(sql, (err, data) => {
 
-    if(err){
-      res.json({message : "Could'nt fetch colors at the moment"});
-    }else{
+    if (err) {
+      res.json({ message: "Could'nt fetch colors at the moment" });
+    } else {
       res.json(data);
     }
   })
 })
-app.put('/updatePetProfile',(req, res, next)=>{
-  const {status, userid} = req.body.data;
+app.put('/updatePetProfile', (req, res, next) => {
+  const { status, userid } = req.body.data;
   const sql = 'UPDATE awt_userprofile SET community_status = ? WHERE userid = ?'
-console.log(status, userid)
-  con.query(sql,[status, userid], (err, data)=>{
-    if(err){
+  console.log(status, userid)
+  con.query(sql, [status, userid], (err, data) => {
+    if (err) {
       return res.status(500).json(err);
-    }else{
+    } else {
       return res.status(200).json(data);
     }
   })
 })
 
+app.get('/getCommunityData', (req, res, next) => {
+
+  const sql = 'SELECT * FROM awt_userprofile ';
+
+
+  con.query(sql, (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      return res.json(data)
+    }
+  });
+});
+
+app.put(('/putGender'), (req, res, next) => {
+  const gender = req.body.gender;
+  const userid = req.body.userid;
+  let newGender = '';
+  if (gender === 'male') {
+    newGender = "M";
+  } else {
+    newGender = 'F';
+  }
+  console.log(newGender, userid);
+
+  const sql2 = "UPDATE awt_userprofile SET gender = ? WHERE userid = ? AND deleted = 0";
+
+  con.query(sql2, [newGender, userid], (error, data) => {
+    if (error) {
+      res.status(500).json({ error: "could not update gender." });
+    } else {
+      res.status(200).json({ message: "Gender Updated successfully", gender: newGender });
+    }
+  })
+})
+
+
+app.post('/addLostFound', upload2.single('image'), (req, res) => {
+  const data = req.body;
+  console.log(data, "message")
+  const image = req.file.fieldname;
+  const { userid, petName, breed, color, mobile, message, last_location } = data;
+
+  const sql = 'INSERT INTO awt_lost_found (`user_id`, `pet_name`, `breed`, `color`, `contact`, `message`, `image`, `last_location`)  VALUES(?,?,?,?,?,?,?,?)';
+
+  con.query(sql, [userid, petName, breed, color, mobile, message, image, last_location], (error, data) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(data);
+    }
+  })
+})
+
+app.get('/getLostFound', (req, res, next) => {
+  const sql = 'SELECT * FROM awt_lost_found WHERE deleted = 0';
+
+  con.query(sql, (error, data) => {
+    if (error) {
+      res.json(err);
+    } else {
+      res.json(data);
+    }
+  })
+})
+
+app.post('/book_appoint', (req, res, next) => {
+  let user_id = req.body.user_id;
+  let service_id = req.body.service_id;
+  let date = req.body.date;
+  let created_at = new Date()
+
+  console.log(date)
+
+  const sql = 'insert into awt_bookappointment(`user_id`,`service_id`,`book_date`,`created_date`) values(?,?,?,?)';
+
+  con.query(sql,[user_id,service_id,date,created_at], (err, data) => {
+    if (err) {
+      res.json("Booking UnSuccessfull");
+    } else {
+      res.json("Booking Successfully");
+    }
+  })
+})
+
+app.post('/getappoint_detail', (req, res, next) => {
+  let user_id = req.body.user_id;
+
+
+
+  const sql = 'select ab.id , ab.user_id , ab.service_id, ab.status , ab.book_date,aas.title,aas.upload_image,ar.firstname,ar.lastname , au.parent_name , au.mobile from awt_bookappointment as ab left JOIN awt_add_services as aas on ab.service_id = aas.id LEFT JOIN awt_registeruser as ar on ar.id = ab.user_id left join awt_userprofile as au on au.userid = ab.user_id  where ab.user_id = ? and ab.deleted = 0 order by ab.id desc';
+
+  con.query(sql,[user_id], (err, data) => {
+    if (err) {
+      res.json(err);
+    } else {
+      const result = data.map((row) => ({
+        id: row.id,
+        user_id : row.user_id,
+        service_id : row.service_id,
+        status : row.status,
+        book_date : row.book_date,
+        title : row.title,
+        upload_image : row.upload_image,
+        firstname : row.firstname,
+        lastname : row.lastname,
+        parent_name : row.parent_name,
+        mobile : row.mobile
+      }));
+      res.json(result);
+    }
+  })
+})
+
+app.post('/getservicereq_detail', (req, res, next) => {
+  let user_id = req.body.user_id;
+
+
+
+  const sql = 'select ab.id , ab.service_id ,ab.book_date,ab.status,aas.title,aas.address,aas.upload_image from awt_bookappointment as ab left join awt_add_services as aas on aas.id = ab.service_id WHERE aas.user_id = 8 order by ab.id desc';
+
+  con.query(sql,[user_id], (err, data) => {
+    if (err) {
+      res.json(err);
+    } else {
+     
+      res.json(data);
+    }
+  })
+})
+
+app.post('/update_appoint', (req, res, next) => {
+  const request_id= req.body.request_id;
+
+  const sql = "update awt_bookappointment set status = 1 where id = ?"
+
+  con.query(sql ,[request_id], (err,data)=>{
+    if(err){
+      return res.json(err)
+    }
+    else{
+      return res.json(data)
+    }
+  })
+})
 app.post('/getPetProfiledata', (req, res, next) => {
   const { userId } = req.body; // Destructure the userid from req.body
   const sql = 'SELECT * FROM awt_userprofile WHERE userid = ? AND deleted = 0 ORDER BY created_date DESC';
@@ -1011,54 +1216,30 @@ app.post('/getPetProfiledata', (req, res, next) => {
   });
 });
 
-app.put(('/putGender'), (req, res, next)=>{
-  const gender = req.body.gender;
-  const userid = req.body.userid;
-  let newGender = '';
-  if(gender === 'male'){
-    newGender = "M";
-  }else{
-    newGender = 'F';
-  }
-  console.log(newGender, userid);
-
-  const sql2 = "UPDATE awt_userprofile SET gender = ? WHERE userid = ? AND deleted = 0";
-
-  con.query(sql2, [newGender, userid], (error, data)=>{
-    if(error){
-      res.status(500).json({error : "could not update gender."});
-    }else{
-      res.status(200).json({message : "Gender Updated successfully", gender : newGender});
-    }
-  })
-})
 
 
-app.post('/addLostFound',upload2.single('image'), (req, res) => {
+app.post('/postManageService', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 }
+]), (req, res) => {
   const data = req.body;
-  console.log(data, "message")
-  const image = req.file.fieldname;
-  const {userid,petName, breed, color, mobile, message, last_location } = data;
+  const image1 = req.files['image'];
+  const image2 = req.files['image2'];
+  const image3 = req.files['image3'];
 
-  const sql = 'INSERT INTO awt_lost_found (`user_id`, `pet_name`, `breed`, `color`, `contact`, `message`, `image`, `last_location`)  VALUES(?,?,?,?,?,?,?,?)';
-
-  con.query(sql, [userid,petName, breed, color, mobile, message, image, last_location], (error, data)=>{
-    if(error){
-      res.json(error);
+  let img1 = image1[0].filename
+  let img2 = image2[0].filename
+  let img3 = image3[0].filename
+  let date = new Date()
+  console.log(data, img1, img2, img3);
+  const{serviceCategory, serviceName,serviceDescription, cost, discount} = req.body;
+const sql = 'INSERT INTO awt_manage_services (`service_name`, `service_category`, `service_description`, `image1`, `image2`, `image3, cost, discount` VALUES (?,?,?,?,?,?))';
+  con.query(sql, [serviceName, serviceCategory, serviceDescription, img1, img2, img3, cost, discount], (err, data)=>{
+    if(err){
+      res.json({message : "Could not add service"});
     }else{
-      res.json(data);
-    }
-  })
-})
-
-app.get('/getLostFound', (req, res, next)=>{
-  const sql = 'SELECT * FROM awt_lost_found WHERE deleted = 0';
-
-  con.query(sql, (error, data)=>{
-    if(error){
-      res.json(err);
-    }else{
-      res.json(data);
+      res.json({message:"Added Successfully"});
     }
   })
 })

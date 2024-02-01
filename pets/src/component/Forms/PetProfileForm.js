@@ -3,6 +3,7 @@ import CustomInput from '../UI/CustomInput'
 import PrimaryButton from '../UI/PrimaryButton'
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import { BASE_URL } from '../Utils/BaseUrl';
 const PetProfileForm = (props) => {
 
   const [values, setValues] = useState({
@@ -13,6 +14,7 @@ const PetProfileForm = (props) => {
     city: props.city || '',
     pincode: props.pincode || '',
     pet:props.petName || '',
+    mobile : props.mobile || '',
   });
 
   useEffect(() => {
@@ -35,6 +37,25 @@ const year = newDate.getFullYear();
 const date = `${year}-${month}-${day}`;
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('userId', values.id);
+    formData.append('parent', values.parent);
+    formData.append('address', values.address);
+    formData.append('state', values.state);
+    formData.append('city', values.city);
+    formData.append('pincode', values.pincode);
+    formData.append('pet', values.pet);
+    formData.append('mobile', values.mobile);
+    formData.append('image', props.image);
+    formData.append('color', props.color);
+    formData.append('breed', props.breed);
+    formData.append('height', props.height);
+    formData.append('weight', props.weight);
+    formData.append('gender', props.gender);
+    formData.append('date', date);
+
+    console.log(formData);
     const user = {
       userId: values.id,
       parent: values.parent,
@@ -52,9 +73,8 @@ const date = `${year}-${month}-${day}`;
       gender:props.gender
     };
 
-    console.log(user);
     axios
-      .post('http://localhost:8081/petProfile', user)
+      .post(`${BASE_URL}/petProfile`, formData)
       .then((res) => {
         console.log(res);
       })
@@ -70,7 +90,7 @@ const date = `${year}-${month}-${day}`;
       status,
       userid
     }
-    axios.put('http://localhost:8081/updatePetProfile', {data})
+    axios.put(`${BASE_URL}/updatePetProfile`, {data})
     .then((response)=>{
       console.log(response.data);
     }).catch((error)=>{
@@ -89,7 +109,11 @@ const date = `${year}-${month}-${day}`;
                 <CustomInput style={{ width: "100%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="State" name="state" value={values.state || props.state} onChange={handleChange}/>
                 <CustomInput style={{ width: "100%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="City" name="city" value={values.city || props.city} onChange={handleChange}/>
                 </div>
+                <div style={{display:"flex", flexDirection:"row", gap:"10px"}}>
+                  
                 <CustomInput style={{ width: "30%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="PIN Code" name="pincode" value={values.pincode || props.pincode} maxLength='6' onChange={handleChange}/>
+                <CustomInput style={{ width: "30%", padding: "10px", borderRadius: "8px" }} type="text" placeholder="Mobile" name="mobile" value={values.mobile || props.mobile} maxLength='10' onChange={handleChange}/>
+                </div>
             </form>
             <div style={{marginTop:"20px", display:"flex",justifyContent:"space-between", gap:"10px", width:"100%", backgroundColor:""}}>
                 <PrimaryButton type="submit" form="profileForm" >Save Profile</PrimaryButton>

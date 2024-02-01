@@ -394,7 +394,7 @@ const ServiceListingPage = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwqdnE5M-UzB69n455IQ5GPCmsdIXIfBQ&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyALPd9h01mpY-C9c8udBmFyYSn7oes2vDE&libraries=places`;
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));
@@ -496,8 +496,10 @@ const ServiceListingPage = () => {
         formData.append('service', value.servicename)
         formData.append('address', value.address)
         formData.append('image', image)
-        // formData.append('image2', image2)
-        // formData.append('image3', image3)
+        formData.append('image2', image2)
+        formData.append('image3', image3)
+        formData.append('latitude',coordinates.lat)
+        formData.append('longitude',coordinates.lng)
         formData.append('description', value.description)
         formData.append('service_id', ser_id)
 

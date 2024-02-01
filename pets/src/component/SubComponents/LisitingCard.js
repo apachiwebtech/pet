@@ -8,6 +8,8 @@ import PrimaryButton from "../UI/PrimaryButton";
 import { DUMMY_DATA } from '../../Dummy_Data'
 import { NavLink } from 'react-router-dom';
 const ListingCard = (props) => {
+
+
   return (
     <NavLink to={`/detailPage/${props.id}`} style={{ textDecoration: "none" }}>
 
@@ -181,7 +183,7 @@ const ListingCard = (props) => {
               color: "black"
             }}
           >
-            <NavLink to='/bookappointment' style={{ textDecoration: "none", color: "black" }}>
+            <NavLink to={`/bookappointment/${props.id}`} style={{ textDecoration: "none", color: "black" }}>
 
               Book Appointment
             </NavLink>

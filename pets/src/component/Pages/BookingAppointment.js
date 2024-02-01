@@ -8,26 +8,32 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Alert from '@mui/material/Alert';
+import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
+
+import LinearProgress from '@mui/material/LinearProgress';
 
 import Card from "../UI/Card";
+import axios from "axios";
+import { BASE_URL } from "../Utils/BaseUrl";
 
-const timing = [
-  "9:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "2:00",
-  "3:00",
-  "4:00",
-  "5:00",
-  "6:00",
-  "7:00",
-  "8:00",
-  "9:00",
-];
+
 
 const BookingAppointment = () => {
+  const date = new Date()
+  const { id } = useParams()
+  const [msg, setMsg] = useState("")
+  const [hide, setHide] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(dayjs(date));
+  const [progress , setProgress] = useState(false)
+
+  const handleDateChange = (newDate) => {
+    setSelectedDate(newDate.format());
+    // You can do something with the selected date value here, like sending it to a server or updating state.
+    console.log('Selected Date:', newDate); // Example: Log the selected date to the console
+  };
+
   const newTheme = (theme) =>
     createTheme({
       ...theme,
@@ -46,18 +52,32 @@ const BookingAppointment = () => {
         },
       },
     });
-  const [value, setValue] = React.useState(dayjs("2022-04-17"));
-  const [time, setTime] = useState("");
-  const navigate = useNavigate();
-  const handleSubmit = () => {
-    console.log(value.$d);
-    const appointmentData = {
-      day: value.$d,
-      timing: time,
-    };
 
-    console.log(appointmentData);
-    navigate("/");
+  // const navigate = useNavigate();
+  const handleSubmit = () => {
+    setProgress(true)
+    const appointmentData = {
+      date: selectedDate,
+      user_id: localStorage.getItem('pet_id'),
+      service_id: id
+    };
+    axios.post(`${BASE_URL}/book_appoint`, appointmentData)
+      .then((res) => {
+        setMsg(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        setHide(true)
+        setProgress(false)
+        
+        setTimeout(() => {
+          setHide(false)
+        }, 5000);
+      })
+
+    // navigate("/");
   };
   return (
     <div
@@ -82,45 +102,35 @@ const BookingAppointment = () => {
         }}
       >
         <Card style={{ padding: "0", height: "100%" }}>
-          <ThemeProvider  theme={newTheme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <StaticDatePicker sx={{fontSize : "50px"}} orientation="portrait" />
-            </LocalizationProvider>
+          <ThemeProvider theme={newTheme}>
+            <DemoItem label="">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <StaticDateTimePicker defaultValue={dayjs(date)} value={selectedDate}
+                  onChange={handleDateChange} />
+              </LocalizationProvider>
+            </DemoItem>
           </ThemeProvider>
         </Card>
-        <div style={{padding:"10px"}}>
+        {
+          hide ? <Alert style={{ height: "50px" }} variant="filled" severity="success">
+            <div className="d-flex justify-content-between">
+              {msg}
+              <p className="px-5 text-light" style={{ textDecoration: "underline" }}> Details <i class="bi bi-arrow-right"></i></p>
+            </div>
+          </Alert> : null
+        }
 
-        <h3 style={{padding:"0", marginBottom:"20px"}}>Select appointment timing</h3>
-        <div className={classes.times}>
-          <span>9:00</span>
 
-          <span>10:00</span>
-
-          <span>11:00</span>
-
-          <span>12:00</span>
-
-          <span>2:00</span>
-
-          <span>3:00</span>
-
-          <span>4:00</span>
-
-          <span>5:00</span>
-
-          <span>6:00</span>
-
-          <span>7:00</span>
-          <span>8:00</span>
-          <span>9:00</span>
-        </div>
-        </div>
       </div>
+
+
       <div style={{ width: "100%" }}>
         <PrimaryButton style={{ width: "100%" }} onClick={handleSubmit}>
           Book Appointment
         </PrimaryButton>
+        {progress?<LinearProgress /> : null}
       </div>
+
     </div>
   );
 };

@@ -67,10 +67,10 @@ const Dash = () => {
            <img className='dash-icon' src={service} alt='' />
            <p>Service <br />Request</p>
          </div></Link>  :
-            <div className=''>
+            <Link to="/myappointment"><div className=''>
               <img className='dash-icon' src={appo} alt=''/>
               <p>My <br />Appointment</p>
-            </div>
+            </div></Link>
         }
         {
           localStorage.getItem("pet_role") == 2 ?

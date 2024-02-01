@@ -45,7 +45,7 @@ const Reviews = () => {
 
     console.log(comment);
     axios
-      .post("http://localhost:8081/addComment", comment)
+      .post(`${BASE_URL}/addComment`, comment)
       .then((res) => {
         console.log(res.data);
         getComments(id);

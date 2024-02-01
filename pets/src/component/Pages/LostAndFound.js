@@ -3,10 +3,14 @@ import Card from "../UI/Card";
 import "./lostFound.css";
 import dog from "../../image/clinic1.png";
 import axios from "axios";
+import PrimaryButton from "../UI/PrimaryButton";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { NavLink } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 const LostAndFound = () => {
 
   const [lostFoundData, setLostFoundData] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const url = 'https://petjs.thetalentclub.co.in'
 
   const getLostFoundData=()=>{
@@ -14,6 +18,7 @@ const LostAndFound = () => {
     .then((response)=>{
       console.log(response);
       setLostFoundData(response.data);
+      setLoading(false);
     }).catch((error)=>{
       console.log(error);
     })
@@ -24,6 +29,19 @@ const LostAndFound = () => {
   }, [])
   return (
     <div className="container lostfound">
+      <NavLink to='/lostfoundform' style={{position:'absolute', right:"20px", marginBottom:"20px", color:"green"}}>
+
+      <AddBoxIcon sx={{fontSize:"50px"}}></AddBoxIcon>
+      </NavLink>
+      {
+        loading ? (
+          <div style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)"}}>
+            <CircularProgress color="success"/>
+            </div>
+        ) : (
+
+      <div style={{marginTop:"60px"}}>
+
       {
         lostFoundData.map((item)=>{
           return (
@@ -106,6 +124,9 @@ const LostAndFound = () => {
       </Card>
           )
         })
+      }
+      </div>
+        )
       }
     </div>
   );

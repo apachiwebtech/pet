@@ -13,6 +13,7 @@ import WeightHeightCal from "../UI/WeightHeightCal";
 import { DateCalc } from "../UI/WeightHeightCal";
 import { PetFormActions } from "../../Store/PetFormSlice";
 import { putPetGender } from "../../Store/PetFormActions";
+import { BASE_URL } from "../Utils/BaseUrl";
 const MyPet = () => {
 
   const dispatch = useDispatch();
@@ -113,7 +114,7 @@ const openDateCalc = ()=>{
     };
   
     const getData = (userid)=>{
-      axios.post(`http://localhost:8081/getPetProfiledata`, { userId: userid })
+      axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid })
   .then((res)=>{
     console.log(res.data[0], "ha bhai");
     setPetObject(res.data[0]);

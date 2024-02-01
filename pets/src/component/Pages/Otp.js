@@ -146,8 +146,16 @@ const Otp = () => {
                         document.getElementById("err").innerHTML = ""
                     }, 2000)
                 } else {
+
+                    if(res.data[0].parent_name === null){
+                        window.location.pathname = '/pet/:id';
+                        
+                    }
+                    else{
+                        window.location.pathname = '/';
+                    }
                     // navigate('/')
-                    window.location.pathname = '/';
+                    // window.location.pathname = '/';
                     const role = res.data[0].role;
                     const value = res.data[0].value;
                     const id = res.data[0].id;

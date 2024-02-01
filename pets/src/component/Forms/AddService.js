@@ -269,6 +269,7 @@ const AddService = () => {
                 lng: latLng.lng,
                 point: { type: "Point", coordinates: [latLng.lng, latLng.lat] },
             });
+
         } catch (error) {
             console.error("Error selecting address:", error);
         }
@@ -284,7 +285,7 @@ const AddService = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ_cnRTD-5PpbUtXTpKFLqVYbwDremSLs&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyALPd9h01mpY-C9c8udBmFyYSn7oes2vDE&libraries=places`;
         script.async = true;
         script.defer = true;
         script.addEventListener("load", () => setScriptLoaded(true));
@@ -373,10 +374,12 @@ const AddService = () => {
 
         if (isValid) {
             const formData = new FormData();
-            formData.append('category', value.category)
+            formData.append('category', catid)
             formData.append('service', value.servicename)
             formData.append('address', value.address)
             formData.append('image', image)
+            formData.append('latitude',coordinates.lat)
+            formData.append('longitude',coordinates.lng)
              formData.append('image2', image2)
              formData.append('image3', image3)
             formData.append('description', value.description)
