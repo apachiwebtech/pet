@@ -31,6 +31,7 @@ const Settings = () => {
           <Card
           className={classes.CardClass}
           >
+
             <p>photo access</p>
             <div className={classes.RadioGroup}>
 

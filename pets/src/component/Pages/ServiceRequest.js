@@ -65,6 +65,7 @@ const ServiceRequest = () => {
                                     <h2>{item.parent_name}</h2>
                                     <p>Date : {dateComponent}</p>
                                     <p>Time : {timeComponent}</p>
+                                    <p>{item.mobile}</p>
 
                                 </div>
                             </div>
@@ -72,7 +73,7 @@ const ServiceRequest = () => {
                             <div className='d-flex'>
                                 {item.status == 0 ?  <button className='btn btn-sm btn-success' onClick={() => handleClick(item.id)}>Accept</button>: <button className='btn btn-sm btn-danger' >Accepted</button>}
                                
-                                <Link to="tel:9326476448" className='btn btn-sm btn-primary mx-2'><i class="bi bi-telephone"></i> Call</Link>
+                                <Link to={`tel:${item.mobile}`} className='btn btn-sm btn-primary mx-2'><i class="bi bi-telephone"></i> Call</Link>
                             </div>
                         </div>
                     )

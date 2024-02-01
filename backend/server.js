@@ -656,7 +656,7 @@ app.post('/add_service', upload.fields([
   const created_date = new Date()
 
   // Insert data into the main table
-  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image,upload_image2,upload_image3, description , created_date , created_by,longitude,latitude) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?)';
+  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image,upload_image2,upload_image3, description , created_date , user_id,  longitude, latitude) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?)';
   const mainValues = [category, service, address, img1, img2, img3, description, created_date, user_id,longitude,latitude];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
