@@ -37,9 +37,9 @@ const year = newDate.getFullYear();
 const date = `${year}-${month}-${day}`;
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const userid = localStorage.getItem('pet_id');
     const formData = new FormData();
-    formData.append('userId', values.id);
+    formData.append('userId', userid);
     formData.append('parent', values.parent);
     formData.append('address', values.address);
     formData.append('state', values.state);
@@ -55,27 +55,13 @@ const date = `${year}-${month}-${day}`;
     formData.append('gender', props.gender);
     formData.append('date', date);
 
-    console.log(formData);
-    const user = {
-      userId: values.id,
-      parent: values.parent,
-      address: values.address,
-      state: values.state,
-      city: values.city,
-      pincode: values.pincode,
-      pet:values.pet,
-      image : props.image,
-      breed : props.breed,
-      color: props.color,
-      height:props.height,
-      weight:props.weight,
-      date:date,
-      gender:props.gender
-    };
+    console.log(props.image, "from form");
 
-    axios
-      .post(`${BASE_URL}/petProfile`, formData)
-      .then((res) => {
+    axios.post(`${BASE_URL}/petProfile`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }).then((res) => {
         console.log(res);
       })
       .catch((err) => {

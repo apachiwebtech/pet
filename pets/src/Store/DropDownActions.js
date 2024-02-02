@@ -1,9 +1,10 @@
+import { BASE_URL } from "../component/Utils/BaseUrl";
 import { DropDownActions } from "./DropDownSlice";
 import axios from "axios";
 
 export const getBreeds = ()=>{
     return async(dispatch)=>{
-        axios.get('http://localhost:8081/get_breeds')
+        axios.get(`${BASE_URL}/get_breeds`)
         .then((res)=>{
           console.log(res.data)
           dispatch(DropDownActions.getBreeds({
@@ -18,7 +19,7 @@ export const getBreeds = ()=>{
 
 export const getColors =()=>{
     return async(dispatch)=>{
-        axios.get('http://localhost:8081/get_color')
+        axios.get(`${BASE_URL}/get_color`)
         .then((res)=>{
           console.log(res.data)
           dispatch(DropDownActions.getColors({

@@ -12,7 +12,6 @@ import WeightHeightCal from "../UI/WeightHeightCal";
 import { DateCalc } from "../UI/WeightHeightCal";
 import { putPetGender, getProfileData } from "../../Store/PetFormActions";
 import { AgeCalculator } from "../Utils/AgeCalculator";
-import { BASE_URL } from "../Utils/BaseUrl";
 const MyPet = () => {
   const userid = localStorage.getItem("pet_id")
   const dispatch = useDispatch();
@@ -114,19 +113,18 @@ const openDateCalc = ()=>{
       dispatch(putPetGender(gender));
     };
   
-    const getData = (userid)=>{
-      axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid })
-  .then((res)=>{
-    setPetObject(res.data[0]);
-    console.log(res.data[0])
-  }).catch((error)=>{
-    console.warn(error);
-  })
-    }
+  //   const getData = (userid)=>{
+  //     axios.post(`https://petjs.thetalentclub.co.in/getPetProfiledata`, { userId: userid })
+  // .then((res)=>{
+  //   setPetObject(res.data[0]);
+  //   console.log(res.data[0])
+  // }).catch((error)=>{
+  //   console.warn(error);
+  // })
+  //   }
    
     const handleImageChange = (event) => {
       const file = event.target.files[0];
-    
       if (file) {
         const reader = new FileReader();
     
@@ -137,7 +135,6 @@ const openDateCalc = ()=>{
         };
     
         reader.readAsDataURL(file);
-        setImage(file);
       }
     };
     
@@ -158,8 +155,9 @@ const openDateCalc = ()=>{
       if (file) {
         try {
           const data = await ImageBase64(file);
-          console.log(data);
           setImage(file);
+          console.log(image, "imageeesaa");
+          console.log(data);
         } catch (error) {
           console.error(error);
         }
@@ -173,14 +171,13 @@ const openDateCalc = ()=>{
       }else{
         return;
       }
-      getData(userid)
     }, []);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await axios.post(
-            "http://localhost:8081/getPetProfiledata",
+            "https://petjs.thetalentclub.co.in/getPetProfiledata",
             { userId: userid }
           );
     

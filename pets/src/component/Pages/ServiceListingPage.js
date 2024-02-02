@@ -564,7 +564,7 @@ const ServiceListingPage = () => {
                                     <p>Service Title: <span>{item.title}</span></p>
                                     <p>Add Address: <span>{item.address}</span></p>
                                     <p>Date: <span>{item.created_date}</span></p>
-                                    <p>{item.id}</p>
+                                    {/* <p>{item.id}</p> */}
                                 </div>
 
 
@@ -680,7 +680,7 @@ const ServiceListingPage = () => {
                                                                 )}
                                                             </PlacesAutocomplete>
                                                             <div className='my-2'>
-                                                                <CustomInput name="address" placeholder={item.address} onChange={onHandleChange} />
+                                                                <CustomInput name="address" onChange={onHandleChange} />
                                                                 {errors.address && <span className="text-danger">{errors.address}</span>}
                                                             </div>
                                                             <div className='row text-center my-4'>
@@ -806,7 +806,7 @@ const ServiceListingPage = () => {
                                                                 </Dialog>
                                                             </div>
                                                             <div>
-                                                                <CustomTextarea className="my-2" placeholder={item.description} name="description" onChange={onHandleChange} />
+                                                                <CustomTextarea className="my-2" name="description" onChange={onHandleChange} />
                                                                 {errors.description && <span className="text-danger">{errors.description}</span>}
                                                             </div>
                                                             <div>

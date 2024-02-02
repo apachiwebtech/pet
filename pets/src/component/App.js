@@ -34,6 +34,9 @@ import ServiceRequest from './Pages/ServiceRequest';
 import ProductRequest from './Pages/ProductRequest';
 import Community from './Pages/Community'
 import MyApointment from './Pages/MyApointMent';
+import Settings from './Pages/Settings';
+import LostAndFound from './Pages/LostAndFound'
+import LostAndFoundForm from './Forms/LostAndFoundForm'
 
 const routing = createBrowserRouter([
 
@@ -127,6 +130,18 @@ const routing = createBrowserRouter([
       {
         path: "/myappointment",
         element: <MyApointment/>
+      },
+      {
+        path: "/setting",
+        element: <Settings/>
+      },
+      {
+        path : '/lost/:id',
+        element:<LostAndFound/>
+      },
+      {
+        path : '/lostfoundform',
+        element : <LostAndFoundForm/>
       },
 
     ]
