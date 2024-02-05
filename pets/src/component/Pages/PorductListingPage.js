@@ -218,11 +218,11 @@ const ProductListingPage = () => {
 
     const handleSubmit = (e, pro_id) => {
         e.preventDefault()
-        setLoader(true)
         const formData = new FormData();
-
-
+        
+        
         if (validateForm()) {
+            setLoader(true)
 
             formData.append('title', value.productname)
             formData.append('image', image)
@@ -324,7 +324,7 @@ const ProductListingPage = () => {
                                   
                                                 <div className='mx-2'>
                                                     <div>
-                                                        {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+                                                        {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)",zIndex :"12" }} />}
                                                     </div>
                                                     <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(pro_data.id)}>Delete Product</button>
                                                     <form onSubmit={(e) => handleSubmit(e, pro_data.id)} method='POST'>
@@ -353,7 +353,7 @@ const ProductListingPage = () => {
 
                                                         <div className='my-2'>
                                                             <CustomInput name="productname" placeholder={item.title} value={value.productname} onChange={onHandleChange} />
-                                                            {errors.productname && <p className="text-danger">{errors.productname}</p>}
+                                                            {errors.productname && <span className="text-danger">{errors.productname}</span>}
                                                         </div>
 
 

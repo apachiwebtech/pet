@@ -310,7 +310,7 @@ const Otp = () => {
                         <div className='text-center btn-sec' >
                             <div className='text-center' style={{ position: "relative" }}>
                                 <button type='submit' className='Verify-btn'>
-                                    Verify2
+                                    Verify
                                 </button>
 
                                 <i className="bi bi-caret-right-fill arrow-btn"></i>

@@ -188,6 +188,9 @@ const ServiceListingPage = () => {
         if (!value.description) {
             newErrors.description = 'description is required';
         }
+        if (!selectedTime) {
+            newErrors.selectedTime = 'please add Timings';
+        }
 
         // Add more validations for other fields
 
@@ -531,8 +534,8 @@ const ServiceListingPage = () => {
     const handleSubmit = (e, ser_id) => {
         e.preventDefault()
 
-        setLoader(true)
         if (validateForm()) {
+            setLoader(true)
 
 
             const formData = new FormData();
@@ -678,7 +681,7 @@ const ServiceListingPage = () => {
 
                                     <>
                                         <div>
-                                            {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+                                            {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)",zIndex :"12" }} />}
                                         </div>
                                         {scriptLoaded && (
                                             <div className='mx-2'>
@@ -703,12 +706,12 @@ const ServiceListingPage = () => {
                                                             onChange={(event, value) => HandleChange(value)} // Pass only the value
                                                         />
                                                         {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
-                                                        {errors.category && <p className="text-danger">{errors.category}</p>}
+                                                        {errors.category && <span className="text-danger">{errors.category}</span>}
                                                     </div>
 
                                                     <div className='my-2'>
                                                         <CustomInput name="service" onChange={(e) => onHandleChange(e, index)} placeholder="Service title"  value={value.service}/>
-                                                        {errors.service && <p className="text-danger">{errors.service}</p>}
+                                                        {errors.service && <sapn className="text-danger">{errors.service}</sapn>}
                                                     </div>
                                                     <PlacesAutocomplete
 
@@ -807,7 +810,7 @@ const ServiceListingPage = () => {
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
-                                                            <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                             {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                         </div>
@@ -815,6 +818,7 @@ const ServiceListingPage = () => {
 
                                                     <div className='my-2'>
                                                         <PrimaryButton children="Add Timings" type="button" onClick={() => handleClickOpen(item.id)} />
+                                                        {errors.selectedTime && <span className="text-danger">{errors.selectedTime}</span>}
                                                         <Dialog
                                                             fullScreen
                                                             open={open}
