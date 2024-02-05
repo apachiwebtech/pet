@@ -328,3 +328,13 @@ padding: 5px 0px;
   border: 1px solid lightgrey !important;
 }
 /* MUI  */
+
+.count{
+  background-color: red;
+  padding: 3px 9px;
+  border-radius: 50%;
+  position: absolute;
+  right: -14px;
+  top: -10px;
+  color: #fff;
+}

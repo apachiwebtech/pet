@@ -131,8 +131,8 @@ const AddProduct = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        setLoader(true)
         if (validateForm()) {
+            setLoader(true)
 
 
             const formData = new FormData();
@@ -193,7 +193,7 @@ const AddProduct = () => {
     return (
         <>
             <div>
-                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" ,zIndex :"12"}} />}
             </div>
             <div className='mx-2'>
                 <form onSubmit={handleSubmit} method='POST'>
@@ -223,7 +223,7 @@ const AddProduct = () => {
 
                     <div className='my-2'>
                         <CustomInput name="productname" placeholder="Product Title" onChange={onHandleChange} />
-                        {errors.productname && <p className="text-danger">{errors.productname}</p>}
+                        {errors.productname && <span className="text-danger">{errors.productname}</span>}
                     </div>
 
 

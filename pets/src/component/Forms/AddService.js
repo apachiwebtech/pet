@@ -113,6 +113,9 @@ const AddService = () => {
         if (!value.description) {
             newErrors.description = 'description is required';
         }
+        if (!selectedTime) {
+            newErrors.selectedTime = 'please add Timings';
+        }
 
         // Add more validations for other fields
 
@@ -125,47 +128,47 @@ const AddService = () => {
     const navigate = useNavigate();
 
     const handleTimeChange = (newTime) => {
-        setSelectedTime(newTime);
+        setSelectedTime(newTime.format());
     };
     const handleTimeChange2 = (newTime) => {
-        setSelectedTime2(newTime);
+        setSelectedTime2(newTime.format());
     };
     const handleTimeChange3 = (newTime) => {
-        setSelectedTime3(newTime);
+        setSelectedTime3(newTime.format());
     };
     const handleTimeChange4 = (newTime) => {
-        setSelectedTime4(newTime);
+        setSelectedTime4(newTime.format());
     };
     const handleTimeChange5 = (newTime) => {
-        setSelectedTime5(newTime);
+        setSelectedTime5(newTime.format());
     };
     const handleTimeChange6 = (newTime) => {
-        setSelectedTime6(newTime);
+        setSelectedTime6(newTime.format());
     };
     const handleTimeChange7 = (newTime) => {
-        setSelectedTime7(newTime);
+        setSelectedTime7(newTime.format());
     };
     const handleTimeChange8 = (newTime) => {
-        setSelectedTime8(newTime);
+        setSelectedTime8(newTime.format());
     };
     const handleTimeChange9 = (newTime) => {
-        setSelectedTime9(newTime);
+        setSelectedTime9(newTime.format());
     };
     const handleTimeChange10 = (newTime) => {
-        setSelectedTime10(newTime);
+        setSelectedTime10(newTime.format());
     };
     const handleTimeChange11 = (newTime) => {
-        setSelectedTime11(newTime);
+        setSelectedTime11(newTime.format());
     };
     const handleTimeChange12 = (newTime) => {
-        setSelectedTime12(newTime);
+        setSelectedTime12(newTime.format());
     };
     const handleTimeChange13 = (newTime) => {
-        setSelectedTime13(newTime);
+        setSelectedTime13(newTime.format());
     };
     const handleTimeChange14 = (newTime) => {
-        const isoFormattedTime = newTime.toISOString();
-        setSelectedTime14(isoFormattedTime);
+      
+        setSelectedTime14(newTime.format());
     };
 
 
@@ -382,9 +385,9 @@ const AddService = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const isValid = validateForm();
-        setLoader(true)
-
+        
         if (isValid) {
+            setLoader(true)
             const formData = new FormData();
             formData.append('category', catid)
             formData.append('service', value.servicename)
@@ -472,7 +475,7 @@ const AddService = () => {
     return (
         <div >
             <div>
-               {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+               {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" ,zIndex :"12"}} />}
             </div>
             {scriptLoaded && (
 
@@ -499,12 +502,12 @@ const AddService = () => {
                                 onChange={(event, value) => HandleChange(value)} // Pass only the value
                             />
                             {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
-                            {errors.category && <p className="text-danger">{errors.category}</p>}
+                            {errors.category && <span className="text-danger">{errors.category}</span>}
                         </div>
 
                         <div className='my-2'>
                             <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
-                            {errors.servicename && <p className="text-danger">{errors.servicename}</p>}
+                            {errors.servicename && <span className="text-danger">{errors.servicename}</span>}
                         </div>
                         <p>Add Google Location</p>
                         <PlacesAutocomplete
@@ -613,6 +616,7 @@ const AddService = () => {
 
                         <div className='my-2'>
                             <PrimaryButton children="Add Timings" type="button" onClick={handleClickOpen} />
+                            {errors.selectedTime && <span className="text-danger">{errors.selectedTime}</span>}
                             <Dialog
                                 fullScreen
                                 open={open}
@@ -651,8 +655,8 @@ const AddService = () => {
                                                     <TableCell align="left">{day.name}</TableCell>
                                                     <TableCell align="left">
                                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            {/* <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} /> */}
-                                                            <TimePicker label="Basic time picker" onChange={(newTime) => day.handler(newTime)} />
+                                                            <MobileTimePicker defaultValue={day.start} onChange={(newTime) => day.handler(newTime)} />
+                                                            {/* <TimePicker label="Basic time picker" onChange={(newTime) => day.handler(newTime)} /> */}
                                                         </LocalizationProvider>
                                                     </TableCell>
                                                     <TableCell align="left">
