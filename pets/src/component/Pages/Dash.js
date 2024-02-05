@@ -11,6 +11,7 @@ import product from '../icon/product.png'
 const Dash = () => {
   const [feild, setfeild] = useState([])
   const [search, setSearch] = useState('')
+  const [count, setCount] = useState([])
   async function getDashicon() {
     const data = {
       type: localStorage.getItem("pet_role")
@@ -30,10 +31,25 @@ const Dash = () => {
     getDashicon()
   }, [])
 
-  // console.log(feild);
-  // const handlesearch = (e) =>{
-  // setSearch(e.target.value)
-  // }
+
+
+  async function getCount() {
+
+    const data = {
+      user_id: localStorage.getItem("pet_id")
+    }
+    axios.post(`${BASE_URL}/Servicerequest_count`, data)
+      .then((res) => {
+        setCount(res.data[0])
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getCount()
+  },[])
 
   return (
     <div className='mx-3'>
@@ -63,21 +79,23 @@ const Dash = () => {
 
         {
           localStorage.getItem("pet_role") == 2 ?
-           <div className=''>
-           <Link to="/servicerequest"><img className='dash-icon' src={service} alt='' /></Link>
-           <p>Service <br />Request</p>
-         </div>  :
+            <div className='' style={{position :"relative"}}>
+              <Link to="/servicerequest"><img className='dash-icon' src={service} alt='' /></Link>
+              <p>Service <br />Request</p>
+              <span className='count'>{count.count}</span>
+            </div> :
             <div className=''>
-              <Link to="/myappointment"><img className='dash-icon' src={appo} alt=''/></Link>
+              <Link to="/myappointment"><img className='dash-icon' src={appo} alt='' /></Link>
               <p>My <br />Appointment</p>
             </div>
         }
         {
           localStorage.getItem("pet_role") == 2 ?
-          <div className=' '>
-              <Link to="/productrequest"><img className='dash-icon' src={order} alt='' /></Link> 
-              <p>Product  <br /> Request</p> 
-             </div>:
+            <div className=' '>
+              <Link to="/productrequest"><img className='dash-icon' src={order} alt='' /></Link>
+              <p>Product  <br /> Request</p>
+            
+            </div> :
             <div className=' '>
               <img className='dash-icon' src={order} alt='' />
               <p>My Order <br /> Booking</p>
