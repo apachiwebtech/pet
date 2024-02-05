@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import AddIcon from '@mui/icons-material/Add';
@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { esES } from '@mui/x-date-pickers';
 
 const WeightHeightCal = (props) => {
   const style = {
@@ -30,21 +31,21 @@ const WeightHeightCal = (props) => {
     flex: "1"
   };
 
-  const [weight, setWeight] = useState(props.type === 'weight' ? 10 : 1);
-  const [height, setHeight] = useState(props.type === 'height' ? 10 : 1);
-
+  const [weight, setWeight] = useState(props.type === 'weight' ? 0 : 5);
+  const [height, setHeight] = useState(props.type === 'height' ? 10 : 10);
+  const [disabled, setDisabled] = useState(false);
   const handleAdd = () => {
-    if (props.type === 'weight') {
+    if (props.type === 'weight' && weight >= 5) {
       setWeight(prevWeight => prevWeight + props.step);
-    } else if (props.type === 'height') {
+    } else if (props.type === 'height'&& height >= 10) {
       setHeight(prevHeight => prevHeight + props.step);
     }
   };
 
   const handleRemove = () => {
-    if (props.type === 'weight') {
+    if (props.type === 'weight' && weight >=10) {
       setWeight(prevWeight => prevWeight - props.step);
-    } else if (props.type === 'height') {
+    } else if (props.type === 'height' && height >=20) {
       setHeight(prevHeight => prevHeight - props.step);
     }
   };
@@ -67,7 +68,13 @@ const WeightHeightCal = (props) => {
     // Close the modal
     props.onClose();
   };
-
+useEffect(()=>{
+  if(weight=== 5 && height=== 10 ){
+    setDisabled(true);
+  }else{
+    setDisabled(false)
+  }
+}, [weight, height])
   return (
     <div>
       <Modal
@@ -84,7 +91,7 @@ const WeightHeightCal = (props) => {
                           onChange={(e) => handleInputChange(parseInt(e.target.value, 10) || 0)}
 
             />
-            <PrimaryButton style={{ borderRadius: "0 10px 10px 0" }} onClick={handleRemove}><RemoveIcon /></PrimaryButton>
+            <PrimaryButton style={{ borderRadius: "0 10px 10px 0", backgroundColor: disabled ? "grey" : "#4acf7e" }} onClick={handleRemove} disabled={disabled}><RemoveIcon /></PrimaryButton>
           </div>
           <PrimaryButton onClick={handleSave} style={{ width: "90%", border: "2px solid #4acf7e", backgroundColor: "transparent", color: "#4acf7e" }}>Save</PrimaryButton>
         </Box>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useId } from "react";
-import petimg from "../../image/dogscaping.jpg";
+import petimg from "../../image/add_a_photo_rounded.svg";
 import PetsIcon from '@mui/icons-material/Pets';
 import PetProfileForm from "../Forms/PetProfileForm";
 import MaleIcon from '@mui/icons-material/Male';
@@ -12,6 +12,7 @@ import WeightHeightCal from "../UI/WeightHeightCal";
 import { DateCalc } from "../UI/WeightHeightCal";
 import { putPetGender, getProfileData } from "../../Store/PetFormActions";
 import { AgeCalculator } from "../Utils/AgeCalculator";
+import { BASE_URL } from "../Utils/BaseUrl";
 const MyPet = () => {
   const userid = localStorage.getItem("pet_id")
   const dispatch = useDispatch();
@@ -40,8 +41,6 @@ const MyPet = () => {
   const [date, setDate] = useState('');
   const [age, setAge] = useState(0);
   const fileInputRef = useRef(null);
-
-
   const initialPetObject = {
     pet_name: "",
     breed: "",
@@ -91,9 +90,6 @@ const openDateCalc = ()=>{
 
   const [selectedColor, setSelectedColor] = useState("");
 
-  // const handleSelectedOption = (option) => {
-  //     setSelectedOption(option);
-  //   };
   const handleSelectedOption = (option, type) => {
     if (type === 'breeds') {
       setSelectedBreed(option); 
@@ -110,31 +106,29 @@ const openDateCalc = ()=>{
       dispatch(putPetGender(gender));
     };
   
-  //   const getData = (userid)=>{
-  //     axios.post(`https://petjs.thetalentclub.co.in/getPetProfiledata`, { userId: userid })
-  // .then((res)=>{
-  //   setPetObject(res.data[0]);
-  //   console.log(res.data[0])
-  // }).catch((error)=>{
-  //   console.warn(error);
-  // })
-  //   }
-   
-    const handleImageChange = (event) => {
+
+    const handleImageChange = async (event) => {
       const file = event.target.files[0];
-      if (file) {
         const reader = new FileReader();
-    
-        reader.onloadend = () => {
-          setSelectedImage(reader.result);
-          // Use reader.result directly without splitting for base64 data
-          setSelectedImageToSend(reader.result);
-        };
-    
-        reader.readAsDataURL(file);
+
+      if (file) {
+        try {
+          const data = await ImageBase64(file);
+          setImage(file);
+          console.log(file, "imageee"); // Use 'file' instead of 'image' for immediate access to the selected file
+          console.log(data);
+          reader.onloadend = () => {
+                  setSelectedImage(reader.result);
+                  // Use reader.result directly without splitting for base64 data
+                  setSelectedImageToSend(reader.result);
+                }; 
+
+                reader.readAsDataURL(file);
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
-    
     async function ImageBase64(file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -146,35 +140,43 @@ const openDateCalc = ()=>{
   
       return data;
     }
-    const handleUpload = async (e) => {
-      const file = e.target.files[0];
+    useEffect(() => {
+      console.log("petObject.dob:", petObject.dob);
     
-      if (file) {
-        try {
-          const data = await ImageBase64(file);
-          setImage(file);
-          console.log(image, "imageeesaa");
-          console.log(data);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-    useEffect(()=>{
-      const userid = localStorage.getItem("pet_id")
-      if(petObject.dob!== ""){
-        setAge(AgeCalculator(petObject.dob))
+      if (petObject.dob !== undefined && petObject.dob !== "") {
+        console.log("Inside if");
+        setAge(AgeCalculator(petObject.dob));
+      } else if(date !== ''){
+        console.log(date)
+        const dateObject = new Date(Date.parse(date));
 
-      }else{
-        return;
+       console.log(dateObject)
+        const year = dateObject.getFullYear();
+        console.log(year)
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+        console.log(month);
+        const day = date.getDate().toString().padStart(2, '0');
+        console.log(day);
+        // console.log("inside else ")
+        const formattedDate = `${year}-${month}-${day}`;
+        
+        console.log("Formatted date:", formattedDate);
+    
+        setAge(AgeCalculator(formattedDate));
       }
-    }, []);
+    }, [date, petObject.dob]);
+    
+    console.log(date);
+    const dateObject = new Date(date);
 
+
+
+    
     useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await axios.post(
-            "https://petjs.thetalentclub.co.in/getPetProfiledata",
+            `${BASE_URL}/getPetProfiledata`,
             { userId: userid }
           );
     
@@ -195,21 +197,34 @@ const openDateCalc = ()=>{
         fetchData();
       }
     
-    }, [userid]);
-    
+    }, []);
+
+      const putImage=(image)=>{
+        const formData = new FormData();
+
+        formData.append('image', image);
+        console.log(
+          "put image called"
+        )
+      }
+
+    const containerHeight = 220; // Set your container height here
+    const imageHeight = selectedImage ? containerHeight : 0; // Use 0 if no image is selected
+    const topPosition = (containerHeight - imageHeight) / 2;
+  
   return (
     <div className="main" style={{ position: "relative", paddingBottom: "50px" }}>
-      <div className="pet-img" style={{position:"relative", height:"220px"}} >
-        <img src={selectedImage} width="100%" height="100%" alt="" style={{objectFit:"contain"}}/>
-      <input type='file' style={{display:"", position:"absolute", top:"50%", left:"50%" , transform:"translate(-50%, -50%)", width:"100%", height:"100%"}}
+      <div className="pet-img" style={{position:"relative",  height: `${containerHeight}px` }}>
+        <img src={selectedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/>
+      <input type='file' style={{display:"", position:"absolute", top:"50%", left:"50%" , transform:"translate(-50%, -50%)", width:"100%", height:"100%", border:"none", boxShadow:"none"}}
               onChange={handleImageChange}
               ref={fileInputRef}
-              onClick={handleUpload}
+              // onClick={handleUpload}
       
       ></input>
       </div>
       <div style={{ position: "relative", backgroundColor: "" }}>
-        <div
+        {petObject.pet_name && <div
           className="d-flex justify-content-between align-items-center pet-name"
           style={{
             position: "absolute",
@@ -235,11 +250,11 @@ const openDateCalc = ()=>{
           <FemaleIcon sx={{ fontSize: "3rem", color: "#e91e63" }} />
         )}
       </div>
-        </div>
+        </div>}
         <div style={{ position: "relative", top: "3em", padding: "0 10px", display: "flex", flexDirection: "row", alignItems: "center" }}>
           <div style={{ display: "flex", justifyItems: "center", gap: "1em" }}>
             <span><PetsIcon style={{ padding: "0" }} /></span>
-            <h4 >About {petObject.pet_name || ""}</h4>
+            <h4 >About {petObject.pet_name || "Your furry friend"}</h4>
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "row", padding: "10px", gap: "10px", flexWrap: "", marginTop: "", justifyContent: "center" }}>
@@ -250,31 +265,32 @@ const openDateCalc = ()=>{
           <div onClick={()=>handleOpen('breeds')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Species</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.breed || ""}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{petObject.breed || selectedBreed || ""}</span>
 
           </div>
           <div onClick={openDateCalc} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Age</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{age || "years"}</span>
+            {/* <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{`${age} years` || "select date"}</span> */}
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>  {age < 0 ? `${age * 10} months` : `${age} years` || "select date"}</span>
 
           </div>
           <div onClick={()=>{openWeightHeight('weight')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Weight</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.weight || ""} kg</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.weight || "" || weight} kg</span>
 
           </div>
           <div onClick={()=>{openWeightHeight('height')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Height</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.height || ""} cm</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.height || "" || height} cm</span>
 
           </div>
           <div onClick={()=>handleOpen('colors')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Color</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.color || ""}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{petObject.color || "" || selectedColor}</span>
 
           </div>
 
@@ -302,7 +318,7 @@ const openDateCalc = ()=>{
            options={options}
            onSelect={(option) => handleSelectedOption(option, options === breeds ? 'breeds' : 'colors')}
         ></DropDown>
-        <WeightHeightCal open={openWeightHeightModal} onClose={handleClose} step={stepType === 'weight' ? 5 : 20} type={stepType === 'weight' ? 'weight' : 'height'} onSave={stepType === 'weight' ? handleWeightSave : handleHeightSave} />
+        <WeightHeightCal open={openWeightHeightModal} onClose={handleClose} step={stepType === 'weight' ? 5 : 10} type={stepType === 'weight' ? 'weight' : 'height'} onSave={stepType === 'weight' ? handleWeightSave : handleHeightSave} />
         <DateCalc 
             onSave={handleDateSave}
             open={openDateCalculator}
