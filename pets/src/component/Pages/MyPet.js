@@ -40,10 +40,7 @@ const MyPet = () => {
   const [date, setDate] = useState('');
   const [age, setAge] = useState(0);
   const fileInputRef = useRef(null);
-  const handleImageClick = () => {
-    // Trigger a click on the hidden file input
-    fileInputRef.current.click();
-  };
+
 
   const initialPetObject = {
     pet_name: "",
@@ -202,7 +199,7 @@ const openDateCalc = ()=>{
     
   return (
     <div className="main" style={{ position: "relative", paddingBottom: "50px" }}>
-      <div className="pet-img" style={{position:"relative", height:"220px"}} onClick={handleImageClick}>
+      <div className="pet-img" style={{position:"relative", height:"220px"}} >
         <img src={selectedImage} width="100%" height="100%" alt="" style={{objectFit:"contain"}}/>
       <input type='file' style={{display:"", position:"absolute", top:"50%", left:"50%" , transform:"translate(-50%, -50%)", width:"100%", height:"100%"}}
               onChange={handleImageChange}

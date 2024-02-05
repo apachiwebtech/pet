@@ -6,7 +6,9 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import HandshakeIcon from '@mui/icons-material/Handshake';
 import { Link } from 'react-router-dom';
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 const Footer = () => {
   const [value, setValue] = React.useState('home');
 
@@ -37,7 +39,7 @@ const Footer = () => {
     //   </div>
     // </div>
     <div className='footer py-1'>
-      <BottomNavigation sx={{ width: "100%", background: "green" }} value={value} onChange={handleChange}>
+      <BottomNavigation sx={{ width: "100%", background: "#5DB15B" }} value={value} onChange={handleChange}>
         <BottomNavigationAction
           component={Link}
           to='/'
@@ -46,18 +48,29 @@ const Footer = () => {
           icon={<HomeOutlinedIcon />}
           selected
         />
-        <BottomNavigationAction
+        {localStorage.getItem("pet_role") == 1 ? <BottomNavigationAction
           component={Link}
           to='/pet/:id'
           label="Profile"
           value="profile"
           icon={<PetsOutlinedIcon />}
-        />
-        <BottomNavigationAction
-          label="Location"
-          value="location"
-          icon={<LocationOnOutlinedIcon />}
-        />
+        /> : null}
+        {localStorage.getItem("pet_role") == 2 ? <BottomNavigationAction
+          component={Link}
+          to='/servicerequest'
+          label="Service"
+          value="Service Request"
+          icon={<MoveToInboxIcon />}
+        /> : null}
+        {localStorage.getItem("pet_role") == 1 ? 
+          <BottomNavigationAction
+            component={Link}
+            to='/community/:id'
+            label="Community"
+            value="Community"
+            icon={<HandshakeIcon />}
+          /> : null}
+
         <BottomNavigationAction
           component={Link}
           to='/setting'

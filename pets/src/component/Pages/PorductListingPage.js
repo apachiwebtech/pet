@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import PrimaryButton from '../UI/PrimaryButton';
 import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
+import { CircularProgress } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,16 +30,29 @@ const ProductListingPage = () => {
     const [pro_data, setProData] = useState([])
     const [catid, setCatid] = useState("");
     const [errors, setErrors] = useState({});
+    const [loader, setLoader] = useState(false)
 
+    
     const [value, setValue] = useState({
         category: '',
-        productname: '',
-        description: '',
-        address: '',
+        productname: '' || pro_data.title,
+        description: '' || pro_data.description,
         image: '',
         image2: '',
         image3: '',
     })
+
+    useEffect(()=>{
+        setValue({
+        category: '',
+        productname: pro_data.title,
+        description: pro_data.description,
+        image: '',
+        image2: '',
+        image3: '',
+        })
+    }, [pro_data])
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = (id) => {
@@ -49,7 +63,7 @@ const ProductListingPage = () => {
         axios.post(`${BASE_URL}/product_data`, data)
             .then((res) => {
                 console.log(res)
-                setProData(res)
+                setProData(res.data[0])
             })
             .catch((err) => {
                 console.log(err)
@@ -191,8 +205,12 @@ const ProductListingPage = () => {
     };
 
     const onHandleChange = (e) => {
-        setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    }
+        const { name, value } = e.target;
+        setValue((prevValue) => ({
+          ...prevValue,
+          [name]: value,
+        }));
+      };
 
 
 
@@ -200,7 +218,7 @@ const ProductListingPage = () => {
 
     const handleSubmit = (e, pro_id) => {
         e.preventDefault()
-
+        setLoader(true)
         const formData = new FormData();
 
 
@@ -220,7 +238,7 @@ const ProductListingPage = () => {
                 body: formData,
             })
                 .then((res) => {
-                    // console.log(res)
+                    setLoader(false)
                     if (res) {
                         getlisitngdetail()
                         setOpen(false);
@@ -303,12 +321,13 @@ const ProductListingPage = () => {
                                             </Button>
                                         </Toolbar>
                                     </AppBar>
-                                    {
-                                        pro_data?.data?.map((item) => {
-                                            return (
+                                  
                                                 <div className='mx-2'>
-                                                    <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(item.id)}>Delete Product</button>
-                                                    <form onSubmit={(e) => handleSubmit(e, item.id)} method='POST'>
+                                                    <div>
+                                                        {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+                                                    </div>
+                                                    <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(pro_data.id)}>Delete Product</button>
+                                                    <form onSubmit={(e) => handleSubmit(e, pro_data.id)} method='POST'>
 
                                                         <div className='my-2'>
                                                             <Autocomplete
@@ -333,27 +352,27 @@ const ProductListingPage = () => {
                                                         </div>
 
                                                         <div className='my-2'>
-                                                            <CustomInput name="productname" placeholder={item.title} onChange={onHandleChange} />
+                                                            <CustomInput name="productname" placeholder={item.title} value={value.productname} onChange={onHandleChange} />
                                                             {errors.productname && <p className="text-danger">{errors.productname}</p>}
                                                         </div>
 
 
-                                                        <div className='row text-center my-4'>
+                                                        <div className='row text-center my-4 justify-content-evenly'>
                                                             <p>Product Images</p>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
+                                                                <p id='uptext1' >Upload 1</p>
                                                                 <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
                                                                 {errors.image && <span className="text-danger">{errors.image}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                                                                <p id='uptext2'>Upload 2</p>
                                                                 <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload2} />
                                                                 {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                                                                <p id='uptext3' >Upload 3</p>
                                                                 <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                                 {errors.image3 && <span className="text-danger">{errors.image3}</span>}
@@ -362,7 +381,7 @@ const ProductListingPage = () => {
 
 
                                                         <div>
-                                                            <CustomTextarea className="my-2" placeholder={item.description} name="description" onChange={onHandleChange} />
+                                                            <CustomTextarea className="my-2"  value={value.description} name="description" onChange={onHandleChange} />
                                                             {errors.description && <span className="text-danger">{errors.description}</span>}
                                                         </div>
                                                         <div>
@@ -371,9 +390,7 @@ const ProductListingPage = () => {
                                                     </form>
 
                                                 </div>
-                                            )
-                                        })
-                                    }
+                                   
 
                                 </Dialog>
                             </React.Fragment>

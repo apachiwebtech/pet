@@ -1,3 +1,10 @@
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,700&display=swap');
+
+
+
+
 *{
   margin: 0px;
   padding: 0px;
@@ -8,27 +15,28 @@
 }
 body{
   overflow-x: hidden;
+  font-family: 'Ubuntu', sans-serif !important;
 }
 /* Header Start  */
 .head{
-  background: green;
-  padding-top: 33px;
-  padding-bottom: 1px;
+  background: #5DB15B;
+  padding: 10px;
+  /* padding-bottom: 1px; */
   color: #fff;
-  height: 67px;
+  /* height: 3px; */
 }
 .head{
   font-size: 18px;
 }
 .head-arrow{
   position: absolute;
-  left: 7px;
-  top: 33px;
+  left: 12px;
+  top: 16px;
 }
 /* Header End */
 /* Splash Section  */
 .slug{
-  color: green;
+  color: #5DB15B;
   font-weight: 700;
   padding-right: 5px;
 }
@@ -38,7 +46,7 @@ body{
 .splash-btn{
 
   color: #fff;
-  background-color: green;
+  background-color: #5DB15B;
   padding: 18px 180px 18px 18px;
   border: none;
   border-radius: 10px;
@@ -103,7 +111,7 @@ font-size: 20px;
 }
 .reg-btn{
   color: #fff;
-  background-color: green;
+  background-color: #5DB15B;
   width: 261px;
   padding: 8px 0px;
   border: none;
@@ -116,7 +124,7 @@ font-size: 20px;
 .reg-service{
   width: 261px;
   color: #fff;
-  background-color: green;
+  background-color: #5DB15B;
   padding: 8px 0px ;
   padding-left: 10px;
   border: none;
@@ -133,14 +141,14 @@ font-size: 20px;
   color: darkblue;
 }
 .foot-info{
-  position: absolute;
+  position: fixed;
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
 }
 .foot-info2{
-  position: absolute;
+  position: fixed;
   bottom: 58px;
   left: 50%;
   transform: translateX(-50%);
@@ -153,7 +161,7 @@ font-size: 20px;
 .Verify-btn{
 
   color: #fff;
-  background-color: green;
+  background-color: #5DB15B;
   padding: 18px 180px 18px 18px;
   border: none;
   border-radius: 10px;
@@ -169,7 +177,7 @@ font-size: 20px;
   position: fixed;
   bottom: 0px;
   width: 100%;
-  background: green;
+  background: #5DB15B;
   color: #fff;
   font-size: 10px;
 }
@@ -229,24 +237,34 @@ font-size: 13px;
 /* Service form start */
 input[type="file"]
 { 
-
    width: 100px; 
    height: 100px; 
-   
-   border-radius: 8px;
-    border: 1px solid #757575;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+   z-index: 100;
+   position: absolute;
+
 }
 
 input[type='file'] { font-size: 0; }
 ::file-selector-button { display: none; }
+
+.upload-box{
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid lightgray;
+  width: 120px !important; 
+  height: 130px; 
+  background: #fff;
+}
+.upload-box img{
+  background: #fff;
+}
 
 .upload-box p {
   position: absolute;
   top: 51px;
   left: 50%;
   transform: translateX(-50%);
-  
+
 }
 .area-list p{
   margin: 0px;
@@ -273,7 +291,7 @@ input[type='file'] { font-size: 0; }
 .service-list-edit{
 font-size: 15px;
 text-decoration: underline;
-color: green;
+color: #5DB15B;
 }
 
 .service-card p{
@@ -286,6 +304,27 @@ padding: 5px 0px;
   font-weight: 400;
 }
 .service-card {
-  border-left: 5px solid green !important;
+  border-left: 5px solid #5DB15B !important;
 }
 /* Service Listing End */
+
+
+/* My Appintment */
+.appo-title{
+  font-size: 19px;
+}
+.apoint-frame{
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* My Appintment */
+
+/* MUI  */
+.css-hbf9i9-MuiAutocomplete-root{
+  border: 1px solid lightgrey !important;
+}
+/* MUI  */

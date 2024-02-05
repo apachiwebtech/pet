@@ -169,7 +169,7 @@ const ListingCard = (props) => {
               color: "#adadad",
             }}
           >
-            {`Last visit` + " " + props.date}
+            {/* {`Last visit` + " " + props.date} */}
           </div>
           <PrimaryButton
             style={{

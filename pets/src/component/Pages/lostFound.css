@@ -1,89 +1,88 @@
-.lostfound{
-    height: calc(85vh);
-    overflow-y: auto;
-    padding: 15px 15px 15px 15px;
-
+.lostfound {
+  height: calc(85vh);
+  overflow-y: auto;
+  padding: 15px 15px 15px 15px;
 }
-.header{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background-color:#fffafa;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fffafa;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 }
-.header h1{
-    color: #1e732c;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 2rem;
-    font-family: 'Bebas Neue', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    letter-spacing: 3px;
+.header h1 {
+  color: #1e732c;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 2rem;
+  font-family: "Bebas Neue", Impact, Haettenschweiler, "Arial Narrow Bold",
+    sans-serif;
+  letter-spacing: 3px;
 }
-h1 + p{
-    color: #1e732c;
-    letter-spacing: 3px;
+h1 + p {
+  color: #1e732c;
+  letter-spacing: 3px;
 }
 .header p {
-    padding: 0;
-    margin: 0;
-    text-transform: uppercase;
-    font-weight: bold;
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: bold;
 }
-.CardClass{
-    /* padding: 10px; */
-    display: grid;
-    height: 500px;
-    grid-template-columns: 1;
-    grid-template-rows: 1fr 2fr 1fr;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    background-color: #e4fee5;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    
-
+.CardClass {
+  /* padding: 10px; */
+  display: grid;
+  height: 500px;
+  grid-template-columns: 1;
+  grid-template-rows: 1fr 2fr 1fr;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  background-color: #e4fee5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
-.mainSection{
-    box-sizing: border-box;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1;
-    height: 300px;
-    grid-column-gap: 10px;
+.mainSection {
+  box-sizing: border-box;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1;
+  height: 300px;
+  grid-column-gap: 10px;
 }
 .imageContainer {
-    width: 100%; /* Ensure the imageContainer takes up 100% of the available width */
-    height: 100%; /* Ensure the imageContainer takes up 100% of the available height */
-    overflow: hidden; /* Hide any overflow content outside the imageContainer */
-  }
-  
-  img {
-    width: 100%; /* Make the image take up 100% of the width of its container */
-    height: 100%; /* Make the image take up 100% of the height of its container */
-    object-fit: contain; /* Ensure the image covers the entire container while maintaining aspect ratio */
-  }
-  
-.info{
-    display: flex;
-    flex-direction: column;
+  width: 100%; /* Ensure the imageContainer takes up 100% of the available width */
+  height: 100%; /* Ensure the imageContainer takes up 100% of the available height */
+  overflow: hidden; /* Hide any overflow content outside the imageContainer */
 }
-.info h2{
-    color: #1e732c;
+
+.lost-img {
+  width: 100%; /* Make the image take up 100% of the width of its container */
+  height: 100%; /* Make the image take up 100% of the height of its container */
+  object-fit: contain; /* Ensure the image covers the entire container while maintaining aspect ratio */
 }
-.info p , span{
-    font-size: 0.8rem;
+
+.info {
+  display: flex;
+  flex-direction: column;
 }
-.foot{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background-color: #1e732c;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
+.info h2 {
+  color: #1e732c;
 }
-.foot h1{
-    color:#fffafa;
+.info p,
+span {
+  font-size: 0.8rem;
+}
+.foot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #1e732c;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+.foot h1 {
+  color: #fffafa;
 }

@@ -25,16 +25,23 @@ const MyApointment = () => {
     getAppointDetails()
   }, [])
 
+
+
   return (
-    <div>
+    <div style={{ paddingBottom: "70px" }}>
       {
         data.map((item) => {
           const timestampStr = item.book_date; // Assuming item.book_date is the timestamp string
           const timestamp = new Date(timestampStr);
 
           // Extracting components
-          const dateComponent = timestamp.toLocaleDateString();
-          const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const day = String(timestamp.getDate()).padStart(2, '0');
+          const month = String(timestamp.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+          const year = String(timestamp.getFullYear()).slice(2);
+          
+          const formattedDate = `${day + "/"} ${month + '/'} ${year}`;
+          const timeComponent = timestamp.toLocaleTimeString()
+          // const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
 
 
@@ -42,14 +49,14 @@ const MyApointment = () => {
           return (
             <div className={`card p-2 m-3 ${item.status == 0 ? 'border-warning' : 'border-success'}`}>
               <div className='d-flex'>
-                <div className='p-1 border border-1 mx-2' >
+                <div className='p-1 border border-1 mx-2 apoint-frame' >
                   <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} width="100px" alt='' />
                 </div>
                 <div>
-                  <h2>{item.title}</h2>
-                  <p>Date : {dateComponent}</p>
+                  <h2 className='appo-title'>{item.title}</h2>
+                  <p>Date : {formattedDate}</p>
                   <p>Time : {timeComponent}</p>
-               
+
                 </div>
               </div>
               <hr />

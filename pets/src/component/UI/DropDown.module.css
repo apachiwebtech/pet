@@ -21,7 +21,7 @@
     border-radius: 5px;
 }
 .listStyle:hover{
-    background-color:rgba(74, 207, 125, 0.749);
+    background-color:#5DB15B;
     transform: scale(1);
     box-shadow:  rgba(99, 99, 99, 0.6) 0px 2px 8px 0px;
 cursor: pointer;

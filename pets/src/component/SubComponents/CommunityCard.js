@@ -69,7 +69,7 @@ const CommunityCard = (props) => {
             }}
           >
             <img
-              src={props.img}
+              src={`http://thetalentclub.co.in/` + props.img}
               alt={props.altText}
               style={{
                 objectFit: "contain",

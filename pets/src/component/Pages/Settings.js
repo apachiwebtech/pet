@@ -10,7 +10,7 @@ const Settings = () => {
     >
       <div>
       <div className={classes.Container}>
-          <h1>personalisations</h1>
+          <h1>Personalisations</h1>
           <Card
           className={classes.CardClass}
           >
@@ -21,7 +21,7 @@ const Settings = () => {
               <Radio value="outlined" label="Outlined" variant="outlined" color="success" />
             <span>Public</span>
               <Radio value="soft" label="Soft" variant="soft" color="success" />
-              <span>private</span>
+              <span>Private</span>
             </RadioGroup>
             </div>
           </Card>
@@ -32,7 +32,7 @@ const Settings = () => {
           className={classes.CardClass}
           >
 
-            <p>photo access</p>
+            <p>Photo access</p>
             <div className={classes.RadioGroup}>
 
             <RadioGroup defaultValue="outlined" name="radio-buttons-group" sx={{display:"flex", flexDirection:"row", alignItems: "center",fontSize:"1.4rem" }}>
@@ -46,7 +46,7 @@ const Settings = () => {
           <Card
           className={classes.CardClass}
           >
-            <p>location access</p>
+            <p>Location access</p>
             <div className={classes.RadioGroup}>
             <RadioGroup defaultValue="outlined" name="radio-buttons-group" sx={{display:"flex", flexDirection:"row", alignItems: "center",fontSize:"1.4rem" }}>
               <Radio value="outlined" label="Outlined" variant="outlined" color="success" />

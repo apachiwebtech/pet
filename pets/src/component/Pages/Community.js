@@ -40,7 +40,7 @@ const Community = (props) => {
       {!loading && 
         data.map((item)=>{
           return (
-            <CommunityCard heading={item.pet_name} gender={item.gender} city={item.city} breed={item.breed} date={item.dob}/>
+            <CommunityCard heading={item.pet_name} gender={item.gender} city={item.city} breed={item.breed} date={item.dob} img={item.profile_image}/>
           )
         })
       }

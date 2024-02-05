@@ -23,7 +23,7 @@ import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import axios from 'axios';
 import PlacesAutocomplete, {
     geocodeByAddress,
@@ -43,6 +43,9 @@ const AddService = () => {
     const [image2, setImage2] = useState(null);
     const [errors, setErrors] = useState({});
     const [image3, setImage3] = useState(null);
+    const [state, setState] = useState([])
+    const [stateid, setStateId] = useState()
+    const [loader , setLoader] = useState(false)
     const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTime2, setSelectedTime2] = useState(null);
@@ -63,13 +66,13 @@ const AddService = () => {
         servicename: '',
         description: '',
         address: '',
+        state: '',
+        city: '',
+        pincode: '',
         image: '',
         image2: '',
         image3: '',
-        day: '',
-        ischeked: '',
-        day2: '',
-        ischeked2: '',
+
     })
 
 
@@ -87,6 +90,15 @@ const AddService = () => {
         }
         if (!value.address) {
             newErrors.address = 'address is required';
+        }
+        if (!stateid) {
+            newErrors.state = 'state is required';
+        }
+        if (!value.city) {
+            newErrors.city = 'city is required';
+        }
+        if (!value.pincode) {
+            newErrors.pincode = 'pincode is required';
         }
         if (!value.image) {
             newErrors.image = ' required';
@@ -370,18 +382,21 @@ const AddService = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const isValid = validateForm();
-
+        setLoader(true)
 
         if (isValid) {
             const formData = new FormData();
             formData.append('category', catid)
             formData.append('service', value.servicename)
             formData.append('address', value.address)
+            formData.append('state', stateid)
+            formData.append('city', value.city)
+            formData.append('pincode', value.pincode)
             formData.append('image', image)
-            formData.append('latitude',coordinates.lat)
-            formData.append('longitude',coordinates.lng)
-             formData.append('image2', image2)
-             formData.append('image3', image3)
+            formData.append('latitude', coordinates.lat)
+            formData.append('longitude', coordinates.lng)
+            formData.append('image2', image2)
+            formData.append('image3', image3)
             formData.append('description', value.description)
             formData.append('user_id', localStorage.getItem("pet_id"))
 
@@ -393,6 +408,7 @@ const AddService = () => {
             })
                 .then((res) => {
                     // console.log(res)
+                    setLoader(false)
                     if (res) {
                         navigate('/servicelistingpage')
 
@@ -428,13 +444,38 @@ const AddService = () => {
             // Now you have the selected id, you can use it in your application logic
         }
     };
+    const HandleChangeState = (selectedValue) => {
+        if (selectedValue) {
+            const selectedId = selectedValue.id;
+            console.log(selectedId, "ser");
+            setStateId(selectedId)
+            // Now you have the selected id, you can use it in your application logic
+        }
+    };
 
+    async function getstate() {
+        axios.get(`${BASE_URL}/state`)
+            .then((res) => {
+                setState(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getstate()
+    }, [])
 
 
 
     return (
-        <>
+        <div >
+            <div>
+               {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+            </div>
             {scriptLoaded && (
+
                 <div className='mx-2'>
                     <form onSubmit={handleSubmit} method='POST'>
 
@@ -465,6 +506,7 @@ const AddService = () => {
                             <CustomInput name="servicename" placeholder="Service Title" onChange={onHandleChange} />
                             {errors.servicename && <p className="text-danger">{errors.servicename}</p>}
                         </div>
+                        <p>Add Google Location</p>
                         <PlacesAutocomplete
 
                             value={address}
@@ -516,22 +558,53 @@ const AddService = () => {
                             <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
                             {errors.address && <span className="text-danger">{errors.address}</span>}
                         </div>
-                        <div className='row text-center my-4'>
+                        <div className='my-2'>
+                            <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                options={state}
+                                getOptionLabel={(option) => option.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                sx={{
+                                    width: "100%",
+                                    borderRadius: "8px",
+                                    border: "1px solid #757575",
+                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                }}
+                                className='my-2'
+                                renderInput={(params) => <TextField {...params} label="State" />}
+                                name="state"
+                                onChange={(event, value) => HandleChangeState(value)} // Pass only the value
+                            />
+                            {errors.state && <span className="text-danger">{errors.state}</span>}
+                        </div>
+                        <div className='row'>
+                            <div className='my-2 col-6'>
+                                <CustomInput name="city" placeholder="City" onChange={onHandleChange} />
+                                {errors.city && <span className="text-danger">{errors.city}</span>}
+                            </div>
+                            <div className='my-2 mx-2 col-5'>
+                                <CustomInput name="pincode" placeholder="Pincode" onChange={onHandleChange} />
+                                {errors.pincode && <span className="text-danger">{errors.pincode}</span>}
+                            </div>
+                        </div>
+
+                        <div className='row text-center my-4 justify-content-evenly'>
                             <p>Service Images</p>
                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
+                                <p id='uptext1' >Upload 1</p>
                                 <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
                                 {errors.image && <span className="text-danger">{errors.image}</span>}
                             </div>
                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                                <p id='uptext2' >Upload 2</p>
                                 <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload2} />
                                 {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                             </div>
                             <div className='upload-box col-4' style={{ position: "relative" }}>
-                                <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                                <p id='uptext3' >Upload 3</p>
                                 <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload3} />
                                 {errors.image3 && <span className="text-danger">{errors.image3}</span>}
@@ -610,7 +683,7 @@ const AddService = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     )
 }
 

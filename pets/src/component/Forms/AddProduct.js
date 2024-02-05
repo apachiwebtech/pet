@@ -5,7 +5,7 @@ import CustomTextarea from '../UI/CustomTexarea';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import { Link, useNavigate } from 'react-router-dom';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import axios from 'axios';
 
 
@@ -18,7 +18,7 @@ const AddProduct = () => {
     const [cat, setCat] = useState([]);
     const [catid, setCatid] = useState("");
     const [errors, setErrors] = useState({});
-
+    const [loader, setLoader] = useState(false)
     const [value, setValue] = useState({
         category: '',
         productname: '',
@@ -42,7 +42,7 @@ const AddProduct = () => {
         if (!value.productname) {
             newErrors.productname = 'Productname Name is required';
         }
-       
+
         if (!value.image) {
             newErrors.image = ' required';
         }
@@ -131,7 +131,7 @@ const AddProduct = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-
+        setLoader(true)
         if (validateForm()) {
 
 
@@ -151,7 +151,7 @@ const AddProduct = () => {
                 body: formData,
             })
                 .then((res) => {
-                    // console.log(res)
+                    setLoader(false)
                     if (res) {
                         navigate('/productlistingpage')
 
@@ -192,7 +192,9 @@ const AddProduct = () => {
 
     return (
         <>
-
+            <div>
+                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" }} />}
+            </div>
             <div className='mx-2'>
                 <form onSubmit={handleSubmit} method='POST'>
 
@@ -225,25 +227,25 @@ const AddProduct = () => {
                     </div>
 
 
-                    <div className='row text-center my-4'>
+                    <div className='row text-center my-4 justify-content-evenly'>
                         <p>Product Images</p>
-                        <div className='upload-box col-4' style={{ position: "relative" }}>
-                            <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>Upload 1</p>
+                        <div className='upload-box col-3' style={{ position: "relative" }}>
+                            <p id='uptext1' >Upload 1</p>
                             <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                             <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
-                        {errors.image && <span className="text-danger">{errors.image}</span>}
+                            {errors.image && <span className="text-danger">{errors.image}</span>}
                         </div>
-                        <div className='upload-box col-4' style={{ position: "relative" }}>
-                            <p id='uptext2' style={{ zIndex: "-1" }}>Upload 2</p>
+                        <div className='upload-box col-3' style={{ position: "relative" }}>
+                            <p id='uptext2' >Upload 2</p>
                             <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                             <input type='file' placeholder='upload' onChange={handleUpload2} />
-                        {errors.image2 && <span className="text-danger">{errors.image2}</span>}
+                            {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                         </div>
-                        <div className='upload-box col-4' style={{ position: "relative" }}>
-                            <p id='uptext3' style={{ zIndex: "-1" }}>Upload 3</p>
+                        <div className='upload-box col-3' style={{ position: "relative" }}>
+                            <p id='uptext3' >Upload 3</p>
                             <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                             <input type='file' placeholder='upload' onChange={handleUpload3} />
-                        {errors.image3 && <span className="text-danger">{errors.image3}</span>}
+                            {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                         </div>
                     </div>
 

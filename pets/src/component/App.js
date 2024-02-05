@@ -181,7 +181,7 @@ const getUserName = (userId) => {
   axios.post(`${BASE_URL}/getUserName`, { user_id })
     .then((res) => {
       localStorage.setItem('awt_parent_name', res.data[0].parent_name);
-      console.log(res.data[0])
+    
     })
     .catch((err) => {
       console.log(err);

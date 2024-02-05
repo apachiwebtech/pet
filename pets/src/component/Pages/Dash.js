@@ -48,7 +48,7 @@ const Dash = () => {
         {
           feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item, index) => {
             return (
-              <div className='col-4 py-2'>
+              <div className='col-4 py-2' key={index}>
                 <Link to={`/${item.link}/${item.id}`}><img src={`https://thetalentclub.co.in/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
                 {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
                 <p>{item.title}</p>
@@ -63,21 +63,21 @@ const Dash = () => {
 
         {
           localStorage.getItem("pet_role") == 2 ?
-           <Link to="/servicerequest"><div className=''>
-           <img className='dash-icon' src={service} alt='' />
+           <div className=''>
+           <Link to="/servicerequest"><img className='dash-icon' src={service} alt='' /></Link>
            <p>Service <br />Request</p>
-         </div></Link>  :
-            <Link to="/myappointment"><div className=''>
-              <img className='dash-icon' src={appo} alt=''/>
+         </div>  :
+            <div className=''>
+              <Link to="/myappointment"><img className='dash-icon' src={appo} alt=''/></Link>
               <p>My <br />Appointment</p>
-            </div></Link>
+            </div>
         }
         {
           localStorage.getItem("pet_role") == 2 ?
-          <div className=' '><Link to="/productrequest">
-              <img className='dash-icon' src={order} alt='' />
-              <p>Product  <br /> Request</p>
-              </Link> </div>:
+          <div className=' '>
+              <Link to="/productrequest"><img className='dash-icon' src={order} alt='' /></Link> 
+              <p>Product  <br /> Request</p> 
+             </div>:
             <div className=' '>
               <img className='dash-icon' src={order} alt='' />
               <p>My Order <br /> Booking</p>

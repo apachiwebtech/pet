@@ -42,7 +42,7 @@ const ServiceRequest = () => {
     }
 
     return (
-        <div>
+        <div style={{paddingBottom : "70px"}}>
             {
                 listing.map((item) => {
                     const timestampStr = item.book_date; // Assuming item.book_date is the timestamp string
@@ -56,16 +56,16 @@ const ServiceRequest = () => {
 
 
                     return (
-                        <div className={`card p-2 m-3 ${item.status == 0 ? 'border-success' : 'border-danger'}`}>
+                        <div className={`card p-2 m-3 ${item.status == 0 ? 'border-success' : 'border-danger'}`} >
                             <div className='d-flex'>
-                                <div className='p-1 border border-1 mx-2' >
+                                <div className='p-1 border border-1 mx-2 apoint-frame' >
                                     <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} width="100px" alt='' />
                                 </div>
                                 <div>
-                                    <h2>{item.parent_name}</h2>
+                                    <h2 className='appo-title'>{item.parent_name}</h2>
                                     <p>Date : {dateComponent}</p>
                                     <p>Time : {timeComponent}</p>
-                                    <p>{item.mobile}</p>
+                                    <p>Mobile : {item.mobile}</p>
 
                                 </div>
                             </div>
@@ -73,7 +73,7 @@ const ServiceRequest = () => {
                             <div className='d-flex'>
                                 {item.status == 0 ?  <button className='btn btn-sm btn-success' onClick={() => handleClick(item.id)}>Accept</button>: <button className='btn btn-sm btn-danger' >Accepted</button>}
                                
-                                <Link to={`tel:${item.mobile}`} className='btn btn-sm btn-primary mx-2'><i class="bi bi-telephone"></i> Call</Link>
+                                <Link to={`tel:${item.mobile}`} className='btn btn-sm btn-primary mx-2'><i className="bi bi-telephone"></i> Call</Link>
                             </div>
                         </div>
                     )

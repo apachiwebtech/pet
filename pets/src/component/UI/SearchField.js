@@ -16,7 +16,7 @@ return (
     <div className='mt-3'>
         <div className='position-relative'>
             <TextField style={{ width: "100%" }} id="outlined-basic" onChange={handlesearch} label="Search Keyword" variant="outlined"value={inputValue} />
-            {!inputValue && <SearchIcon className="search-icon" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }} />}
+           
         </div>
     </div>
 )

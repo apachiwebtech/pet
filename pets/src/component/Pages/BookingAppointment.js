@@ -29,6 +29,7 @@ const BookingAppointment = () => {
   const [progress , setProgress] = useState(false)
 
   const handleDateChange = (newDate) => {
+    
     setSelectedDate(newDate.format());
     // You can do something with the selected date value here, like sending it to a server or updating state.
     console.log('Selected Date:', newDate); // Example: Log the selected date to the console
