@@ -56,7 +56,7 @@ const ServiceRequest = () => {
 
 
                     return (
-                        <div className={`card p-2 m-3 ${item.status == 0 ? 'border-success' : 'border-danger'}`} >
+                        <div className={`card p-2 m-3 ${item.status == 0 ? 'border-danger' : 'border-success'}`} >
                             <div className='d-flex'>
                                 <div className='p-1 border border-1 mx-2 apoint-frame' >
                                     <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} width="100px" alt='' />
@@ -71,9 +71,9 @@ const ServiceRequest = () => {
                             </div>
                             <hr />
                             <div className='d-flex'>
-                                {item.status == 0 ?  <button className='btn btn-sm btn-success' onClick={() => handleClick(item.id)}>Accept</button>: <button className='btn btn-sm btn-danger' >Accepted</button>}
+                                {item.status == 0 ?  <button className='btn btn-sm btn-danger' onClick={() => handleClick(item.id)}>Accept</button>: <button className='btn btn-sm btn-success' >Accepted</button>}
                                
-                                <Link to={`tel:${item.mobile}`} className='btn btn-sm btn-primary mx-2'><i className="bi bi-telephone"></i> Call</Link>
+                                <Link to={`tel:${item.mobile}`} className='btn btn-outline-primary mx-2'><i className="bi bi-telephone"></i> Call</Link>
                             </div>
                         </div>
                     )

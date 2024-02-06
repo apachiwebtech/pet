@@ -19,6 +19,7 @@ const MyPet = () => {
   useEffect(()=>{
     dispatch(getBreeds());
 
+
     dispatch(getColors());
 
     dispatch(getProfileData({id : userid}))
@@ -99,6 +100,24 @@ const openDateCalc = ()=>{
 
     const handleDateSave = (date) => {
       setDate(date);
+
+      const dateObject = new Date(Date.parse(date));
+
+      console.log(dateObject)
+       const year = dateObject.getFullYear();
+       console.log(year)
+       const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+       console.log(month);
+       const day = date.getDate().toString().padStart(2, '0');
+       console.log(day);
+       // console.log("inside else ")
+       const formattedDate = `${year}-${month}-${day}`;
+       setDate(formattedDate);
+       setPetObject((prevObject) => ({ ...prevObject, dob: formattedDate }));
+
+       console.log("Formatted date:", formattedDate);
+   
+       setAge(AgeCalculator(formattedDate));
     };
   
     const toggleGender = () => {
@@ -159,7 +178,9 @@ const openDateCalc = ()=>{
         console.log(day);
         // console.log("inside else ")
         const formattedDate = `${year}-${month}-${day}`;
-        
+        setDate(formattedDate);
+        setPetObject((prevObject) => ({ ...prevObject, dob: formattedDate }));
+
         console.log("Formatted date:", formattedDate);
     
         setAge(AgeCalculator(formattedDate));

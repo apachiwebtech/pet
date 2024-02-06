@@ -142,7 +142,7 @@ const ServiceListingPage = () => {
         }
         axios.post(`${BASE_URL}/delete_service`, data)
             .then((res) => {
-          
+
                 getlisitngdetail()
                 setOpen2(false);
             })
@@ -239,11 +239,11 @@ const ServiceListingPage = () => {
             category: servicedata.cat_id,
             service: servicedata.title,
             description: servicedata.description,
-            address:  servicedata.address,
-            state:  servicedata.state,
-            city:  servicedata.city,
-            pincode:  servicedata.pin,
-            image:  servicedata.upload_image,
+            address: servicedata.address,
+            state: servicedata.state,
+            city: servicedata.city,
+            pincode: servicedata.pin,
+            image: servicedata.upload_image,
             image2: servicedata.upload_image2,
             image3: servicedata.upload_image3,
         })
@@ -406,7 +406,7 @@ const ServiceListingPage = () => {
         try {
             const results = await geocodeByAddress(selectedAddress);
             const latLng = await getLatLng(results[0]);
-          
+
             setAddress(selectedAddress);
             setCoordinates({
                 lat: latLng.lat,
@@ -468,7 +468,7 @@ const ServiceListingPage = () => {
 
 
     const handleUpload = async (e) => {
-     
+
         const data = await ImageBase64(e.target.files[0]);
         const file = e.target.files[0];
         setImage(file);
@@ -481,7 +481,7 @@ const ServiceListingPage = () => {
     };
 
     const handleUpload2 = async (e) => {
-   
+
         const data = await ImageBase64(e.target.files[0]);
         const file = e.target.files[0];
         setImage2(file);
@@ -493,7 +493,7 @@ const ServiceListingPage = () => {
         });
     };
     const handleUpload3 = async (e) => {
-    
+
         const data = await ImageBase64(e.target.files[0]);
         const file = e.target.files[0];
         setImage3(file);
@@ -503,6 +503,7 @@ const ServiceListingPage = () => {
                 image3: data,
             };
         });
+        console.log(image3)
     };
 
     // const onHandleChange = (e) => {
@@ -512,7 +513,7 @@ const ServiceListingPage = () => {
     const HandleChangeState = (selectedValue) => {
         if (selectedValue) {
             const selectedId = selectedValue.id;
-         
+
             setStateId(selectedId)
             // Now you have the selected id, you can use it in your application logic
         }
@@ -521,10 +522,10 @@ const ServiceListingPage = () => {
     const onHandleChange = (e) => {
         const { name, value } = e.target;
         setValue((prevValue) => ({
-          ...prevValue,
-          [name]: value,
+            ...prevValue,
+            [name]: value,
         }));
-      };
+    };
 
 
     const navigate = useNavigate();
@@ -576,6 +577,9 @@ const ServiceListingPage = () => {
     }
 
 
+    
+
+
     async function getcategory() {
         axios.get(`${BASE_URL}/get_category`)
             .then((res) => {
@@ -618,22 +622,22 @@ const ServiceListingPage = () => {
 
 
     return (
-        <div className='service-listing page p-3' style={{marginBottom :"70px"}}>
+        <div className='service-listing page p-3' style={{ marginBottom: "70px" }}>
 
-            
+
             {
                 listing.map((item, index) => {
                     const timestampStr = item.created_date; // Assuming item.book_date is the timestamp string
                     const timestamp = new Date(timestampStr);
-          
+
                     // Extracting components
                     const day = String(timestamp.getDate()).padStart(2, '0');
                     const month = String(timestamp.getMonth() + 1).padStart(2, '0'); // Months are zero-based
                     const year = String(timestamp.getFullYear()).slice(2);
-                    
+
                     const formattedDate = `${day + "/"} ${month + '/'} ${year}`;
-              
-                    
+
+
                     return (
                         <div className='service-card card p-3 my-2' key={index}>
                             <div className='d-flex justify-content-between ' style={{ borderBottom: "1px solid lightgrey" }}>
@@ -675,13 +679,13 @@ const ServiceListingPage = () => {
                                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                                 Edit Service
                                             </Typography>
-                                          
+
                                         </Toolbar>
                                     </AppBar>
 
                                     <>
                                         <div>
-                                            {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)",zIndex :"12" }} />}
+                                            {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)", zIndex: "12" }} />}
                                         </div>
                                         {scriptLoaded && (
                                             <div className='mx-2'>
@@ -710,7 +714,7 @@ const ServiceListingPage = () => {
                                                     </div>
 
                                                     <div className='my-2'>
-                                                        <CustomInput name="service" onChange={(e) => onHandleChange(e, index)} placeholder="Service title"  value={value.service}/>
+                                                        <CustomInput name="service" onChange={(e) => onHandleChange(e, index)} placeholder="Service title" value={value.service} />
                                                         {errors.service && <sapn className="text-danger">{errors.service}</sapn>}
                                                     </div>
                                                     <PlacesAutocomplete
@@ -810,7 +814,7 @@ const ServiceListingPage = () => {
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
-                                                            <img src={value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={value.image3 !== ""? `http://thetalentclub.co.in/pet-app/upload/subcategory/` + value.image3 : value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                             {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                         </div>
