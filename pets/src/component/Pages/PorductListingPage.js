@@ -62,7 +62,7 @@ const ProductListingPage = () => {
         }
         axios.post(`${BASE_URL}/product_data`, data)
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 setProData(res.data[0])
             })
             .catch((err) => {
@@ -77,7 +77,7 @@ const ProductListingPage = () => {
         }
         axios.post(`${BASE_URL}/delete_product`, data)
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 getlisitngdetail()
                 setOpen(false);
             })
@@ -268,7 +268,7 @@ const ProductListingPage = () => {
     const HandleChange = (selectedValue) => {
         if (selectedValue) {
             const selectedId = selectedValue.id;
-            console.log(selectedId, "ser");
+            // console.log(selectedId, "ser");
             setCatid(selectedId)
             // Now you have the selected id, you can use it in your application logic
         }

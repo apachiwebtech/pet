@@ -205,6 +205,7 @@ app.post('/otp', (req, res) => {
   if (value == 1) {
     const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id where ar.email =?  and ar.otp = ? and ar.deleted = 0 ";
     params = [email, otp]
+    
     con.query(sql, params, (err, data) => {
       if (err) {
         return res.json(err)

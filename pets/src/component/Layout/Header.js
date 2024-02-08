@@ -40,6 +40,7 @@ const Header = () => {
         return 'Pet App';
     }
   };
+  
   return (
     <div className='head text-center position-relative'>
       <p style={{ color: "white" }}>{getPageName()}</p>

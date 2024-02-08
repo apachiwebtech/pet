@@ -338,3 +338,9 @@ padding: 5px 0px;
   top: -10px;
   color: #fff;
 }
+
+
+.loader img{
+  position: absolute;
+  top: 50%;
+}

@@ -1,5 +1,5 @@
 import '../App.css';
-import Dash from './Pages/Dash';
+// import Dash from './Pages/Dash';
 import {
   createBrowserRouter,
   Outlet,
@@ -13,7 +13,7 @@ import Register from './Pages/Register';
 import MyPet from './Pages/MyPet';
 import BusinessListing from './Pages/BusinessListing';
 import Otp from './Pages/Otp';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from './Pages/DetailPage';
 import ProductManagingForm from './Forms/ProductManagingForm';
@@ -37,6 +37,9 @@ import MyApointment from './Pages/MyApointMent';
 import Settings from './Pages/Settings';
 import LostAndFound from './Pages/LostAndFound'
 import LostAndFoundForm from './Forms/LostAndFoundForm'
+import Loader from './UI/Loader';
+
+const Dash = lazy(() => import('./Pages/Dash'));
 
 const routing = createBrowserRouter([
 
@@ -45,8 +48,12 @@ const routing = createBrowserRouter([
     element: <App />,
     children: [
       {
-        element: <Dash />,
-        path: '/'
+        path: '/',
+        element:(
+          <Suspense fallback={<Loader />}>
+              <Dash />
+          </Suspense>
+        ),
       },
       {
         path: '/splash',
@@ -98,6 +105,10 @@ const routing = createBrowserRouter([
       {
         path: "/reviews/:id",
         element: <Reviews />
+      },
+      {
+        path: "/loader",
+        element: <Loader />
       },
       {
         path: "/servicelistingpage",

@@ -47,7 +47,7 @@ const ServiceRequest = () => {
                 listing.map((item) => {
                     const timestampStr = item.book_date; // Assuming item.book_date is the timestamp string
                     const timestamp = new Date(timestampStr);
-                       console.log(timestamp)
+                     
                     // Extracting components
                     const dateComponent = timestamp.toLocaleDateString();
                     const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

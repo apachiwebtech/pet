@@ -814,7 +814,7 @@ const ServiceListingPage = () => {
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
-                                                            <img src={value.image3 !== ""? `http://thetalentclub.co.in/pet-app/upload/subcategory/` + value.image3 : value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={value.image3 !== "" ? `http://thetalentclub.co.in/pet-app/upload/subcategory/` + value.image3 : value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                             {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                         </div>
