@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -38,6 +38,14 @@ const DropDown = (props) => {
     props.onClose(); // Close the modal after saving
 
   }
+  useEffect(() => {
+    if (props.options === props.breeds) {
+      setSelectedOption(props.petObject.breed || ''); // Set selected option to pet breed if available
+    } else if (props.options === props.colors) {
+      setSelectedOption(props.petObject.color || '');
+    }
+  }, [props.options, props.petObject]);
+console.log(  props.petObject.breed, "breed from dropdown")
   return (
     <Modal
       open={props.open}

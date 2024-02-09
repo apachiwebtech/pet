@@ -75,6 +75,14 @@ useEffect(()=>{
     setDisabled(false)
   }
 }, [weight, height])
+
+useEffect(()=>{
+  if(props.petObject){
+    setHeight(Number(props.petObject.height) || 10);
+    setWeight(Number(props.petObject.weight) || 5);
+  }
+}, [props.petObject])
+console.log(props.petObject, "inside weight heoght")
   return (
     <div>
       <Modal
@@ -118,9 +126,16 @@ export const DateCalc=(props)=>{
     gap: "20px",
     flex: "1"
   };
-  const [selectDate, setSelectDate] = useState(dayjs('2022-04-17'))
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // Months are zero-indexed, so adding 1
+  const day = date.getDate();
+  
+  const formattedDate = `${year}-${month}-${day}`;
+  const [selectDate, setSelectDate] = useState(dayjs(formattedDate))
 
-  const handleDateChange = (date) => {
+  console.log(formattedDate); // Output: 2024-2-7
+    const handleDateChange = (date) => {
     setSelectDate(date.$d);
   };
   const handleSave = () => {
@@ -155,7 +170,7 @@ export const DateCalc=(props)=>{
             // pass props `actions={['clear']}` to the actionBar slot
             actionBar: { actions: [''] },
           }}
-          defaultValue={dayjs('2022-04-17')}
+          defaultValue={dayjs(formattedDate)}
           onChange={handleDateChange}
 
           />

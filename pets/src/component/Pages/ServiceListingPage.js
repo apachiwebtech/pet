@@ -644,13 +644,16 @@ const ServiceListingPage = () => {
                                 <h5>{item.title}</h5>
                                 <span className='service-list-edit' onClick={() => handleClickOpen2(item.id)}>Edit Service</span>
                             </div>
-                            <div className='d-flex justify-content-between'>
+                            <div className='d-flex justify-content-between align-items-center'>
                                 <div>
                                     <p>Service Title: <span>{item.title}</span></p>
                                     <p>Add Address: <span>{item.address}</span></p>
                                     <p>Date: <span>{formattedDate}</span></p>
                                     {/* <p>{item.id}</p> */}
                                 </div>
+                                <div>
+                                    <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image}  width="80px" alt=''/>
+                                </div>    
 
 
                             </div>
@@ -814,7 +817,7 @@ const ServiceListingPage = () => {
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
-                                                            <img src={value.image3 !== "" ? `http://thetalentclub.co.in/pet-app/upload/subcategory/` + value.image3 : value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={ value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                             {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                         </div>

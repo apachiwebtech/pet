@@ -288,11 +288,14 @@ const ProductListingPage = () => {
                                 <h5>{item.title}</h5>
                                 <span className='service-list-edit' onClick={() => handleClickOpen(item.id)}>Edit Product</span>
                             </div>
-                            <div className='d-flex justify-content-between'>
+                            <div className='d-flex justify-content-between align-items-center'>
                                 <div>
                                     <p>Service Title: <span>{item.title}</span></p>
                                     <p>Date: <span>{item.created_date}</span></p>
                                 </div>
+                                <div>
+                                    <img src={`https://thetalentclub.co.in/pet-app/upload/product/` + item.upload_image}  width="80px" alt=''/>
+                                </div>   
                             </div>
                             <React.Fragment >
 

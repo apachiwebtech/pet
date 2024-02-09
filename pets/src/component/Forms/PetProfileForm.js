@@ -2,46 +2,39 @@ import React, { useState, useEffect } from 'react';
 import CustomInput from '../UI/CustomInput';
 import PrimaryButton from '../UI/PrimaryButton';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 import { BASE_URL } from '../Utils/BaseUrl';
+import { ToastContainer, toast,Slide } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 const PetProfileForm = (props) => {
-  // const [values, setValues] = useState({
-  //   id: '',
-  //   parent: props.parentName || '',
-  //   address: props.address || '',
-  //   state: props.state || '',
-  //   city: props.city || '',
-  //   pincode: props.pincode || '',
-  //   pet: props.petName || '',
-  //   mobile: props.mobile || '',
-  // });
-  const [values, setValues] = useState(
-    props
-      ? {
-          id: '',
-          parent: props.parentName ,
-          address: props.address ,
-          state: props.state,
-          city: props.city,
-          pincode: props.pincode ,
-          pet: props.petName ,
-          mobile: props.mobile ,
-        }
-      : {
-          id: '',
-          parent: '',
-          address: '',
-          state: '',
-          city: '',
-          pincode: '',
-          pet: '',
-          mobile: '',
-        }
-  );
-  
-
-  const [errors, setErrors] = useState({
+  // const [values, setValues] = useState(
+  //   props
+  //     ? {
+  //         id: '',
+  //         parent: props.petObject.parent_name ,
+  //         address: props.address ,
+  //         state: props.state,
+  //         city: props.city,
+  //         pincode: props.pincode ,
+  //         pet: props.petName ,
+  //         mobile: props.mobile ,
+  //         gender: props.gender,
+  //       }
+  //     : {
+  //         id: '',
+  //         parent: '',
+  //         address: '',
+  //         state: '',
+  //         city: '',
+  //         pincode: '',
+  //         pet: '',
+  //         mobile: '',
+  //         gender:'',
+  //       }
+  // );
+  const [petObject, setPetObject] = useState({});
+  const [values, setValues] = useState({
+    id: '',
     parent: '',
     address: '',
     state: '',
@@ -49,6 +42,90 @@ const PetProfileForm = (props) => {
     pincode: '',
     pet: '',
     mobile: '',
+    gender: '',
+    breed:"",
+    date:'',
+    height: '',
+    weight:'',
+    color:'',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userid = localStorage.getItem('pet_id');
+        const response = await axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid });
+        if (response.data && response.data.length > 0) {
+          setPetObject(response.data[0]);
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setValues({
+      id: petObject.id || '',
+      parent: petObject.parent_name || '',
+      address: petObject.address || '',
+      state: petObject.state || '',
+      city: petObject.city || '',
+      pincode: petObject.pincode || '',
+      pet: petObject.pet_name || '',
+      mobile: petObject.mobile || '',
+      gender: petObject.gender || '',
+      breed:petObject.breed || '',
+      date : petObject.date || '',
+      weight : Number(petObject.weight) || 10,
+      height : Number(petObject.height) || 10,
+      color : petObject.color || '',
+    });
+  }, [petObject]);
+  const notifyMe = (message) => toast.error(`${message}`, {
+    position:"top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    delay:1000,
+    limit : 1,
+    transition:Slide
+  });
+  const notifySuccess = (message) => toast.success(`${message}`, {
+    position:"top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    delay:1000,
+    limit : 3,
+    transition:Slide
+  });
+
+  const [errors, setErrors] = useState({
+    emptyFoemFields: '',
+    parent: '',
+    address: '',
+    state: '',
+    city: '',
+    pincode: '',
+    pet: '',
+    mobile: '',
+    gender:'',
+    color : '',
+    breed : '',
+    height : '',
+    weight : '',
+    image : '',
   });
 
   useEffect(() => {
@@ -79,60 +156,117 @@ const PetProfileForm = (props) => {
       }));
     }, 3000);
   };
-  
+
 
   const validateForm = () => {
     const newErrors = { ...errors };
+    
 
-    if (!values.parent) {
-      newErrors.parent = 'Please enter parent name';
-    } else {
-      newErrors.parent = '';
+    if(!values.parent && !values.address && !values.pet && !values.pincode && !values.city && !values.mobile && !values.state ){
+      newErrors.emptyFoemFields = 'Form cannot be empty';
+      notifyMe(newErrors.emptyFoemFields);
+      
+  
     }
+    else{
 
-    if (!values.address) {
-      newErrors.address = 'Please enter address';
-    } else {
-      newErrors.address = '';
+      if (!values.parent) {
+        newErrors.parent = 'Please enter parent name';
+        notifyMe(newErrors.parent);
+      } else {
+        newErrors.parent = '';
+      }
+  
+      if (!values.address) {
+        newErrors.address = 'Please enter address';
+        notifyMe(newErrors.address);
+  
+      } else {
+        newErrors.address = '';
+      }
+  
+      if (!values.state) {
+        newErrors.state = 'Please enter state';
+        notifyMe(newErrors.state);
+  
+      } else {
+        newErrors.state = '';
+      }
+  
+      if (!values.city) {
+        newErrors.city = 'Please enter city';
+        notifyMe(newErrors.city);
+  
+      } else {
+        newErrors.city = '';
+      }
+  
+      if (!values.pincode) {
+        newErrors.pincode = 'Please enter PIN code';
+        notifyMe(newErrors.pincode);
+  
+      } else if (!/^\d{6}$/.test(values.pincode)) {
+        newErrors.pincode = 'PIN code should be 6 digits';
+        notifyMe(newErrors.pincode);
+  
+      } else {
+        newErrors.pincode = '';
+      }
+  
+      if (!values.pet) {
+        newErrors.pet = 'Please enter pet name';
+        notifyMe(newErrors.pet);
+  
+      } else {
+        newErrors.pet = '';
+      }
+  
+      if (!values.mobile) {
+        newErrors.mobile = 'Please enter mobile number';
+        notifyMe(newErrors.mobile);
+  
+      } else if (!/^\d{10}$/.test(values.mobile)) {
+        newErrors.mobile = 'Mobile number should be 10 digits';
+        notifyMe(newErrors.mobile);
+  
+      } else {
+        newErrors.mobile = '';
+      }
+  
+  
+      if(!petObject.height){
+        newErrors.height = 'Please enter Height';
+        notifyMe(newErrors.height);
+  
+      }else if(petObject.height <= 0){
+        newErrors.height = 'Please enter a valid value for weight';
+        notifyMe(newErrors.height);
+  
+      }
+      if(!petObject.weight){
+        newErrors.weight = 'Please enter Weight';
+        notifyMe(newErrors.weight);
+  
+      }else if(petObject.weight <= 0){
+        newErrors.weight = 'Please enter a valid value for weight';
+        notifyMe(newErrors.weight);
+  
+      }
+      if(!petObject.color){
+        newErrors.color = 'Please select a color';
+        notifyMe(newErrors.color);
+      }
+      
+      if(!petObject.breed){
+        newErrors.breed = 'Please select a breed';
+        notifyMe(newErrors.breed);
+      }
+  
     }
-
-    if (!values.state) {
-      newErrors.state = 'Please enter state';
-    } else {
-      newErrors.state = '';
-    }
-
-    if (!values.city) {
-      newErrors.city = 'Please enter city';
-    } else {
-      newErrors.city = '';
-    }
-
-    if (!values.pincode) {
-      newErrors.pincode = 'Please enter PIN code';
-    } else if (!/^\d{6}$/.test(values.pincode)) {
-      newErrors.pincode = 'PIN code should be 6 digits';
-    } else {
-      newErrors.pincode = '';
-    }
-
-    if (!values.pet) {
-      newErrors.pet = 'Please enter pet name';
-    } else {
-      newErrors.pet = '';
-    }
-
-    if (!values.mobile) {
-      newErrors.mobile = 'Please enter mobile number';
-    } else if (!/^\d{10}$/.test(values.mobile)) {
-      newErrors.mobile = 'Mobile number should be 10 digits';
-    } else {
-      newErrors.mobile = '';
-    }
-
     setErrors(newErrors);
 
     return Object.values(newErrors).every((error) => error === '');
+   
   };
 
   const newDate = new Date(props.date);
@@ -162,7 +296,6 @@ const PetProfileForm = (props) => {
     formData.append('gender', props.gender);
     formData.append('date', date);
 
-    console.log(props.image, 'from form');
     if (validateForm()) {
       axios
         .post(`${BASE_URL}/petProfile`, formData, {
@@ -172,6 +305,7 @@ const PetProfileForm = (props) => {
         })
         .then((res) => {
           console.log(res);
+          notifySuccess('Profile saved')
         })
         .catch((err) => {
           console.log(err);
@@ -197,6 +331,7 @@ const PetProfileForm = (props) => {
   };
 
   return (
+    <>
     <div style={{ marginTop: '2em', padding: '10px 10px 30px 10px', backgroundColor: '' }}>
       <form id="profileForm" onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomInput
@@ -205,11 +340,8 @@ const PetProfileForm = (props) => {
           placeholder="Parent's Name"
           name="parent"
           value={values.parent}
-          defaultValue={props.parentName}
           onChange={handleChange}
         />
-      {errors.parent && <span className='text-danger'>{errors.parent}</span>}
-
         <CustomInput
           style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
           type="text"
@@ -218,7 +350,6 @@ const PetProfileForm = (props) => {
           value={ values.pet}
           onChange={handleChange}
         />
-      {errors.pet && <span className='text-danger'>{errors.pet}</span>}
 
         <CustomInput
           style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
@@ -228,7 +359,6 @@ const PetProfileForm = (props) => {
           value={values.address}
           onChange={handleChange}
         />
-      {errors.address && <span className='text-danger'>{errors.address}</span>}
 
         <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
           <CustomInput
@@ -239,7 +369,6 @@ const PetProfileForm = (props) => {
             value={values.state}
             onChange={handleChange}
           />
-        {errors.state && <span className='text-danger'>{errors.state}</span>}
 
           <CustomInput
             style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
@@ -249,7 +378,6 @@ const PetProfileForm = (props) => {
             value={values.city}
             onChange={handleChange}
           />
-        {errors.city && <span className='text-danger'>{errors.city}</span>}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
@@ -262,7 +390,6 @@ const PetProfileForm = (props) => {
             maxLength="6"
             onChange={handleChange}
           />
-        {errors.pincode && <span className='text-danger'>{errors.pincode}</span>}
 
           <CustomInput
             style={{ width: '60%', padding: '10px', borderRadius: '8px' }}
@@ -273,7 +400,14 @@ const PetProfileForm = (props) => {
             maxLength="10"
             onChange={handleChange}
           />
-        {errors.mobile && <span className='text-danger'>{errors.mobile}</span>}
+          <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="gender M or F"
+            name="gender"
+            value={values.gender}
+            onChange={handleChange}
+          />
         </div>
       </form>
       <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', gap: '10px', width: '100%', backgroundColor: '' }}>
@@ -285,6 +419,23 @@ const PetProfileForm = (props) => {
         </PrimaryButton>
       </div>
     </div>
+    <ToastContainer
+    style={{marginBottom:"10px", width:"300px", padding:"4px"}}
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={true}
+rtl
+pauseOnFocusLoss
+draggable
+stacked={false}
+pauseOnHover
+theme="light"
+transition={Slide}
+
+/>    
+    </>
   );
 };
 
