@@ -41,6 +41,7 @@ const Reviews = () => {
       serviceProviderId: id,
       comment: commnetRef.current.value,
       rating: rating,
+      average : average.toFixed(0)
     };
 
     console.log(comment);
@@ -91,10 +92,13 @@ const Reviews = () => {
     }
   }
   const totalRating = Number(
-    commentData.reduce((accumulator, review) => accumulator + review.rating, 0)
+    commentData.reduce((accumulator, review) => accumulator + Number(review.rating), 0)
   );
+
+  console.log(commentData,"rerw")
   const average = Number(totalRating / commentData.length);
-  console.log(average.toFixed(1));
+  
+  console.log(average.toFixed(0));
 
   const ratingCalc = (data) => {
     const ratings = {

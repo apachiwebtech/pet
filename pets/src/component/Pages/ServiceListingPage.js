@@ -203,6 +203,7 @@ const ServiceListingPage = () => {
     const [image, setImage] = useState(null);
     const [image2, setImage2] = useState(null);
     const [image3, setImage3] = useState(null);
+
     const [errors, setErrors] = useState({});
     const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
@@ -228,9 +229,9 @@ const ServiceListingPage = () => {
         state: '' || servicedata.state,
         city: '' || servicedata.city,
         pincode: '' || servicedata.pin,
-        image: '' || servicedata.upload_image,
-        image2: '' || servicedata.upload_image2,
-        image3: '' || servicedata.upload_image3,
+        image: '',
+        image2: '',
+        image3: '',
 
     })
 
@@ -243,13 +244,9 @@ const ServiceListingPage = () => {
             state: servicedata.state,
             city: servicedata.city,
             pincode: servicedata.pin,
-            image: servicedata.upload_image,
-            image2: servicedata.upload_image2,
-            image3: servicedata.upload_image3,
+
         })
     }, [servicedata])
-
-
 
 
 
@@ -471,6 +468,8 @@ const ServiceListingPage = () => {
 
         const data = await ImageBase64(e.target.files[0]);
         const file = e.target.files[0];
+
+
         setImage(file);
         setValue((prev) => {
             return {
@@ -503,7 +502,7 @@ const ServiceListingPage = () => {
                 image3: data,
             };
         });
-        console.log(image3)
+
     };
 
     // const onHandleChange = (e) => {
@@ -573,11 +572,11 @@ const ServiceListingPage = () => {
                     setOpen2(false);
                 })
         }
-        setValue({})
+       
     }
 
 
-    
+
 
 
     async function getcategory() {
@@ -652,8 +651,8 @@ const ServiceListingPage = () => {
                                     {/* <p>{item.id}</p> */}
                                 </div>
                                 <div>
-                                    <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image}  width="80px" alt=''/>
-                                </div>    
+                                    <img src={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} width="80px" alt='' />
+                                </div>
 
 
                             </div>
@@ -720,6 +719,7 @@ const ServiceListingPage = () => {
                                                         <CustomInput name="service" onChange={(e) => onHandleChange(e, index)} placeholder="Service title" value={value.service} />
                                                         {errors.service && <sapn className="text-danger">{errors.service}</sapn>}
                                                     </div>
+                                                    <p>Add Google Location</p>
                                                     <PlacesAutocomplete
 
                                                         value={address}
@@ -801,23 +801,25 @@ const ServiceListingPage = () => {
                                                             {errors.pincode && <span className="text-danger">{errors.pincode}</span>}
                                                         </div>
                                                     </div>
+
                                                     <div className='row text-center my-4 justify-content-evenly'>
                                                         <p>Service Images</p>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext1' >Upload 1</p>
-                                                            <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={value.image !== undefined ? value.image : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
                                                             {errors.image && <span className="text-danger">{errors.image}</span>}
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext2' >Upload 2</p>
-                                                            <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+
+                                                            <img src={value.image2 !== undefined ? value.image2 : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image2}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload2} />
                                                             {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
-                                                            <img src={ value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            <img src={value.image3 !== undefined ? value.image3 : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image2}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                             {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                         </div>

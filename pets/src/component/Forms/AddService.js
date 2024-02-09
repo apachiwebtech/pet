@@ -100,15 +100,15 @@ const AddService = () => {
         if (!value.pincode) {
             newErrors.pincode = 'pincode is required';
         }
-        if (!value.image) {
-            newErrors.image = ' required';
-        }
-        if (!value.image2) {
-            newErrors.image2 = ' required';
-        }
-        if (!value.image3) {
-            newErrors.image3 = ' required';
-        }
+        // if (!value.image) {
+        //     newErrors.image = ' required';
+        // }
+        // if (!value.image2) {
+        //     newErrors.image2 = ' required';
+        // }
+        // if (!value.image3) {
+        //     newErrors.image3 = ' required';
+        // }
 
         if (!value.description) {
             newErrors.description = 'description is required';

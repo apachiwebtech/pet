@@ -167,7 +167,7 @@ const ProductListingPage = () => {
 
 
     const handleUpload = async (e) => {
-        document.getElementById("uptext1").style.display = "none"
+
         const data = await ImageBase64(e.target.files[0]);
         const file = e.target.files[0];
         setImage(file);
@@ -364,19 +364,21 @@ const ProductListingPage = () => {
                                                             <p>Product Images</p>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                 <p id='uptext1' >Upload 1</p>
-                                                                <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                                <img src={value.image !== '' ? value.image : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
                                                                 {errors.image && <span className="text-danger">{errors.image}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                 <p id='uptext2'>Upload 2</p>
-                                                                <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                                {/* <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' /> */}
+                                                                <img src={value.image2 !== '' ? value.image2 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image2}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload2} />
                                                                 {errors.image2 && <span className="text-danger">{errors.image2}</span>}
                                                             </div>
                                                             <div className='upload-box col-4' style={{ position: "relative" }}>
                                                                 <p id='uptext3' >Upload 3</p>
-                                                                <img src={ value.image3} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                            
+                                                                <img src={value.image3 !== '' ? value.image3 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image3}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                                 <input type='file' placeholder='upload' onChange={handleUpload3} />
                                                                 {errors.image3 && <span className="text-danger">{errors.image3}</span>}
                                                             </div>
