@@ -282,6 +282,12 @@ const ProductListingPage = () => {
         <div className='service-listing page p-3'>
             {
                 listing.map((item, index) => {
+                    const timestampStr = item.created_date; // Assuming item.book_date is the timestamp string
+                    const timestamp = new Date(timestampStr);
+                     
+                    // Extracting components
+                    const dateComponent = timestamp.toLocaleDateString();
+                    // const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     return (
                         <div className='service-card card p-3 my-2' key={index}>
                             <div className='d-flex justify-content-between ' style={{ borderBottom: "1px solid lightgrey" }}>
@@ -291,7 +297,7 @@ const ProductListingPage = () => {
                             <div className='d-flex justify-content-between align-items-center'>
                                 <div>
                                     <p>Service Title: <span>{item.title}</span></p>
-                                    <p>Date: <span>{item.created_date}</span></p>
+                                    <p>Date: <span>{dateComponent}</span></p>
                                 </div>
                                 <div>
                                     <img src={`https://thetalentclub.co.in/pet-app/upload/product/` + item.upload_image}  width="80px" alt=''/>

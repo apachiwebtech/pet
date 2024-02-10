@@ -215,7 +215,7 @@ function App() {
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash'&& window.location.pathname !== '/otp' && window.location.pathname !== '/reg' && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
+      {window.location.pathname !== '/splash'&& window.location.pathname !== '/otp' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
     </>
 
   );

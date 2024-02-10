@@ -364,3 +364,8 @@ padding: 5px 0px;
   position: absolute;
   top: 50%;
 }
+.required{
+  z-index: 100;
+  position: absolute;
+  left: 35px;
+}

@@ -84,7 +84,9 @@ const AddService = () => {
         if (!catid) {
             newErrors.category = 'Category is required';
         }
-
+        if (!address) {
+            newErrors.places = 'Please select google location';
+        }
         if (!value.servicename) {
             newErrors.servicename = 'Service Name is required';
         }
@@ -100,15 +102,15 @@ const AddService = () => {
         if (!value.pincode) {
             newErrors.pincode = 'pincode is required';
         }
-        // if (!value.image) {
-        //     newErrors.image = ' required';
-        // }
-        // if (!value.image2) {
-        //     newErrors.image2 = ' required';
-        // }
-        // if (!value.image3) {
-        //     newErrors.image3 = ' required';
-        // }
+        if (!value.image) {
+            newErrors.image = ' required';
+        }
+        if (!value.image2) {
+            newErrors.image2 = ' required';
+        }
+        if (!value.image3) {
+            newErrors.image3 = ' required';
+        }
 
         if (!value.description) {
             newErrors.description = 'description is required';
@@ -557,6 +559,7 @@ const AddService = () => {
                                 </div>
                             )}
                         </PlacesAutocomplete>
+                        {errors.places && <span className="text-danger">{errors.places}</span>}
                         <div className='my-2'>
                             <CustomInput name="address" placeholder="Add Address" onChange={onHandleChange} />
                             {errors.address && <span className="text-danger">{errors.address}</span>}

@@ -159,6 +159,9 @@ const ServiceListingPage = () => {
         if (!catid) {
             newErrors.category = 'Category is required';
         }
+        if (!address) {
+            newErrors.places = 'Please select google location';
+        }
 
         if (!value.service) {
             newErrors.service = 'Service Name is required';
@@ -767,6 +770,7 @@ const ServiceListingPage = () => {
                                                             </div>
                                                         )}
                                                     </PlacesAutocomplete>
+                                                    {errors.places && <span className="text-danger">{errors.places}</span>}
                                                     <div className='my-2'>
                                                         <CustomInput name="address" onChange={onHandleChange} value={value.address} placeholder={" Address"} />
                                                         {errors.address && <span className="text-danger">{errors.address}</span>}
@@ -808,20 +812,20 @@ const ServiceListingPage = () => {
                                                             <p id='uptext1' >Upload 1</p>
                                                             <img src={value.image !== undefined ? value.image : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
-                                                            {errors.image && <span className="text-danger">{errors.image}</span>}
+                                                            {errors.image && <span className="text-danger required">{errors.image}</span>}
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext2' >Upload 2</p>
 
                                                             <img src={value.image2 !== undefined ? value.image2 : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image2}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload2} />
-                                                            {errors.image2 && <span className="text-danger">{errors.image2}</span>}
+                                                            {errors.image2 && <span className="text-danger required">{errors.image2}</span>}
                                                         </div>
                                                         <div className='upload-box col-4' style={{ position: "relative" }}>
                                                             <p id='uptext3' >Upload 3</p>
                                                             <img src={value.image3 !== undefined ? value.image3 : `https://thetalentclub.co.in/pet-app/upload/subcategory/${servicedata.upload_image2}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                                             <input type='file' placeholder='upload' onChange={handleUpload3} />
-                                                            {errors.image3 && <span className="text-danger">{errors.image3}</span>}
+                                                            {errors.image3 && <span className="text-danger required">{errors.image3}</span>}
                                                         </div>
                                                     </div>
 

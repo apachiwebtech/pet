@@ -188,8 +188,9 @@ const ServiceProviderForm = () => {
                 <form onSubmit={handlesubmit} method='POST'>
                     <div>
 
-                        <div className='d-flex '>
+                        <div className='d-flex py-3'>
                             <div className='upload-box' style={{ position: "relative" }}>
+                            <p>Add+</p>
                                 <p id='uptext1' style={{ zIndex: "-1", textAlign: "center" }}>profile</p>
                                 <img src={value.image} className='service-img' alt='' width="100%" accept='image/*' id='output' />
                                 <input type='file' placeholder='upload' onChange={handleUpload} name='image' />

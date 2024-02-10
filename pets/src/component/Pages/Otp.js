@@ -38,9 +38,9 @@ const Otp = () => {
 
 
         setOtp(localStorage.getItem('otp'));
-        setTimeout(() => {
-            setShowOtp(false);
-        }, 10000)
+        // setTimeout(() => {
+        //     setShowOtp(false);
+        // }, 10000)
 
     }, []);
     const onHandleChange = (e) => {
@@ -104,7 +104,7 @@ const Otp = () => {
         axios.post(`${BASE_URL}/resend_provider`, data)
             .then((res) => {
 
-
+              console.log(res)
 
                 document.getElementById("msg").innerHTML = " <Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='success'>Otp sent to your device!</Alert> </Stack>";
                 setTimeout(() => {
