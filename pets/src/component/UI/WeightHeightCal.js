@@ -53,6 +53,7 @@ const WeightHeightCal = (props) => {
   const handleInputChange = (newValue) => {
     if (props.type === 'weight') {
       setWeight(newValue);
+      console.log(newValue,"ee")
     } else if (props.type === 'height') {
       setHeight(newValue);
     }

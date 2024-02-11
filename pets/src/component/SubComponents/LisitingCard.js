@@ -11,7 +11,7 @@ const ListingCard = (props) => {
 
 
   return (
-    <NavLink to={`/detailPage/${props.id}`} style={{ textDecoration: "none" }}>
+    <NavLink to={`/detailPage/${props.id}/${props.rating}`} style={{ textDecoration: "none" }}>
 
 
       <Card

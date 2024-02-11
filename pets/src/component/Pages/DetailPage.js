@@ -39,6 +39,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const DetailPage = () => {
   const { id } = useParams();
+  const { ratings } = useParams();
+
+  console.log(ratings , "rate")
   const serviceProvider = DUMMY_DATA.find((itm) => itm.id === id);
   const [open, setOpen] = useState(false);
 
@@ -169,11 +172,11 @@ const DetailPage = () => {
               gap: "10px",
             }}
           >
-            <p style={{ margin: "0" }}>{detail.rating}</p>
+            {/* <p style={{ margin: "0" }}>{ratings}</p> */}
             <Rating
               name="half-rating"
               defaultValue={0}
-              value={detail.rating}
+              value={ratings}
               precision={0.5}
               readOnly
             />

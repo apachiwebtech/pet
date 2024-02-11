@@ -191,9 +191,9 @@ const ServiceListingPage = () => {
         if (!value.description) {
             newErrors.description = 'description is required';
         }
-        if (!selectedTime) {
-            newErrors.selectedTime = 'please add Timings';
-        }
+        // if (!selectedTime) {
+        //     newErrors.selectedTime = 'please add Timings';
+        // }
 
         // Add more validations for other fields
 

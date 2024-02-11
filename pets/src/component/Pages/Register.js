@@ -21,16 +21,48 @@ const Register = () => {
     const [value, setValue] = useState({
         email: '',
     })
+    const [location, setLocation] = useState(null);
     const [otp, setOTP] = useState('');
     const navigate = useNavigate();
 
     const handleGenerateOTP = () => {
         const generatedOTP = generateOTP(4); // Change 6 to the desired length of OTP
         setOTP(generatedOTP);
+
+        if (localStorage.getItem('longitude') == null) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const currentLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    };
+
+                    setLocation(currentLocation);
+
+                    if (window.confirm("Would you like to store your current location for future use?")) {
+                        localStorage.setItem('latitude', currentLocation.latitude);
+                        localStorage.setItem('longitude', currentLocation.longitude);
+                        console.log("Location stored in local storage.");
+                    }
+                },
+                (error) => {
+                    console.log(`Unable to retrieve your location. Error: ${error.message}`);
+                },
+                {
+                    enableHighAccuracy: false, // Optional: reduce energy consumption
+                }
+            );
+        }
+
+
+
+
     };
 
 
+
     const onhandlesubmit = (e) => {
+
         e.preventDefault();
 
         const data = {
@@ -98,6 +130,10 @@ const Register = () => {
 
 
     }
+
+
+
+
 
 
 

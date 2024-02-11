@@ -76,7 +76,7 @@ const routing = createBrowserRouter([
         element: <BusinessListing />
       },
       {
-        path: '/detailPage/:id',
+        path: '/detailPage/:id/:ratings',
         element: <DetailPage />
       },
       {
@@ -166,6 +166,8 @@ function checkLocalStorageAndRedirect(navigate) {
     navigate('/reg'); // Redirect to dashboard if id exists in localStorage
   }
 }
+
+
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(success, error);
 } else {
@@ -215,7 +217,7 @@ function App() {
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash'&& window.location.pathname !== '/otp' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
+      {window.location.pathname !== '/splash'&& window.location.pathname !== '/otp' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
     </>
 
   );

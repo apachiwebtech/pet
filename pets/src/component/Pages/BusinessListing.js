@@ -45,6 +45,9 @@ const BusinessListing = () => {
       console.log(err);
     })
   },[])
+
+
+
   return (
     <>
       <div style={{ margin: "10px 10px", position: "sticky", zIndex: "100" }}>
@@ -79,9 +82,18 @@ const BusinessListing = () => {
               paddingBottom: "80px",
             }}
           >
-            {listData?.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item) => {
+            {listData?.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item,index) => {
+                const ratings = item.post_rating.map(Number);
+
+                // Calculate the average
+                const averageRating = ratings.length > 0
+                  ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+                  : 0;
+
+           
+                  
               return (
-                <ListingCard key={item.id} title={item.title} rating={item.rating} heading={item.heading  || `${heading}`} date={item.date || ''} img={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} altText={item.alt || "alternate image"} id={item.id}/>
+                <ListingCard key={item.id} title={item.title} rating={averageRating.toFixed(2)} heading={item.heading  || `${heading}`} date={item.date || ''} img={`https://thetalentclub.co.in/pet-app/upload/subcategory/` + item.upload_image} altText={item.alt || "alternate image"} id={item.id}/>
               );
             })}
           </div>
