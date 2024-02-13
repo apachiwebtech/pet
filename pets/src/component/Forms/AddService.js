@@ -489,14 +489,16 @@ const AddService = () => {
                             <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
+                                size='small'
                                 options={cat}
                                 getOptionLabel={(option) => option.title}
                                 getOptionSelected={(option, value) => option.id === value.id}
                                 sx={{
                                     width: "100%",
                                     borderRadius: "8px",
-                                    border: "1px solid #757575",
+                                    border: "none",
                                     boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                    fontFamily:"Ubuntu', sans-serif"
                                 }}
                                 className='my-2'
                                 renderInput={(params) => <TextField {...params} label="Category" />}
@@ -568,14 +570,16 @@ const AddService = () => {
                             <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
+                                size='small'
                                 options={state}
                                 getOptionLabel={(option) => option.name}
                                 getOptionSelected={(option, value) => option.id === value.id}
                                 sx={{
                                     width: "100%",
                                     borderRadius: "8px",
-                                    border: "1px solid #757575",
+                                    border: "none",
                                     boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                    fontFamily:"Ubuntu', sans-serif"
                                 }}
                                 className='my-2'
                                 renderInput={(params) => <TextField {...params} label="State" />}

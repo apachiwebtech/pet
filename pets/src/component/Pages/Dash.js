@@ -51,6 +51,28 @@ const Dash = () => {
     getCount()
   },[])
 
+
+  async function getprivate() {
+    const data = {
+      user_id: localStorage.getItem("pet_id"),
+
+    }
+    axios.post(`${BASE_URL}/getPrivate`, data)
+      .then((res) => {
+    
+        if(res.data){
+          localStorage.setItem('selectedRadioValue', res.data[0].private);
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getprivate()
+  }, [])
+
   return (
     <div className='mx-3'>
       <div className='text-center '>

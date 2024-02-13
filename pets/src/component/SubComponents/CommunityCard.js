@@ -9,9 +9,14 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import PetsIcon from '@mui/icons-material/Pets';
 
 const CommunityCard = (props) => {
+  const timestampStr = props.date; // Assuming item.book_date is the timestamp string
+  const timestamp = new Date(timestampStr);
+   
+  // Extracting components
+  const dateComponent = timestamp.toLocaleDateString();
   return (
-<div className='container' style={{padding:"10px"}}>
-        <Card
+    <div className='container' style={{ padding: "10px" }}>
+      <Card
         style={{
           width: "100%",
           height: "300px",
@@ -33,7 +38,7 @@ const CommunityCard = (props) => {
         >
           <span>
             {/* <PetsIcon sx={{ color: "#454545" }}></PetsIcon> */}
-            <PetsIcon/>
+            <PetsIcon />
           </span>
           <h4
             style={{
@@ -121,29 +126,29 @@ const CommunityCard = (props) => {
                 }}
               >
               </div>
-            <div
+              <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(2,1fr)",
-                  gridTemplateRows: "1fr"  ,
-                  gridColumnGap:"10px",
+                  gridTemplateRows: "1fr",
+                  gridColumnGap: "10px",
                   padding: "0",
-                  backgroundColor:"",
-                  height:"100%",
+                  backgroundColor: "",
+                  height: "100%",
                 }}
               >
-               <div style={{display:"flex", flexDirection:"column", gap:"5px", justifyContent:"space-between"}}>
-                    <span>Breed</span>
-                    <span>Gender</span>
-                    <span>Age</span>
-                    <span>Location</span>
-               </div>
-               <div style={{display:"flex", flexDirection:"column", gap:"5px"}}>
-               <span>{props.breed}</span>
-                    <span>{props.gender}</span>
-                    <span>{props.age || "no age"}</span>
-                    <span>{props.city}</span>
-               </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "5px", justifyContent: "space-between" }}>
+                  <span>Breed</span>
+                  <span>Gender</span>
+                  <span>Age</span>
+                  <span>Location</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                  <span>{props.breed}</span>
+                  <span>{props.gender}</span>
+                  <span>{props.age || "no age"}</span>
+                  <span>{props.city}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -158,48 +163,48 @@ const CommunityCard = (props) => {
               color: "#adadad",
             }}
           >
-            {props.date || 'Behavior'}
+            {dateComponent || 'Behavior'}
           </div>
           <div
-  style={{
-    fontSize: "0.8rem",
-    padding: "0",
-    display: "flex",
-    float: "right",
-    alignItems: "center",
-    justifyContent: "flex-end", // This will make the inner div float right and have flex-end alignment
-    border: "none",
-    backgroundColor: "",
-    color: "black",
-    width: "100%",
-  }}
->
-  <div
-    style={{
-      fontSize: "0.8rem",
-      padding: "0",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      border: "none",
-      backgroundColor: "",
-      color: "black",
-      width: "80%",
-    }}
-  >
-    <FavoriteBorderOutlinedIcon />
-    <ChatBubbleOutlineOutlinedIcon />
-    <BookmarkBorderOutlinedIcon />
-  </div>
+            style={{
+              fontSize: "0.8rem",
+              padding: "0",
+              display: "flex",
+              float: "right",
+              alignItems: "center",
+              justifyContent: "flex-end", // This will make the inner div float right and have flex-end alignment
+              border: "none",
+              backgroundColor: "",
+              color: "black",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "0.8rem",
+                padding: "0",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                border: "none",
+                backgroundColor: "",
+                color: "black",
+                width: "80%",
+              }}
+            >
+              <FavoriteBorderOutlinedIcon />
+              <ChatBubbleOutlineOutlinedIcon />
+              <BookmarkBorderOutlinedIcon />
+            </div>
 
-  {/* <NavLink to='/bookappointment' style={{ textDecoration: "none", color: "black" }}>
+            {/* <NavLink to='/bookappointment' style={{ textDecoration: "none", color: "black" }}>
     Book Appointment
   </NavLink> */}
-</div>
+          </div>
 
         </Card>
       </Card>
-        </div>  )
+    </div>)
 }
 
 export default CommunityCard

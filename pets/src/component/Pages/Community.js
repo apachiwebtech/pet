@@ -15,7 +15,7 @@ const Community = (props) => {
     console.log(userid)
     const data = { userid: userid }; // Replace with the desired user ID
   
-    axios.get(`${BASE_URL}/getCommunityData`,)
+    axios.get(`${BASE_URL}/getCommunityData`)
       .then((response) => {
         console.log(response.data);
         setData(response.data);

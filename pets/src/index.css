@@ -261,6 +261,7 @@ input[type='file'] { font-size: 0; }
 
 .upload-box p {
   position: absolute;
+  font-size: 12px;
   top: 51px;
   left: 50%;
   transform: translateX(-50%);
@@ -323,31 +324,7 @@ padding: 5px 0px;
 }
 /* My Appintment */
 
-/* MUI  */
-.css-hbf9i9-MuiAutocomplete-root{
-  border: 1px solid lightgrey !important;
 
-}
-
-
-
-.MuiAutocomplete-hasPopupIcon.css-hbf9i9-MuiAutocomplete-root .MuiAutocomplete-inputRoot{
-  padding: 5px !important;
-}
-
-.css-hbf9i9-MuiAutocomplete-root{
-  border-radius: 10px !important;
-  border: none !important;
-}
-
-.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
-  border-radius: 10px !important;
-  border: none !important;
-}
-.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
-  font-family: 'Ubuntu', sans-serif !important;
-}
-/* MUI  */
 
 .count{
   background-color: red;

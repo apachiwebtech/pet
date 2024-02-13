@@ -24,7 +24,7 @@ const AddProduct = () => {
         productname: '',
         description: '',
         address: '',
-        image: '',
+        image: '' ,
         image2: '',
         image3: '',
     })
@@ -202,6 +202,7 @@ const AddProduct = () => {
                     <div className='my-2'>
                         <Autocomplete
                             disablePortal
+                            size='small'
                             id="combo-box-demo"
                             options={cat}
                             getOptionLabel={(option) => option.title}
@@ -209,8 +210,9 @@ const AddProduct = () => {
                             sx={{
                                 width: "100%",
                                 borderRadius: "8px",
-                                border: "1px solid #757575",
+                                border: "none",
                                 boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                fontFamily:"Ubuntu', sans-serif"
                             }}
                             className='my-2'
                             renderInput={(params) => <TextField {...params} label="Category" />}

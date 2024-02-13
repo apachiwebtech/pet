@@ -9,13 +9,14 @@ import CustomInput from '../UI/CustomInput';
 import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import Validation from '../Utils/Validate';
-
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ServiceProviderForm = () => {
     const [address, setAddress] = useState('');
     const [errors, setError] = useState({});
     const [scriptLoaded, setScriptLoaded] = useState(false);
     const [cat, setCat] = useState([])
+    const [progress , setProgress] = useState(false)
     const [value, setValue] = useState({
         image: '',
         fullname: '',
@@ -118,6 +119,8 @@ const ServiceProviderForm = () => {
     const Navigate = useNavigate()
     const handlesubmit = (e) => {
         e.preventDefault()
+
+      
         setError(Validation(value));
         setTimeout(() => {
             setError("");
@@ -133,7 +136,7 @@ const ServiceProviderForm = () => {
         formData.append('pin', value.pin)
 
         if (value.address !== "" && value.image !== "" && value.fullname !== "" && value.mobile !== "" && value.address !== "" && value.state !== "" && value.city !== "" && image !== "") {
-
+  setProgress(true)
             fetch(`${BASE_URL}/provider_details`, {
                 method: 'POST',
                 body: formData,
@@ -142,6 +145,8 @@ const ServiceProviderForm = () => {
                     if (data) {
                         Navigate('/')
                     }
+
+                    setProgress(false)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -230,54 +235,7 @@ const ServiceProviderForm = () => {
 
                             </div>
                         </div>
-                        <PlacesAutocomplete
-
-                            value={address}
-                            onChange={setAddress}
-                            onSelect={handleSelect}
-                            searchOptions={{
-                                bounds: MaharashtraBounds,
-                            }}
-                        >
-                            {({
-                                getInputProps,
-                                suggestions,
-                                getSuggestionItemProps,
-                                loading,
-                            }) => (
-                                <div className="col-md-12">
-                                    {/* <label htmlFor="google_address" className="form-label">
-                                        Address <span className="text-danger">*</span>
-                                    </label> */}
-                                    <input
-                                        {...getInputProps({
-                                            className: "location-search-input form-control",
-                                            autoComplete: "off",
-                                        })}
-                                    />
-                                    <div className="autocomplete-dropdown-container">
-                                        {loading && <div>Loading...</div>}
-                                        {/* {console.log(suggestions, "sugge")} */}
-                                        {suggestions.map((suggestion) => {
-                                            const style = {
-                                                backgroundColor: suggestion.active
-                                                    ? "#41b6e6"
-                                                    : "#fff",
-                                            };
-                                            return (
-                                                <div
-                                                    {...getSuggestionItemProps(suggestion, {
-                                                        style,
-                                                    })}
-                                                >
-                                                    {suggestion.description}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-                        </PlacesAutocomplete>
+                     
                         <CustomInput className="my-2" placeholder="Address" onChange={onHandleChange} name="address" />
                         <p class='text-danger m-0 pl-31'>{errors.address}</p>
                         <CustomInput className="my-2" placeholder="State" onChange={onHandleChange} name="state" />
@@ -294,6 +252,7 @@ const ServiceProviderForm = () => {
                             </div>
                         </div>
                         <PrimaryButton type="submit" children="Submit" className="mt-5" />
+                        {progress?<LinearProgress /> : null}
                     </div>
                 </form>
             )}

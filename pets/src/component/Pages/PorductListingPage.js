@@ -32,7 +32,7 @@ const ProductListingPage = () => {
     const [errors, setErrors] = useState({});
     const [loader, setLoader] = useState(false)
 
-    
+
     const [value, setValue] = useState({
         category: '',
         productname: '' || pro_data.title,
@@ -42,16 +42,18 @@ const ProductListingPage = () => {
         image3: '',
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         setValue({
-        category: '',
-        productname: pro_data.title,
-        description: pro_data.description,
-        image: '',
-        image2: '',
-        image3: '',
+            category: '',
+            productname: pro_data.title,
+            description: pro_data.description,
+            image: '',
+            image2: '',
+            image3: '',
         })
     }, [pro_data])
+
+ 
 
     const [open, setOpen] = React.useState(false);
 
@@ -207,10 +209,10 @@ const ProductListingPage = () => {
     const onHandleChange = (e) => {
         const { name, value } = e.target;
         setValue((prevValue) => ({
-          ...prevValue,
-          [name]: value,
+            ...prevValue,
+            [name]: value,
         }));
-      };
+    };
 
 
 
@@ -219,8 +221,8 @@ const ProductListingPage = () => {
     const handleSubmit = (e, pro_id) => {
         e.preventDefault()
         const formData = new FormData();
-        
-        
+
+
         if (validateForm()) {
             setLoader(true)
 
@@ -284,7 +286,7 @@ const ProductListingPage = () => {
                 listing.map((item, index) => {
                     const timestampStr = item.created_date; // Assuming item.book_date is the timestamp string
                     const timestamp = new Date(timestampStr);
-                     
+
                     // Extracting components
                     const dateComponent = timestamp.toLocaleDateString();
                     // const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -300,8 +302,8 @@ const ProductListingPage = () => {
                                     <p>Date: <span>{dateComponent}</span></p>
                                 </div>
                                 <div>
-                                    <img src={`https://thetalentclub.co.in/pet-app/upload/product/` + item.upload_image}  width="80px" alt=''/>
-                                </div>   
+                                    <img src={`https://thetalentclub.co.in/pet-app/upload/product/` + item.upload_image} width="80px" alt='' />
+                                </div>
                             </div>
                             <React.Fragment >
 
@@ -325,83 +327,84 @@ const ProductListingPage = () => {
                                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                                 Edit Product
                                             </Typography>
-                                            <Button autoFocus color="inherit" onClick={handleClose}>
-                                                save
-                                            </Button>
+                                         
                                         </Toolbar>
                                     </AppBar>
-                                  
-                                                <div className='mx-2'>
-                                                    <div>
-                                                        {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)",zIndex :"12" }} />}
-                                                    </div>
-                                                    <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(pro_data.id)}>Delete Product</button>
-                                                    <form onSubmit={(e) => handleSubmit(e, pro_data.id)} method='POST'>
 
-                                                        <div className='my-2'>
-                                                            <Autocomplete
-                                                                disablePortal
-                                                                id="combo-box-demo"
-                                                                options={cat}
-                                                                getOptionLabel={(option) => option.title}
-                                                                getOptionSelected={(option, value) => option.id === value.id}
-                                                                sx={{
-                                                                    width: "100%",
-                                                                    borderRadius: "8px",
-                                                                    border: "1px solid #757575",
-                                                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
-                                                                }}
-                                                                className='my-2'
-                                                                renderInput={(params) => <TextField {...params} label="Category" />}
-                                                                name="category"
-                                                                onChange={(event, value) => HandleChange(value)} // Pass only the value
-                                                            />
-                                                            {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
-                                                            {errors.category && <span className="text-danger">{errors.category}</span>}
-                                                        </div>
+                                    <div className='mx-2'>
+                                        <div>
+                                            {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)", zIndex: "12" }} />}
+                                        </div>
+                                        <button className='btn btn-danger btn-sm w-100 my-2' onClick={() => handleDelete(pro_data.id)}>Delete Product</button>
+                                        <form onSubmit={(e) => handleSubmit(e, pro_data.id)} method='POST'>
 
-                                                        <div className='my-2'>
-                                                            <CustomInput name="productname" placeholder={item.title} value={value.productname} onChange={onHandleChange} />
-                                                            {errors.productname && <span className="text-danger">{errors.productname}</span>}
-                                                        </div>
+                                            <div className='my-2'>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    id="combo-box-demo"
+                                                    size='small'
+                                                    options={cat}
+                                                    getOptionLabel={(option) => option.title}
+                                                    getOptionSelected={(option, value) => option.id === value.id}
+                                                    
+                                                    sx={{
+                                                        width: "100%",
+                                                        borderRadius: "8px",
+                                                        border: "small",
+                                                        boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                                        fontFamily: "Ubuntu', sans-serif"
+                                                    }}
+                                                    className='my-2'
+                                                    renderInput={(params) => <TextField {...params} label="Category" />}
+                                                    name="category"
+                                                    onChange={(event, value) => HandleChange(value)} // Pass only the value
+                                                />
+                                                {/* <CustomInput name="servicecategory" placeholder="Service Category" onChange={onHandleChange} /> */}
+                                                {errors.category && <span className="text-danger">{errors.category}</span>}
+                                            </div>
 
-
-                                                        <div className='row text-center my-4 justify-content-evenly'>
-                                                            <p>Product Images</p>
-                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext1' >Upload 1</p>
-                                                                <img src={value.image !== '' ? value.image : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                                <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
-                                                                {errors.image && <span className="text-danger">{errors.image}</span>}
-                                                            </div>
-                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext2'>Upload 2</p>
-                                                                {/* <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' /> */}
-                                                                <img src={value.image2 !== '' ? value.image2 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image2}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                                <input type='file' placeholder='upload' onChange={handleUpload2} />
-                                                                {errors.image2 && <span className="text-danger">{errors.image2}</span>}
-                                                            </div>
-                                                            <div className='upload-box col-4' style={{ position: "relative" }}>
-                                                                <p id='uptext3' >Upload 3</p>
-                                                            
-                                                                <img src={value.image3 !== '' ? value.image3 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image3}`}className='service-img' alt='' width="100%" accept='image/*' id='output' />
-                                                                <input type='file' placeholder='upload' onChange={handleUpload3} />
-                                                                {errors.image3 && <span className="text-danger">{errors.image3}</span>}
-                                                            </div>
-                                                        </div>
+                                            <div className='my-2'>
+                                                <CustomInput name="productname" placeholder={item.title} value={value.productname} onChange={onHandleChange} />
+                                                {errors.productname && <span className="text-danger">{errors.productname}</span>}
+                                            </div>
 
 
-                                                        <div>
-                                                            <CustomTextarea className="my-2"  value={value.description} name="description" onChange={onHandleChange} />
-                                                            {errors.description && <span className="text-danger">{errors.description}</span>}
-                                                        </div>
-                                                        <div>
-                                                            <PrimaryButton children="submit" type="submit" />
-                                                        </div>
-                                                    </form>
-
+                                            <div className='row text-center my-4 justify-content-evenly'>
+                                                <p>Product Images</p>
+                                                <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                    <p id='uptext1' >Upload 1</p>
+                                                    <img src={value.image !== '' ? value.image : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                    <input type='file' placeholder='upload' onChange={handleUpload} name='image' />
+                                                    {errors.image && <span className="text-danger">{errors.image}</span>}
                                                 </div>
-                                   
+                                                <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                    <p id='uptext2'>Upload 2</p>
+                                                    {/* <img src={value.image2} className='service-img' alt='' width="100%" accept='image/*' id='output' /> */}
+                                                    <img src={value.image2 !== '' ? value.image2 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image2}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                    <input type='file' placeholder='upload' onChange={handleUpload2} />
+                                                    {errors.image2 && <span className="text-danger">{errors.image2}</span>}
+                                                </div>
+                                                <div className='upload-box col-4' style={{ position: "relative" }}>
+                                                    <p id='uptext3' >Upload 3</p>
+
+                                                    <img src={value.image3 !== '' ? value.image3 : `https://thetalentclub.co.in/pet-app/upload/product/${pro_data.upload_image3}`} className='service-img' alt='' width="100%" accept='image/*' id='output' />
+                                                    <input type='file' placeholder='upload' onChange={handleUpload3} />
+                                                    {errors.image3 && <span className="text-danger">{errors.image3}</span>}
+                                                </div>
+                                            </div>
+
+
+                                            <div>
+                                                <CustomTextarea className="my-2" value={value.description} name="description" onChange={onHandleChange} />
+                                                {errors.description && <span className="text-danger">{errors.description}</span>}
+                                            </div>
+                                            <div>
+                                                <PrimaryButton children="submit" type="submit" />
+                                            </div>
+                                        </form>
+
+                                    </div>
+
 
                                 </Dialog>
                             </React.Fragment>

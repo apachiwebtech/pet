@@ -11,7 +11,7 @@ import { getColors, getBreeds } from "../../Store/DropDownActions";
 import { useSelector, useDispatch } from 'react-redux'
 import WeightHeightCal from "../UI/WeightHeightCal";
 import { DateCalc } from "../UI/WeightHeightCal";
-import { putPetGender, getProfileData } from "../../Store/PetFormActions";
+import { putPetGender, getProfileData, addBreedActions, addColorActions, addDateActions } from "../../Store/PetFormActions";
 import { AgeCalculator } from "../Utils/AgeCalculator";
 import { BASE_URL } from "../Utils/BaseUrl";
 const MyPet = () => {
@@ -42,6 +42,11 @@ const MyPet = () => {
   const [date, setDate] = useState('');
   const [age, setAge] = useState(0);
   const fileInputRef = useRef(null);
+  const sliceWeight = useSelector((state)=> state.petform.weight);
+  const sliceHeight = useSelector((state)=> state.petform.height);
+  const sliceBreed = useSelector((state)=> state.petform.breed);
+  const sliceColor = useSelector((state)=> state.petform.color);
+
   const initialPetObject = {
     pet_name: "",
     breed: "",
@@ -100,13 +105,16 @@ const openDateCalc = ()=>{
   const handleSelectedOption = (option, type) => {
     if (type === 'breeds') {
       setSelectedBreed(option); 
+      dispatch(addBreedActions(option));
     } else if (type === 'colors') {
       setSelectedColor(option);
+      dispatch(addColorActions(option));
+
     }    };
 
     const handleDateSave = (date) => {
       setDate(date);
-
+console.log(date, "from datesace")
       const dateObject = new Date(Date.parse(date));
 
       console.log(dateObject)
@@ -122,7 +130,6 @@ const openDateCalc = ()=>{
        setPetObject((prevObject) => ({ ...prevObject, dob: formattedDate }));
 
        console.log("Formatted date:", formattedDate);
-   
        setAge(AgeCalculator(formattedDate));
     };
   
@@ -130,7 +137,9 @@ const openDateCalc = ()=>{
       setGender((prevGender) => (prevGender === 'male' ? 'female' : 'male'));
       dispatch(putPetGender(gender));
     };
-  
+    const [displayedImage, setDisplayedImage] = useState(
+      petObject.profile_image ? petObject.profile_image : selectedImage
+    );
 
     const handleImageChange = async (event) => {
       const file = event.target.files[0];
@@ -145,6 +154,8 @@ const openDateCalc = ()=>{
           reader.onloadend = () => {
                   setSelectedImage(reader.result);
                   // Use reader.result directly without splitting for base64 data
+                  setDisplayedImage(reader.result); // Update displayed image with the selected image
+
                   setSelectedImageToSend(reader.result);
                 }; 
 
@@ -196,7 +207,7 @@ const openDateCalc = ()=>{
     console.log(date);
     const dateObject = new Date(date);
 
-
+  
 
     
     useEffect(() => {
@@ -235,7 +246,7 @@ console.log(petObject, "after call")
           "put image called"
         )
       }
-
+dispatch(getProfileData(localStorage.getItem('pet_id')))
     const containerHeight = 220; // Set your container height here
     const imageHeight = selectedImage ? containerHeight : 0; // Use 0 if no image is selected
     const topPosition = (containerHeight - imageHeight) / 2;
@@ -243,7 +254,8 @@ console.log(petObject, "after call")
   return (
     <div className="main" style={{ position: "relative", paddingBottom: "50px" }}>
      {!petObject.profile_image &&  <div className="pet-img" style={{position:"relative",  height: `${containerHeight}px` }}>
-        <img src={selectedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/>
+        <img src={displayedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/>
+        {/* <img src={selectedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/> */}
       <input type='file' style={{display:"", position:"absolute", top:"50%", left:"50%" , transform:"translate(-50%, -50%)", width:"100%", height:"80%", border:"none", boxShadow:"none"}}
               onChange={handleImageChange}
               ref={fileInputRef}
@@ -253,7 +265,8 @@ console.log(petObject, "after call")
       </div>}
       {petObject.profile_image && <div className="pet-img" style={{position:"relative",  height: `${containerHeight}px` }}>
       <div className="d-flex align-items-center justify-content-center" style={{position:"absolute", right:"1em", top:"10px", minHeight:"50px",minWidth:"50px",borderRadius:"50%", backgroundColor:"#4acf7e",zIndex:"1"}} onClick={handleImageChange}><AddPhotoAlternateIcon fontSize='large'/></div>
-        <img src={selectedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/>
+        <img src={displayedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/>
+        {/* <img src={selectedImage} width="100%" height="100%" alt="" accept='image/*' style={{objectFit:"contain", position:"absolute",  top: `${topPosition}px` }}/> */}
       {/* <input type='file' style={{display:"", position:"absolute", top:"50%", left:"50%" , transform:"translate(-50%, -50%)", width:"100%", height:"80%", border:"none", boxShadow:"none"}}
               onChange={handleImageChange}
               ref={fileInputRef}
@@ -284,7 +297,8 @@ console.log(petObject, "after call")
           <div>
             <h3 style={{ color: "white" }}>{petObject.pet_name || "Add your pet's name"}</h3>
             <p style={{ color: "#22a36b", fontWeight: "bold", fontSize: "1.2rem" }}>
-              {petObject.breed}
+              {/* {petObject.breed} */}
+              {sliceBreed}
             </p>
           </div>
           <div className="gender-img" onClick={toggleGender}>
@@ -309,7 +323,7 @@ console.log(petObject, "after call")
           <div onClick={()=>handleOpen('breeds')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Breed</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{selectedBreed || petObject.breed  || ""}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{sliceBreed}</span>
 
           </div>
           <div onClick={openDateCalc} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
@@ -322,19 +336,19 @@ console.log(petObject, "after call")
           <div onClick={()=>{openWeightHeight('weight')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Weight</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{weight|| petObject.weight || ""} kg</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{sliceWeight} kg</span>
 
           </div>
           <div onClick={()=>{openWeightHeight('height')}} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Height</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{height || petObject.height || ""} cm</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{sliceHeight} cm</span>
 
           </div>
           <div onClick={()=>handleOpen('colors')} onClose={handleClose} style={{ position: "relative", top: "3em", padding: "", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#d9ffe3", height: "4rem", width: "4.3rem", borderRadius: "10px", borderBottom: "3px solid #22a36b", fontSize: "0.8rem" }}>
 
             <p style={{ margin: "0" }}>Color</p>
-            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{selectedColor || petObject.color || ""}</span>
+            <span style={{ margin: "0", fontWeight: "bold", color: "#22a36b" }}>{sliceColor}</span>
 
           </div>
 

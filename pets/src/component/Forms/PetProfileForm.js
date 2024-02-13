@@ -4,8 +4,9 @@ import PrimaryButton from '../UI/PrimaryButton';
 import axios from 'axios';
 import { BASE_URL } from '../Utils/BaseUrl';
 import { ToastContainer, toast, Slide } from 'react-toastify';
-
+import { useSelector, useDispatch } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+import LinearProgress from '@mui/material/LinearProgress';
 const PetProfileForm = (props) => {
   // const [values, setValues] = useState(
   //   props
@@ -33,24 +34,26 @@ const PetProfileForm = (props) => {
   //       }
   // );
   const [petObject, setPetObject] = useState({});
+  const [progress , setProgress] = useState(false)
+  const sliceGender = useSelector((state) => state.petform.gender);
+  console.log(sliceGender, "slicegender")
+
   const [values, setValues] = useState({
-    id: '',
-    parent: '',
-    address: '',
-    state: '',
-    city: '',
-    pincode: '',
-    pet: '',
-    mobile: '',
-    gender: '',
-    breed: "",
+    id: petObject.id || '',
+    parent: petObject.parent_name || '',
+    address: petObject.address || '',
+    state: petObject.state || '',
+    city: petObject.city || '',
+    pincode: petObject.pincode || '',
+    pet: petObject.pet_name || '',
+    mobile: petObject.mobile || '',
+    gender: petObject.gender || '',
+    breed: '',
     date: '',
-    height: '',
-    weight: '',
+    weight: 0,
+    height: 0,
     color: '',
   });
-
-  console.log(values.height)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,13 +82,14 @@ const PetProfileForm = (props) => {
       pet: petObject.pet_name || '',
       mobile: petObject.mobile || '',
       gender: petObject.gender || '',
-      breed: petObject.breed || '',
+      breed: values.breed,
       date: petObject.date || '',
-      weight: Number(petObject.weight) || 10,
-      height: Number(petObject.height) || 10,
-      color: petObject.color || '',
+      weight: values.weight,
+      height: values.height,
+      color: values.color || '',
     });
   }, [petObject]);
+  console.log(petObject, "petObj")
   const notifyMe = (message) => toast.error(`${message}`, {
     position: "top-right",
     autoClose: 3000,
@@ -136,8 +140,6 @@ const PetProfileForm = (props) => {
       id: localStorage.getItem('pet_id'),
     }));
   }, []);
-
-  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -238,33 +240,33 @@ const PetProfileForm = (props) => {
       }
 
 
-      if (!petObject.height) {
-        newErrors.height = 'Please enter Height';
-        notifyMe(newErrors.height);
+      // if(!petObject.height && !props.petObject.height){
+      //   newErrors.height = 'Please enter Height';
+      //   notifyMe(newErrors.height);
 
-      } else if (petObject.height <= 0) {
-        newErrors.height = 'Please enter a valid value for weight';
-        notifyMe(newErrors.height);
+      // }else if(petObject.height <= 0 && props.petObject.height <=0){
+      //   newErrors.height = 'Please enter a valid value for weight';
+      //   notifyMe(newErrors.height);
 
-      }
-      if (!petObject.weight) {
-        newErrors.weight = 'Please enter Weight';
-        notifyMe(newErrors.weight);
+      // }
+      // if(!petObject.weight && !props.petObject.weight){
+      //   newErrors.weight = 'Please enter Weight';
+      //   notifyMe(newErrors.weight);
 
-      } else if (petObject.weight <= 0) {
-        newErrors.weight = 'Please enter a valid value for weight';
-        notifyMe(newErrors.weight);
+      // }else if(petObject.weight <= 0){
+      //   newErrors.weight = 'Please enter a valid value for weight';
+      //   notifyMe(newErrors.weight);
 
-      }
-      if (!petObject.color) {
-        newErrors.color = 'Please select a color';
-        notifyMe(newErrors.color);
-      }
+      // }
+      // if(!petObject.color && !props.petObject.color){
+      //   newErrors.color = 'Please select a color';
+      //   notifyMe(newErrors.color);
+      // }
 
-      if (!petObject.breed) {
-        newErrors.breed = 'Please select a breed';
-        notifyMe(newErrors.breed);
-      }
+      // if(!petObject.breed && !props.petObject.breed){
+      //   newErrors.breed = 'Please select a breed';
+      //   notifyMe(newErrors.breed);
+      // }
 
     }
     setErrors(newErrors);
@@ -281,6 +283,7 @@ const PetProfileForm = (props) => {
   const date = `${year}-${month}-${day}`;
 
   const handleSubmit = (event) => {
+
     event.preventDefault();
     const userid = localStorage.getItem('pet_id');
     const formData = new FormData();
@@ -293,14 +296,20 @@ const PetProfileForm = (props) => {
     formData.append('pet', values.pet);
     formData.append('mobile', values.mobile);
     formData.append('image', props.image);
-    formData.append('color', props.color);
-    formData.append('breed', props.breed);
-    formData.append('height', props.height);
-    formData.append('weight', props.weight);
-    formData.append('gender', props.gender);
+    // formData.append('breed', props.breed);
+    // formData.append('height', props.height);
+    // formData.append('weight', props.weight);
+
+    // if(values.color !== undefined || values.color!== ""){
+    //  formData.append('color',props.color)
+    // }else{
+    //   formData.append('color',petObject.color)
+    // }
+    // formData.append('gender', values.gender);
     formData.append('date', date);
 
     if (validateForm()) {
+      setProgress(true) 
       axios
         .post(`${BASE_URL}/petProfile`, formData, {
           headers: {
@@ -308,15 +317,36 @@ const PetProfileForm = (props) => {
           },
         })
         .then((res) => {
-          // console.log(res)
+          console.log(res);
           notifySuccess('Profile saved')
+          setProgress(false)
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
+  useEffect(() => {
+    if (values.breed !== '' || values.color !== '' || values.height !== '' || values.weight !== '') {
+      setValues((prevValues) => ({
+        ...prevValues,
+        color: values.color,
+        breed: values.breed,
+        height: values.height,
+        weight: values.weight,
 
+      }))
+    } else {
+      setValues((prevValues) => ({
+        ...prevValues,
+        color: petObject.color,
+        breed: petObject.breed,
+        height: petObject.height,
+        weight: petObject.weight,
+
+      }))
+    }
+  }, [])
   const addToCommunity = () => {
     const status = 1;
     const userid = localStorage.getItem('pet_id');
@@ -327,7 +357,7 @@ const PetProfileForm = (props) => {
     axios
       .put(`${BASE_URL}/updatePetProfile`, { data })
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -337,6 +367,7 @@ const PetProfileForm = (props) => {
   return (
     <>
       <div style={{ marginTop: '2em', padding: '10px 10px 30px 10px', backgroundColor: '' }}>
+      {progress?<LinearProgress /> : null}
         <form id="profileForm" onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', gap: '20px', flexDirection: 'column' }}>
           <CustomInput
             style={{ width: '100%', padding: '10px', borderRadius: '8px' }}
@@ -407,12 +438,52 @@ const PetProfileForm = (props) => {
             <CustomInput
               style={{ width: '20%', padding: '10px', borderRadius: '8px', textAlign: "center" }}
               type="text"
-              placeholder="gender M or F"
+              placeholder="M / F"
               name="gender"
               value={values.gender}
               onChange={handleChange}
             />
           </div>
+          {/* <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="Breed"
+            name="breed"
+            value={props.breed}
+            onChange={handleChange}
+          /> */}
+          {/* <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="date"
+            name="date"
+            value={values.date}
+            onChange={handleChange}
+          />
+          <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="height"
+            name="height"
+            value={props.height}
+            onChange={handleChange}
+          />
+          <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="weight"
+            name="weight"
+            value={props.weight}
+            onChange={handleChange}
+          />
+          <CustomInput
+            style={{ width: '20%', padding: '10px', borderRadius: '8px',textAlign:"center" }}
+            type="text"
+            placeholder="color"
+            name="color"
+            value={props.color}
+            onChange={handleChange}
+          /> */}
         </form>
         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', gap: '10px', width: '100%', backgroundColor: '' }}>
           <PrimaryButton type="submit" form="profileForm">
@@ -423,7 +494,7 @@ const PetProfileForm = (props) => {
           </PrimaryButton>
         </div>
       </div>
-
+    
       <ToastContainer
         style={{ marginBottom: "10px", width: "300px", padding: "4px" }}
         position="top-right"

@@ -1,6 +1,6 @@
-import { BASE_URL } from "../component/Utils/BaseUrl";
 import { DropDownActions } from "./DropDownSlice";
 import axios from "axios";
+import { BASE_URL } from '../component/Utils/BaseUrl';
 
 export const getBreeds = ()=>{
     return async(dispatch)=>{

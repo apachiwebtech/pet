@@ -5,10 +5,28 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchField from "./SearchField";
 import classes from './DropDown.module.css'
+import { BASE_URL } from "../Utils/BaseUrl";
+import axios from "axios";
 const DropDown = (props) => {
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState(""); // New state to hold selected option
+  const [petObjDd, setPetObjectDd] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userid = localStorage.getItem('pet_id');
+        const response = await axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid });
+        if (response.data && response.data.length > 0) {
+          setPetObjectDd(response.data[0]);
+          console.log(response.data[0])
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    };
   
+    fetchData();
+  }, []);
   const style = {
     position: "absolute",
     top: "50%",
@@ -38,13 +56,30 @@ const DropDown = (props) => {
     props.onClose(); // Close the modal after saving
 
   }
+  // useEffect(() => {
+  //   if (props.options === props.breeds) {
+  //     setSelectedOption(props.petObject.breed || ''); // Set selected option to pet breed if available
+  //   } else if (props.options === props.colors) {
+  //     setSelectedOption(props.petObject.color || '');
+  //   }
+  // }, [props.options, props.petObject]);
   useEffect(() => {
-    if (props.options === props.breeds) {
-      setSelectedOption(props.petObject.breed || ''); // Set selected option to pet breed if available
-    } else if (props.options === props.colors) {
-      setSelectedOption(props.petObject.color || '');
+    if(petObjDd){
+
+      if (props.options === props.breeds) {
+        if(petObjDd.breed !== ""){
+
+          setSelectedOption(petObjDd.breed || selectedOption); // Set selected option to pet breed if available
+        }
+      } else if (props.options === props.colors) {
+        if(petObjDd.color!== ""){
+
+          setSelectedOption(petObjDd.color || selectedOption);
+        }
+      }
     }
   }, [props.options, props.petObject]);
+  console.log(selectedOption);
 console.log(  props.petObject.breed, "breed from dropdown")
   return (
     <Modal

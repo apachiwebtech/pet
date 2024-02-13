@@ -6,13 +6,14 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import PrimaryButton from './PrimaryButton';
 import CustomInput from './CustomInput';
 import dayjs from 'dayjs';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { esES } from '@mui/x-date-pickers';
-
+import { BASE_URL } from '../Utils/BaseUrl';
+import axios from 'axios';
+import { addHeightActions, addWeightActions, addDateActions } from '../../Store/PetFormActions';
+import { useDispatch, useSelector } from 'react-redux';
 const WeightHeightCal = (props) => {
   const style = {
     position: 'absolute',
@@ -34,6 +35,10 @@ const WeightHeightCal = (props) => {
   const [weight, setWeight] = useState(props.type === 'weight' ? 0 : 5);
   const [height, setHeight] = useState(props.type === 'height' ? 10 : 10);
   const [disabled, setDisabled] = useState(false);
+  const sliceWeight = useSelector((state)=> state.petform.weight);
+  console.log(sliceWeight, sliceWeight);
+  const [petObjHW, setPetObjectHW] = useState({});
+  const dispatch = useDispatch();
   const handleAdd = () => {
     if (props.type === 'weight' && weight >= 5) {
       setWeight(prevWeight => prevWeight + props.step);
@@ -53,7 +58,6 @@ const WeightHeightCal = (props) => {
   const handleInputChange = (newValue) => {
     if (props.type === 'weight') {
       setWeight(newValue);
-      console.log(newValue,"ee")
     } else if (props.type === 'height') {
       setHeight(newValue);
     }
@@ -61,8 +65,10 @@ const WeightHeightCal = (props) => {
   const handleSave = () => {
     // Send the data to the parent component
     if (props.type === 'weight') {
+      dispatch(addWeightActions(weight));
       props.onSave(weight);
     } else if (props.type === 'height') {
+      dispatch(addHeightActions(height));
       props.onSave(height);
     }
 
@@ -78,12 +84,27 @@ useEffect(()=>{
 }, [weight, height])
 
 useEffect(()=>{
-  if(props.petObject){
-    setHeight(Number(props.petObject.height) || 10);
-    setWeight(Number(props.petObject.weight) || 5);
+  if(petObjHW.height !== '' && petObjHW.weight!== ''){
+    setHeight(Number(petObjHW.height) || 10);
+    setWeight(Number(petObjHW.weight) || 5);
   }
 }, [props.petObject])
-console.log(props.petObject, "inside weight heoght")
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const userid = localStorage.getItem('pet_id');
+      const response = await axios.post(`${BASE_URL}/getPetProfiledata`, { userId: userid });
+      if (response.data && response.data.length > 0) {
+        setPetObjectHW(response.data[0]);
+        console.log(response.data[0])
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  fetchData();
+}, []);
   return (
     <div>
       <Modal
@@ -134,7 +155,7 @@ export const DateCalc=(props)=>{
   
   const formattedDate = `${year}-${month}-${day}`;
   const [selectDate, setSelectDate] = useState(dayjs(formattedDate))
-
+const dispatch = useDispatch();
   console.log(formattedDate); // Output: 2024-2-7
     const handleDateChange = (date) => {
     setSelectDate(date.$d);
@@ -142,6 +163,8 @@ export const DateCalc=(props)=>{
   const handleSave = () => {
     // Send the selected date to the parent component
     props.onSave(selectDate);
+    // dispatch(addDateActions(selectDate));
+    dispatch(addDateActions(formattedDate));
 
     // Close the modal
     props.onClose();
