@@ -46,6 +46,7 @@ const Footer = () => {
           label="Home"
           value="home"
           icon={<HomeOutlinedIcon />}
+          style={{ color: '#fff' }}
           selected
         />
         {localStorage.getItem("pet_role") == 1 ? <BottomNavigationAction
@@ -53,6 +54,7 @@ const Footer = () => {
           to='/pet/:id'
           label="Profile"
           value="profile"
+          style={{ color: '#fff' }}
           icon={<PetsOutlinedIcon />}
         /> : null}
         {localStorage.getItem("pet_role") == 2 ? <BottomNavigationAction
@@ -60,6 +62,7 @@ const Footer = () => {
           to='/servicerequest'
           label="Service"
           value="Service Request"
+          style={{ color: '#fff' }}
           icon={<MoveToInboxIcon />}
         /> : null}
         {localStorage.getItem("pet_role") == 1 ? 
@@ -68,6 +71,7 @@ const Footer = () => {
             to='/community/:id'
             label="Community"
             value="Community"
+            style={{ color: '#fff' }}
             icon={<HandshakeIcon />}
           /> : null}
 
@@ -76,9 +80,11 @@ const Footer = () => {
           to='/setting'
           label="Setting"
           value="setting"
+          
+          style={{ color: '#fff' }}
           icon={<SettingsOutlinedIcon />}
         />
-        <BottomNavigationAction label="Logout" value="logout" icon={<LogoutOutlinedIcon />} />
+        {/* <BottomNavigationAction label="Logout" value="logout" icon={<LogoutOutlinedIcon />} /> */}
       </BottomNavigation>
     </div>
 

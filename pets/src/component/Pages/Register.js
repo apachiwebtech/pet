@@ -151,7 +151,7 @@ const Register = () => {
             <div className='mobile-detail '>
 
                 <div className='mob-box'>
-                    <label className='py-2' style={{ fontWeight: "700" }} >Email</label>
+                    {/* <label className='py-2' style={{ fontWeight: "700" }} >Email</label> */}
                     <input className='mob-no' type='email' value={value.email} name='email' onChange={onhandlechange} placeholder='Enter Email' required />
                 </div>
             </div>

@@ -6,6 +6,7 @@ import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import { Link, useNavigate } from 'react-router-dom';
 import { Autocomplete, CircularProgress, TextField } from '@mui/material';
+import imageCompression from 'browser-image-compression';
 import axios from 'axios';
 
 
@@ -24,7 +25,7 @@ const AddProduct = () => {
         productname: '',
         description: '',
         address: '',
-        image: '' ,
+        image: '',
         image2: '',
         image3: '',
     })
@@ -85,43 +86,171 @@ const AddProduct = () => {
 
 
 
-    const handleUpload = async (e) => {
-        document.getElementById("uptext1").style.display = "none"
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage(file);
+    async function handleUpload(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image: data,
             };
         });
-    };
 
-    const handleUpload2 = async (e) => {
-        document.getElementById("uptext2").style.display = "none"
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage2(file);
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload2(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image2: data,
             };
         });
-    };
-    const handleUpload3 = async (e) => {
-        document.getElementById("uptext3").style.display = "none"
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage3(file);
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage2(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage2(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload3(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image3: data,
             };
         });
-    };
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage3(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage3(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const onHandleChange = (e) => {
         setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -193,7 +322,7 @@ const AddProduct = () => {
     return (
         <>
             <div>
-                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" ,zIndex :"12"}} />}
+                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)", zIndex: "12" }} />}
             </div>
             <div className='mx-2'>
                 <form onSubmit={handleSubmit} method='POST'>
@@ -212,7 +341,7 @@ const AddProduct = () => {
                                 borderRadius: "8px",
                                 border: "none",
                                 boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
-                                fontFamily:"Ubuntu', sans-serif"
+                                fontFamily: "Ubuntu', sans-serif"
                             }}
                             className='my-2'
                             renderInput={(params) => <TextField {...params} label="Category" />}

@@ -10,9 +10,12 @@ import PrimaryButton from '../UI/PrimaryButton';
 import { BASE_URL } from '../Utils/BaseUrl';
 import Validation from '../Utils/Validate';
 import LinearProgress from '@mui/material/LinearProgress';
+import { Autocomplete, TextField } from '@mui/material';
 
 const ServiceProviderForm = () => {
     const [address, setAddress] = useState('');
+    const [stateid, setStateId] = useState()
+    const [state, setState] = useState([])
     const [errors, setError] = useState({});
     const [scriptLoaded, setScriptLoaded] = useState(false);
     const [cat, setCat] = useState([])
@@ -35,6 +38,21 @@ const ServiceProviderForm = () => {
         lng: null,
         point: null,
     });
+
+    
+    async function getstate() {
+        axios.get(`${BASE_URL}/state`)
+            .then((res) => {
+                setState(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        getstate()
+    }, [])
 
     const handleSelect = async (selectedAddress) => {
         try {
@@ -132,10 +150,10 @@ const ServiceProviderForm = () => {
         formData.append('mobile', value.mobile)
         formData.append('mobile1', value.mobile1)
         formData.append('address', value.address)
-        formData.append('state', value.state)
+        formData.append('state', stateid)
         formData.append('pin', value.pin)
 
-        if (value.address !== "" && value.image !== "" && value.fullname !== "" && value.mobile !== "" && value.address !== "" && value.state !== "" && value.city !== "" && image !== "") {
+        if (value.address !== "" && value.image !== "" && value.fullname !== "" && value.mobile !== "" && value.address !== "" && stateid !== "" && value.city !== "" && image !== "") {
   setProgress(true)
             fetch(`${BASE_URL}/provider_details`, {
                 method: 'POST',
@@ -186,6 +204,16 @@ const ServiceProviderForm = () => {
     const onHandleChange = (e) => {
         setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
+
+    const HandleChangeState = (selectedValue) => {
+        if (selectedValue) {
+            const selectedId = selectedValue.id;
+            console.log(selectedId, "ser");
+            setStateId(selectedId)
+            // Now you have the selected id, you can use it in your application logic
+        }
+    };
+
 
     return (
         <div className='mx-2'>
@@ -238,7 +266,26 @@ const ServiceProviderForm = () => {
                      
                         <CustomInput className="my-2" placeholder="Address" onChange={onHandleChange} name="address" />
                         <p class='text-danger m-0 pl-31'>{errors.address}</p>
-                        <CustomInput className="my-2" placeholder="State" onChange={onHandleChange} name="state" />
+                        <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                size='small'
+                                options={state}
+                                getOptionLabel={(option) => option.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                sx={{
+                                    width: "100%",
+                                    borderRadius: "8px",
+                                    border: "none",
+                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                    fontFamily:"Ubuntu', sans-serif"
+                                }}
+                                className='my-2'
+                                renderInput={(params) => <TextField {...params} label="State" />}
+                                name="state"
+                                onChange={(event, value) => HandleChangeState(value)} // Pass only the value
+                            />
+                        {/* <CustomInput className="my-2" placeholder="State" onChange={onHandleChange} name="state" /> */}
                         <p class='text-danger m-0 pl-31'>{errors.state}</p>
 
                         <div className=' row d-flex justify-content-between'>

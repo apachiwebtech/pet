@@ -141,20 +141,23 @@ font-size: 20px;
   color: darkblue;
 }
 .foot-info{
-  position: fixed;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
+margin-top: 342px;
 }
 .foot-info2{
-  position: fixed;
+  /* position: fixed;
   bottom: 58px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 100%; */
 }
-/* Register */
+
+@media only screen and (max-width: 400px) {
+  .foot-info{
+    margin-top: 200px;
+    }
+}
+
+/* Regist er */
 
 /* Otp start  */
 
@@ -185,9 +188,7 @@ font-size: 20px;
   margin-bottom: 0px;
   
 }
-.css-1bjk3jo-MuiButtonBase-root-MuiBottomNavigationAction-root.Mui-selected {
-  color: #fff !important;
-}
+
 /* Footer end*/
 
 /* Dashboard Start */

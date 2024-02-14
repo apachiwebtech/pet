@@ -52,7 +52,7 @@ const LostAndFound = () => {
                     </div>
                     <div className="mainSection">
                       <div className="imageContainer">
-                        <img className="lost-img" src={`https://thetalentclub.co.in/pet-app/uploads/lost_found/${item.image}`} alt="dogimage" />
+                        <img className="lost-img" src={`https://thetalentclub.co.in/pet-app/upload/lost_found/${item.image}`} alt="dogimage" />
                       </div>
 
                       <div className="info">

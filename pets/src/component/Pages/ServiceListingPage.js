@@ -24,6 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import CustomInput from '../UI/CustomInput';
+import imageCompression from 'browser-image-compression';
 import CustomTextarea from '../UI/CustomTexarea';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -467,46 +468,172 @@ const ServiceListingPage = () => {
 
 
 
-    const handleUpload = async (e) => {
 
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
+    async function handleUpload(event) {
+        const file = event.target.files[0];
+        // setHide(true)
 
-
-        setImage(file);
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image: data,
             };
         });
-    };
 
-    const handleUpload2 = async (e) => {
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
 
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage2(file);
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload2(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image2: data,
             };
         });
-    };
-    const handleUpload3 = async (e) => {
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
 
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage3(file);
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage2(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage2(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload3(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
         setValue((prev) => {
             return {
                 ...prev,
                 image3: data,
             };
         });
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
 
-    };
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage3(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage3(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // const onHandleChange = (e) => {
     //     setValue((prev) => ({ ...prev, [e.target.name]: e.target.value }))

@@ -868,7 +868,7 @@ app.post('/add_product', upload.fields([
 
   let date = new Date()
 
-  console.log(img1)
+  console.log(image1)
 
 
   const sql = "insert into awt_add_product(`title`,`description`,`upload_image`,`upload_image2`,`upload_image3`,`created_date`,`created_by`) values(?,?,?,?,?,?,?)";
@@ -958,6 +958,20 @@ app.post('/product_listing', (req, res) => {
   const sql = "select * from awt_add_product where created_by = ? and deleted = 0 order by id desc";
 
   con.query(sql, [user_id], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      return res.json(data)
+    }
+  })
+})
+
+app.get('/product', (req, res) => {
+
+
+  const sql = "select * from awt_add_product where deleted = 0 order by id desc";
+
+  con.query(sql,  (err, data) => {
     if (err) {
       return res.json(err)
     } else {

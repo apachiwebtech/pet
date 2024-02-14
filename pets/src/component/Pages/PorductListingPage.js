@@ -16,6 +16,7 @@ import PrimaryButton from '../UI/PrimaryButton';
 import CustomInput from '../UI/CustomInput';
 import CustomTextarea from '../UI/CustomTexarea';
 import { CircularProgress } from '@mui/material';
+import imageCompression from 'browser-image-compression';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -53,7 +54,7 @@ const ProductListingPage = () => {
         })
     }, [pro_data])
 
- 
+
 
     const [open, setOpen] = React.useState(false);
 
@@ -128,9 +129,9 @@ const ProductListingPage = () => {
             newErrors.productname = 'Productname Name is required';
         }
 
-        if (!value.image) {
-            newErrors.image = ' required';
-        }
+        // if (!value.image) {
+        //     newErrors.image = ' required';
+        // }
         if (!value.image2) {
             newErrors.image2 = ' required';
         }
@@ -168,43 +169,44 @@ const ProductListingPage = () => {
 
 
 
-    const handleUpload = async (e) => {
+    // const handleUpload = async (e) => {
 
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage(file);
-        setValue((prev) => {
-            return {
-                ...prev,
-                image: data,
-            };
-        });
-    };
+    //     const data = await ImageBase64(e.target.files[0]);
+    //     const file = e.target.files[0];
+    //     setImage(file);
+    //     setValue((prev) => {
+    //         return {
+    //             ...prev,
+    //             image: data,
+    //         };
+    //     });
+    // };
 
-    const handleUpload2 = async (e) => {
-        document.getElementById("uptext2").style.display = "none"
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage2(file);
-        setValue((prev) => {
-            return {
-                ...prev,
-                image2: data,
-            };
-        });
-    };
-    const handleUpload3 = async (e) => {
-        document.getElementById("uptext3").style.display = "none"
-        const data = await ImageBase64(e.target.files[0]);
-        const file = e.target.files[0];
-        setImage3(file);
-        setValue((prev) => {
-            return {
-                ...prev,
-                image3: data,
-            };
-        });
-    };
+    // const handleUpload2 = async (e) => {
+    //     document.getElementById("uptext2").style.display = "none"
+    //     const data = await ImageBase64(e.target.files[0]);
+    //     const file = e.target.files[0];
+    //     setImage2(file);
+    //     setValue((prev) => {
+    //         return {
+    //             ...prev,
+    //             image2: data,
+    //         };
+    //     });
+    // };
+
+    // const handleUpload3 = async (e) => {
+    //     document.getElementById("uptext3").style.display = "none"
+    //     const data = await ImageBase64(e.target.files[0]);
+    //     const file = e.target.files[0];
+    //     setImage3(file);
+    //     setValue((prev) => {
+    //         return {
+    //             ...prev,
+    //             image3: data,
+    //         };
+    //     });
+    // };
 
     const onHandleChange = (e) => {
         const { name, value } = e.target;
@@ -213,6 +215,172 @@ const ProductListingPage = () => {
             [name]: value,
         }));
     };
+
+    async function handleUpload(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image: data,
+            };
+        });
+
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload2(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image2: data,
+            };
+        });
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage2(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage2(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpload3(event) {
+        const file = event.target.files[0];
+        // setHide(true)
+
+        const data = await ImageBase64(event.target.files[0]);
+        setValue((prev) => {
+            return {
+                ...prev,
+                image3: data,
+            };
+        });
+        // Check if the file has a valid extension
+        const allowedExtensions = ['png', 'jpg', 'jpeg', 'mp4'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            // console.log('Invalid file type. Please upload a .png, .jpg, or .mp4 file.');
+            return;
+        }
+
+        console.log(file, "jhsd");
+        console.log('file instanceof Blob', file instanceof Blob); // true
+        console.log(`file size ${file.size / 1024 / 1024} MB`);
+
+        const options = {
+            maxSizeMB: 0.1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        };
+
+        try {
+            let convertedFile;
+
+            if (fileExtension === 'mp4') {
+                setImage3(file)
+            } else {
+                // Handle image file using imageCompression library
+                const compressedFile = await imageCompression(file, options);
+                console.log("nbchjvbhj");
+                console.log(compressedFile);
+                console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+                console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+                // Convert Blob to File with the desired extension
+                const fileName = `compressedFile.${fileExtension}`;
+                convertedFile = new File([compressedFile], fileName, { type: `image/${fileExtension}` });
+                await setImage3(convertedFile);
+            }
+
+
+            // You can replace the following line with your own logic to handle the converted file
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -327,7 +495,7 @@ const ProductListingPage = () => {
                                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                                 Edit Product
                                             </Typography>
-                                         
+
                                         </Toolbar>
                                     </AppBar>
 
@@ -346,7 +514,7 @@ const ProductListingPage = () => {
                                                     options={cat}
                                                     getOptionLabel={(option) => option.title}
                                                     getOptionSelected={(option, value) => option.id === value.id}
-                                                    
+
                                                     sx={{
                                                         width: "100%",
                                                         borderRadius: "8px",

@@ -22,9 +22,9 @@ function Validation(values) {
     }
    
   
-    if (values.state === '') {
-      errors.state = 'state should not be empty';
-    }  
+    // if (values.state === '') {
+    //   errors.state = 'state should not be empty';
+    // }  
   
     if(values.city === ''){
       errors.city  = 'city should not be empty';

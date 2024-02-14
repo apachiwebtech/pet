@@ -38,6 +38,7 @@ import Settings from './Pages/Settings';
 import LostAndFound from './Pages/LostAndFound'
 import LostAndFoundForm from './Forms/LostAndFoundForm'
 import Loader from './UI/Loader';
+import Product from './Pages/Product';
 
 const Dash = lazy(() => import('./Pages/Dash'));
 
@@ -82,6 +83,10 @@ const routing = createBrowserRouter([
       {
         path: '/productmanaging',
         element: <ProductManagingForm />
+      },
+      {
+        path: '/product/:id',
+        element: <Product />
       },
       {
         path: '/serviceproform',
