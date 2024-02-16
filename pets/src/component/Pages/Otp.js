@@ -14,6 +14,7 @@ const Otp = () => {
 
     const [otp, setOtp] = useState('');
     const [showOtp, setShowOtp] = useState(true);
+    const [error, setError] = useState(false)
     console.log(otp, "from ls")
     const generateOTP = (length) => {
 
@@ -100,15 +101,15 @@ const Otp = () => {
             email: localStorage.getItem("pet_email"),
             value: localStorage.getItem("pet_value"),
         }
-
+        
         axios.post(`${BASE_URL}/resend_provider`, data)
             .then((res) => {
 
-              console.log(res)
-
+                console.log(res)
+                
                 document.getElementById("msg").innerHTML = " <Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='success'>Otp sent to your device!</Alert> </Stack>";
                 setTimeout(() => {
-
+                    
                     document.getElementById("msg").innerHTML = "";
                 }, 3000)
             })
@@ -116,18 +117,18 @@ const Otp = () => {
                 console.log(err)
             })
     };
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
 
     const onhandlesubmit = (e) => {
         const mergedOtp = Object.values(value).join('');
         e.preventDefault();
-
+        
         const data = {
             otp: mergedOtp,
             email: localStorage.getItem("pet_email"),
@@ -137,16 +138,18 @@ const Otp = () => {
         axios.post(`${BASE_URL}/otp`, data)
             .then((res) => {
                 console.log(res)
-
-
+                
+                
                 if (res.data.length == 0) {
-                    document.getElementById("err").innerHTML = "<Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='warning'>Please enter valid otp!</Alert></Stack>"
+                    setError(true)
+                    // document.getElementById("err").innerHTML = "<Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='warning'>Please enter valid otp!</Alert></Stack>"
                     setTimeout(() => {
-
-                        document.getElementById("err").innerHTML = ""
+                        setError(false)
+                        
+                        // document.getElementById("err").innerHTML = ""
                     }, 2000)
                 } else {
-
+                    
                     if(res.data[0].parent_name === null){
                         window.location.pathname = '/pet/:id';
                         
@@ -159,7 +162,7 @@ const Otp = () => {
                     const role = res.data[0].role;
                     const value = res.data[0].value;
                     const id = res.data[0].id;
-
+                    
                     localStorage.setItem("pet_role", role)
                     localStorage.setItem("pet_value", value)
                     localStorage.setItem('pet_id', id);
@@ -169,28 +172,30 @@ const Otp = () => {
             .catch((err) => {
                 console.log(err);
             });
-    }
-
-    const onhandleprovider = (e) => {
-        const mergedOtp = Object.values(value).join('');
-        e.preventDefault();
-
-        const data = {
-            otp: mergedOtp,
-            email: localStorage.getItem("pet_email"),
+        }
+        
+        const onhandleprovider = (e) => {
+            const mergedOtp = Object.values(value).join('');
+            e.preventDefault();
+            
+            const data = {
+                otp: mergedOtp,
+                email: localStorage.getItem("pet_email"),
             value: localStorage.getItem("pet_value"),
         }
-
+        
         axios.post(`${BASE_URL}/provider_otp`, data)
             .then((res) => {
-
-
-
+                
+                
+                
                 if (res.data.length == 0) {
-                    document.getElementById("err").innerHTML = "<Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='warning'>Please enter valid otp!</Alert></Stack>"
+                    setError(true)
+                    // document.getElementById("err").innerHTML = "<Stack sx={{ width: '100%' }} spacing={2}><Alert variant='outlined' severity='warning'>Please enter valid otp!</Alert></Stack>"
                     setTimeout(() => {
-
-                        document.getElementById("err").innerHTML = ""
+                        setError(false)
+                        
+                        // document.getElementById("err").innerHTML = ""
                     }, 2000)
                 } else {
                     console.log(res.data)
@@ -228,10 +233,10 @@ const Otp = () => {
             {localStorage.getItem("pet_role") == 1 ? (
                 <div className='reg-main px-3'>
                     <form onSubmit={onhandlesubmit}>
-
+                    {error && <Alert style={{position : "absolute",top:"74px"}} severity='error'>Please enter valid otp!</Alert>}
 
                         <div className='text-center'>
-                            <h4 className='reg-head'>Otp</h4>
+                            <h4 className='reg-head'>OTP</h4>
                         </div>
 
                         <div className=' mobile-detail mob-box'>
@@ -262,22 +267,11 @@ const Otp = () => {
                             <p className='text-danger' id="err"></p>
                             <div id='msg'>
                                 {
-                                    showOtp && <p>{otp}</p>
+                                    showOtp && <Alert severity="info" style={{position : "absolute",top:"74px",right :"1px"}}>{otp}</Alert>
                                 }
                             </div>
 
-                            <div className='foot-info'>
-                                <div>
-                                    <p>(by registering, I agree to the Terms of <br /> Use and Privacy Policy)</p>
-                                </div>
-                                <div className='row'>
-                                    <p className='col-6'>Terms of <br /> Use </p>
-                                    <p className='col-6'>Privacy <br /> Policy </p>
-                                </div>
-                                <div className='text-center splash-bt-text mx-3'>
-                                    <p>design & developed by pet owners</p>
-                                </div>
-                            </div>
+                          
 
 
                         </div>
@@ -289,7 +283,7 @@ const Otp = () => {
 
 
                         <div className='text-center'>
-                            <h4 className='reg-head'>Otp</h4>
+                            <h4 className='reg-head'>OTP</h4>
                         </div>
 
                         <div className=' mobile-detail mob-box'>
@@ -319,22 +313,10 @@ const Otp = () => {
                             <p className='text-danger' id="err"></p>
                             <div id='msg'>
                                 {
-                                    showOtp && <p>{otp}</p>
+                                    showOtp && <Alert severity="info" style={{position : "absolute",top:"74px",right:"1px"}}>{otp}</Alert>
                                 }
                             </div>
 
-                            <div className='foot-info'>
-                                <div>
-                                    <p>(by registering, I agree to the Terms of <br /> Use and Privacy Policy)</p>
-                                </div>
-                                <div className='row'>
-                                    <p className='col-6'>Terms of <br /> Use </p>
-                                    <p className='col-6'>Privacy <br /> Policy </p>
-                                </div>
-                                <div className='text-center splash-bt-text mx-3'>
-                                    <p>design & developed by pet owners</p>
-                                </div>
-                            </div>
 
 
                         </div>

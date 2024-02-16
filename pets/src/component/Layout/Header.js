@@ -44,7 +44,7 @@ const Header = () => {
   return (
     <div className='head text-center position-relative'>
       <p style={{ color: "white" }}>{getPageName()}</p>
-      {window.location.pathname !== '/' && <ArrowBackIosIcon className='head-arrow' onClick={() => navigate(-1)} />}
+      {window.location.pathname !== '/' && window.location.pathname !== '/log'&& <ArrowBackIosIcon className='head-arrow' onClick={() => navigate(-1)} />}
 
     </div>
   )

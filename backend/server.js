@@ -92,6 +92,90 @@ con.connect((err) => {
 
 // })
 
+app.post('/user_login', (req, res) => {
+  let email = req.body.email;
+  let otp = req.body.otp;
+
+  const sql = "SELECT * from awt_registeruser where email = ? AND deleted = 0"
+
+  con.query(sql, [email], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      if (data.length !== 0) {
+        const sql2 = "UPDATE awt_registeruser SET otp = ? WHERE email = ?";
+
+        con.query(sql2, [otp, email], (err, data) => {
+          if (err) {
+            return res.json(err)
+          }
+          else {
+            if (data.length !== 0) {
+
+              const sql = "SELECT * from awt_registeruser WHERE email = ? and deleted = 0";
+              con.query(sql, [email], (err, data) => {
+                if (err) {
+                  return res.json(err)
+                } else {
+                  return res.json(data)
+                }
+              })
+            }
+
+          }
+        })
+      }else{
+        return res.json("Email id is not registered")
+      }
+    }
+  })
+
+})
+
+app.post('/provid_login', (req, res) => {
+  let email = req.body.email;
+  let otp = req.body.otp;
+
+  const sql = "SELECT * from awt_registeruser where email = ? AND deleted = 0"
+
+  con.query(sql, [email], (err, data) => {
+    if (err) {
+      return res.json(err)
+    } else {
+      if (data.length !== 0) {
+        const sql2 = "UPDATE awt_service_register SET otp = ? WHERE email = ?";
+
+        con.query(sql2, [otp, email], (err, data) => {
+          if (err) {
+            return res.json(err)
+          }
+          else {
+            if (data.length !== 0) {
+
+              const sql = "SELECT * from awt_service_register WHERE email = ? and deleted = 0";
+              con.query(sql, [email], (err, data) => {
+                if (err) {
+                  return res.json(err)
+                } else {
+                  return res.json(data)
+                }
+              })
+            }
+            
+
+          }
+        })
+      }else{
+       
+        return res.json("Email id is not registered")
+        
+      }
+    }
+  })
+
+})
+
+
 app.post('/login', (req, res) => {
   let email = req.body.email;
   let otp = req.body.otp;
@@ -315,6 +399,7 @@ app.post('/provider_login', (req, res) => {
 
           }
         })
+
       } else {
         const sql3 = "INSERT INTO awt_registeruser_dummy(`email`,`otp`) VALUES (?, ?)";
         con.query(sql3, [email, otp], (err, data) => {
@@ -857,7 +942,7 @@ app.post('/add_product', upload.fields([
   let user_id = req.body.user_id
   let title = req.body.title
   let description = req.body.description;
-  
+
   const image1 = req.files['image'];
   const image2 = req.files['image2'];
   const image3 = req.files['image3'];
@@ -971,7 +1056,7 @@ app.get('/product', (req, res) => {
 
   const sql = "select * from awt_add_product where deleted = 0 order by id desc";
 
-  con.query(sql,  (err, data) => {
+  con.query(sql, (err, data) => {
     if (err) {
       return res.json(err)
     } else {
@@ -1291,10 +1376,10 @@ app.post(`/private`, (req, res) => {
 
 app.post(`/getprivate`, (req, res) => {
   const user_id = req.body.user_id;
- 
+
 
   const sql = "select private from awt_userprofile where userid = ?";
-  
+
   con.query(sql, [user_id], (err, data) => {
     if (err) {
       return res.json(err)

@@ -39,6 +39,8 @@ import LostAndFound from './Pages/LostAndFound'
 import LostAndFoundForm from './Forms/LostAndFoundForm'
 import Loader from './UI/Loader';
 import Product from './Pages/Product';
+import Login from './Pages/Login';
+import 'animate.css';
 
 const Dash = lazy(() => import('./Pages/Dash'));
 
@@ -63,6 +65,10 @@ const routing = createBrowserRouter([
       {
         path: '/reg',
         element: <Register />
+      },
+      {
+        path: '/log',
+        element: <Login />
       },
       {
         path: '/pet/:id',
@@ -211,7 +217,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkLocalStorageAndRedirect(navigate);
+    // checkLocalStorageAndRedirect(navigate);
     getUserName();
   }, [navigate]);
 
@@ -222,7 +228,7 @@ function App() {
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash'&& window.location.pathname !== '/otp' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
+      {window.location.pathname !== '/splash'&& window.location.pathname !== '/log'&& window.location.pathname !== '/otp' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
     </>
 
   );
