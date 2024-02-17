@@ -124,7 +124,7 @@ app.post('/user_login', (req, res) => {
 
           }
         })
-      }else{
+      } else {
         return res.json("Email id is not registered")
       }
     }
@@ -161,14 +161,14 @@ app.post('/provid_login', (req, res) => {
                 }
               })
             }
-            
+
 
           }
         })
-      }else{
-       
+      } else {
+
         return res.json("Email id is not registered")
-        
+
       }
     }
   })
@@ -642,16 +642,36 @@ const transporter = nodemailer.createTransport({
 app.get('/listing/:id', (req, res, next) => {
 
   const id = req.params.id;
-  const sql = 'SELECT * FROM awt_add_services WHERE catid = ?'
+  const sql = 'SELECT aas.id,aas.catid,aas.upload_image,aas.scatid,aas.designation,aas.service,aas.service,aas.address,aas.description,aas.user_id,aas.title, ac.rating  FROM awt_add_services as aas left JOIN awt_comments as ac on ac.service_provider_id = aas.id WHERE catid = ? and aas.deleted = 0 order by aas.id desc'
 
   con.query(sql, [id], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
-      return res.json(data);
+      const result = mergeDataWithSamePostId(data);
+      return res.json(result);
     }
   })
 })
+function mergeDataWithSamePostId(data) {
+  const mergedData = {};
+
+  // Merge data with the same post_id
+  data.forEach(item => {
+    const Ratings = item.id;
+    if (!mergedData[Ratings]) {
+      mergedData[Ratings] = { ...item, post_rating: [item.rating] };
+      delete mergedData[Ratings].rating; // Remove the redundant key
+    } else {
+      mergedData[Ratings].post_rating.push(item.rating);
+    }
+  });
+
+  // Reverse the order of the merged data
+  const reversedData = Object.values(mergedData).reverse();
+
+  return reversedData;
+}
 
 app.get('/detailPage/:id', (req, res, next) => {
   const id = req.params.id;
@@ -725,11 +745,14 @@ app.post('/add_service', upload.fields([
   const category = req.body.category;
   const service = req.body.service;
   const address = req.body.address;
-  // let imagepath = req.file.filename;
   const latitude = req.body.latitude;
   const longitude = req.body.longitude;
   const description = req.body.description;
   const user_id = req.body.user_id
+  const state = req.body.state
+  const city = req.body.city
+  const pincode = req.body.pincode
+  const recommend = req.body.recommend;
   const daysJSON = req.body.days;
   const days = JSON.parse(daysJSON);
 
@@ -744,8 +767,8 @@ app.post('/add_service', upload.fields([
   const created_date = new Date()
 
   // Insert data into the main table
-  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address, upload_image,upload_image2,upload_image3, description , created_date , user_id,  longitude, latitude) VALUES (?, ?, ?, ?, ?,?,?,?,?,?,?)';
-  const mainValues = [category, service, address, img1, img2, img3, description, created_date, user_id, longitude, latitude];
+  const insertMainQuery = 'INSERT INTO awt_add_services (catid, title, address,state,city ,pin, upload_image, upload_image2, upload_image3, description , created_date , user_id, longitude, latitude,recommend) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+  const mainValues = [category, service, address, state, city, pincode, img1, img2, img3, description, created_date, user_id, longitude, latitude, recommend];
 
   con.query(insertMainQuery, mainValues, (err, mainResult) => {
     if (err) {
@@ -813,11 +836,11 @@ app.post('/update_service', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'image2', maxCount: 1 },
   { name: 'image3', maxCount: 1 }
-]), (req, res) => {
+]), async (req, res) => {
+
   const category = req.body.category;
   const service = req.body.service;
   const address = req.body.address;
-  let imagepath = req.file.filename;
   const description = req.body.description;
   const service_id = req.body.service_id;
   const daysJSON = req.body.days;
@@ -829,62 +852,68 @@ app.post('/update_service', upload.fields([
   const image2 = req.files['image2'];
   const image3 = req.files['image3'];
 
-  let img1 = image1[0].filename
-  let img2 = image2[0].filename
-  let img3 = image3[0].filename
+  let img1 = image1[0].filename;
+  let img2 = image2[0].filename;
+  let img3 = image3[0].filename;
 
-  const updated_date = new Date()
+  const updated_date = new Date();
 
   // Insert data into the main table
   const insertMainQuery = 'update awt_add_services set catid = ? ,title= ?, address = ?, upload_image = ?,upload_image2 = ?,upload_image3 = ? , description = ?, updated_date = ? ,longitude = ? ,latitude = ? where id = ? ';
+
   const mainValues = [category, service, address, img1, img2, img3, description, updated_date, longitude, latitude, service_id];
 
-  con.query(insertMainQuery, mainValues, (err, mainResult) => {
-    if (err) {
-      console.error('Error inserting data into main table:', err);
-      return res.json(err);
-    }
-    // else
-    // {
-    //   return res.json(mainResult)
-    // }
-    const insertDaysQuery = 'UPDATE awt_service_time SET day = ?, starttime = ?, endtime = ?, closed = ?, created_date = ? WHERE service_id = ?';
+  const mainResult = await new Promise((resolve, reject) => {
+    con.query(insertMainQuery, mainValues, (err, result) => {
+      if (err) {
+        console.error('Error inserting data into main table:', err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
 
-    const daysValues = days.map(day => [
+  // Update data in the awt_service_time table
+  const updateQuery = 'UPDATE awt_service_time SET day = ?, starttime = ?, endtime = ?, closed = ?, created_date = ? WHERE service_id = ?and day = ?';
+
+  const updatePromises = days.map(day => {
+    const values = [
       day.name,
       day.start,
       day.end,
-      day.checkval, // Fix the typo here
+      day.checkval,
       updated_date,
-      service_id
-    ]);
+      service_id,
+      day.name,
+    ];
 
+    console.log(values);
 
-
-    async.eachSeries(daysValues, (dayValue, callback) => {
-      con.query(insertDaysQuery, dayValue, (err, result) => {
+    return new Promise((resolve, reject) => {
+      con.query(updateQuery, values , (err, result) => {
         if (err) {
-
           console.error('Error updating data in awt_service_time:', err);
-          callback(err); // Stops the loop on error
+          reject(err);
         } else {
-          // callback(); 
-          // Continues to the next iteration
-          return res.json(result)
+          console.log(updateQuery);
+          resolve(result);
         }
       });
-    }, (err, data) => {
-      if (err) {
-        return res.json({ error: err });
-      } else {
-        return res.json({ error: "success" });
-      }
     });
-
-
-
   });
+
+  // Wait for all update queries to complete
+  try {
+    const updateResults = await Promise.all(updatePromises);
+    console.log(updateResults);
+    return res.json(updateResults);
+  } catch (error) {
+    console.error('Error updating data in awt_service_time:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 exports.markAttendance = async (req, res) => {
   const { attendance } = req.body;
@@ -1587,6 +1616,19 @@ app.post('/addDate', (req, res, next) => {
           return res.json({ message: "Succefully saved date.", date: date });
         }
       })
+    }
+  });
+});
+
+
+app.get('/state', (req, res, next) => {
+  const sql = 'SELECT * FROM awt_states';
+
+  con.query(sql, (err, data) => {
+    if (err) {
+      return res.status(404).json({ msg: "cannot fetch data" });
+    } else {
+      return res.json(data);
     }
   });
 });

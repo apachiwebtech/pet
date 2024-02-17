@@ -40,8 +40,9 @@ const MyApointment = () => {
           const year = String(timestamp.getFullYear()).slice(2);
           
           const formattedDate = `${day + "/"} ${month + '/'} ${year}`;
-          const timeComponent = timestamp.toLocaleTimeString()
-          // const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const options = { hour: '2-digit', minute: '2-digit', second: 'none' };
+          // const timeComponent = timestamp.toLocaleTimeString(options)
+          const timeComponent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
 
 

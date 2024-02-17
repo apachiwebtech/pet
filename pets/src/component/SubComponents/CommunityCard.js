@@ -9,18 +9,18 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import PetsIcon from '@mui/icons-material/Pets';
 
 const CommunityCard = (props) => {
-  const timestampStr = props.date; // Assuming item.book_date is the timestamp string
-  const timestamp = new Date(timestampStr);
+  // const timestampStr = props.date; // Assuming item.book_date is the timestamp string
+  // const timestamp = new Date(timestampStr);
    
   // Extracting components
-  const dateComponent = timestamp.toLocaleDateString();
+  // const dateComponent = timestamp.toLocaleDateString();
   return (
     <div className='container' style={{ padding: "10px" }}>
       <Card
         style={{
           width: "100%",
-          height: "300px",
-          padding: "20px",
+          height: "250px",
+          padding: "15px",
           boxSizing: "border-box",
           marginBottom: "20px",
         }}
@@ -54,8 +54,9 @@ const CommunityCard = (props) => {
             {props.heading || 'heading'}
           </h4>
         </div>
-        <Card
+        <div
           style={{
+            border:"1px solid lightgery",
             height: "80%",
             padding: "20px",
             display: "grid",
@@ -144,8 +145,8 @@ const CommunityCard = (props) => {
                   <span>Location</span>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                  <span>{props.breed}</span>
-                  <span>{props.gender}</span>
+                  <span>{props.breed || "--"}</span>
+                  <span>{props.gender || '--'}</span>
                   <span>{props.age || "no age"}</span>
                   <span>{props.city}</span>
                 </div>
@@ -163,7 +164,7 @@ const CommunityCard = (props) => {
               color: "#adadad",
             }}
           >
-            {dateComponent || 'Behavior'}
+            {/* {dateComponent || 'Behavior'} */}
           </div>
           <div
             style={{
@@ -202,7 +203,7 @@ const CommunityCard = (props) => {
   </NavLink> */}
           </div>
 
-        </Card>
+        </div>
       </Card>
     </div>)
 }

@@ -124,7 +124,7 @@ const Register = () => {
                     setError(true)
                     setTimeout(() => {
                         setError(false)
-                        
+
                     }, 5000);
 
                 }
@@ -132,9 +132,9 @@ const Register = () => {
                     setError2(true)
                     setTimeout(() => {
                         setError2(false)
-                        
+
                     }, 5000);
-                  
+
                 }
             }
         } else {
@@ -169,7 +169,7 @@ const Register = () => {
                     setError(true)
                     setTimeout(() => {
                         setError(false)
-                        
+
                     }, 5000);
 
                 }
@@ -177,9 +177,9 @@ const Register = () => {
                     setError2(true)
                     setTimeout(() => {
                         setError2(false)
-                        
+
                     }, 5000);
-                  
+
                 }
             }
 
@@ -206,8 +206,8 @@ const Register = () => {
 
     return (
         <div className='reg-main px-4' >
-            {error && <Alert style={{ position: "absolute", top: "74px" }}  severity='warning'>Enter email</Alert>}
-            {error2 && <Alert style={{ position: "absolute", top: "134px",width:"300px" }} severity='warning'> Please check the box to agree to our terms before proceeding.</Alert>}
+            {error && <Alert style={{ position: "absolute", top: "74px" }} severity='warning'>Enter email</Alert>}
+            {error2 && <Alert style={{ position: "absolute", top: "134px", width: "300px" }} severity='warning'> Please check the box to agree to our terms before proceeding.</Alert>}
 
             <div className='text-center py-5'>
                 <img src={logo} width="100px" alt='' />
@@ -233,6 +233,7 @@ const Register = () => {
                         <Radio
                             checked={selectedValue === '1'}
                             onChange={handleChange}
+                            id='pet'
                             sx={{
                                 color: "#5DB15B", '&.Mui-checked': {
                                     color: "#5DB15B",
@@ -242,13 +243,15 @@ const Register = () => {
                             name="radio-buttons"
                             inputProps={{ 'aria-label': 'A' }}
                         />
-                        <span>PET OWNER</span>
+                        <label htmlFor='pet' style={{ position: "static", transform: "translate(0px)", fontSize: "12px" }}>PET OWNER</label>
+
                     </div>
                     <div className='col-6'>
 
                         <Radio
                             checked={selectedValue === '2'}
                             onChange={handleChange}
+                            id='service'
                             value="2"
                             sx={{
                                 color: "#5DB15B", '&.Mui-checked': {
@@ -258,7 +261,8 @@ const Register = () => {
                             name="radio-buttons"
                             inputProps={{ 'aria-label': 'B' }}
                         />
-                        <span>SERVICE PROVIDER</span>
+                        <label htmlFor="service" style={{ position: "static", transform: "translate(0px)", fontSize: "12px" }}>SERVICE PROVIDER</label>
+
                     </div>
 
                 </div>
@@ -316,16 +320,20 @@ const Register = () => {
 
                         </Toolbar>
                     </AppBar>
-                    <div>
-                        <div>
+
+                    <div className='p-3'>
+                        <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in ante euismod, porta tellus non, iaculis leo. Nulla mattis sed sem at luctus. In condimentum tellus et arcu elementum, sit amet dapibus felis commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non libero aliquam, tincidunt enim ut, aliquet risus. Nulla facilisi. Donec suscipit ullamcorper neque id gravida. Morbi eget sollicitudin sapien. Ut lorem mauris, egestas eget hendrerit pellentesque, varius nec neque. Morbi dui massa, pulvinar eu justo et, luctus imperdiet arcu. Mauris venenatis tincidunt erat, et rhoncus sem semper at. Integer nec felis id lorem suscipit tristique non ac nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi lorem felis, elementum eget leo sed, tempor sollicitudin velit. In volutpat turpis purus, eu ultricies mauris malesuada a. Nulla eu sem sit amet quam commodo condimentum.
+                        </p>
+                        <br></br>
+                        <p>
+                            Etiam volutpat libero ac lobortis ultrices. Curabitur felis elit, semper quis elit in, semper mattis augue. Etiam egestas libero a accumsan suscipit. Sed eleifend, ex eget cursus blandit, erat sem pellentesque magna, vulputate gravida odio est eget erat. Aenean dictum augue vitae euismod lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam volutpat ligula sapien. Nam magna massa, fringilla ut mattis in, mattis sit amet ex. Nam erat augue, lacinia a lectus in, tempus interdum diam. Nulla facilisi. Mauris finibus posuere urna, ac iaculis est tincidunt euismod. Donec vitae accumsan dui, et pellentesque erat. In sed ante enim. Donec iaculis fermentum nisi, non sodales eros commodo sit amet. Ut id nisi iaculis, tristique dolor eu, pharetra mauris.</p>
+                        <p>
+                            <br></br>
+                            Vestibulum lacinia libero turpis, id mollis odio ultricies non. Vestibulum vitae lacinia orci. Integer eu leo malesuada, mollis tortor ut, gravida ante. Nunc ultrices enim purus, vitae porttitor est mollis id. Suspendisse blandit massa ex, et iaculis ante tempor sit amet. Mauris at dignissim risus. Nullam sed rutrum lorem. Quisque euismod, orci eget blandit fringilla, enim quam ullamcorper leo, sit amet hendrerit tellus nisi non justo. Integer maximus viverra leo ut consequat. Donec pharetra vel magna at mattis. Morbi eget mi ac turpis mattis accumsan. Quisque commodo neque sed aliquet suscipit. Nam ut lectus ultrices, consequat magna non, posuere erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce iaculis libero eu ante laoreet, nec placerat ipsum interdum.</p>
 
-                            Etiam volutpat libero ac lobortis ultrices. Curabitur felis elit, semper quis elit in, semper mattis augue. Etiam egestas libero a accumsan suscipit. Sed eleifend, ex eget cursus blandit, erat sem pellentesque magna, vulputate gravida odio est eget erat. Aenean dictum augue vitae euismod lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam volutpat ligula sapien. Nam magna massa, fringilla ut mattis in, mattis sit amet ex. Nam erat augue, lacinia a lectus in, tempus interdum diam. Nulla facilisi. Mauris finibus posuere urna, ac iaculis est tincidunt euismod. Donec vitae accumsan dui, et pellentesque erat. In sed ante enim. Donec iaculis fermentum nisi, non sodales eros commodo sit amet. Ut id nisi iaculis, tristique dolor eu, pharetra mauris.
-
-                            Vestibulum lacinia libero turpis, id mollis odio ultricies non. Vestibulum vitae lacinia orci. Integer eu leo malesuada, mollis tortor ut, gravida ante. Nunc ultrices enim purus, vitae porttitor est mollis id. Suspendisse blandit massa ex, et iaculis ante tempor sit amet. Mauris at dignissim risus. Nullam sed rutrum lorem. Quisque euismod, orci eget blandit fringilla, enim quam ullamcorper leo, sit amet hendrerit tellus nisi non justo. Integer maximus viverra leo ut consequat. Donec pharetra vel magna at mattis. Morbi eget mi ac turpis mattis accumsan. Quisque commodo neque sed aliquet suscipit. Nam ut lectus ultrices, consequat magna non, posuere erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce iaculis libero eu ante laoreet, nec placerat ipsum interdum.
-
-                        </div>
                     </div>
+
                 </Dialog>
             </React.Fragment>
 
@@ -355,12 +363,16 @@ const Register = () => {
 
                         </Toolbar>
                     </AppBar>
-                    <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in ante euismod, porta tellus non, iaculis leo. Nulla mattis sed sem at luctus. In condimentum tellus et arcu elementum, sit amet dapibus felis commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non libero aliquam, tincidunt enim ut, aliquet risus. Nulla facilisi. Donec suscipit ullamcorper neque id gravida. Morbi eget sollicitudin sapien. Ut lorem mauris, egestas eget hendrerit pellentesque, varius nec neque. Morbi dui massa, pulvinar eu justo et, luctus imperdiet arcu. Mauris venenatis tincidunt erat, et rhoncus sem semper at. Integer nec felis id lorem suscipit tristique non ac nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi lorem felis, elementum eget leo sed, tempor sollicitudin velit. In volutpat turpis purus, eu ultricies mauris malesuada a. Nulla eu sem sit amet quam commodo condimentum.
-
-                        Etiam volutpat libero ac lobortis ultrices. Curabitur felis elit, semper quis elit in, semper mattis augue. Etiam egestas libero a accumsan suscipit. Sed eleifend, ex eget cursus blandit, erat sem pellentesque magna, vulputate gravida odio est eget erat. Aenean dictum augue vitae euismod lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam volutpat ligula sapien. Nam magna massa, fringilla ut mattis in, mattis sit amet ex. Nam erat augue, lacinia a lectus in, tempus interdum diam. Nulla facilisi. Mauris finibus posuere urna, ac iaculis est tincidunt euismod. Donec vitae accumsan dui, et pellentesque erat. In sed ante enim. Donec iaculis fermentum nisi, non sodales eros commodo sit amet. Ut id nisi iaculis, tristique dolor eu, pharetra mauris.
-
-                        Vestibulum lacinia libero turpis, id mollis odio ultricies non. Vestibulum vitae lacinia orci. Integer eu leo malesuada, mollis tortor ut, gravida ante. Nunc ultrices enim purus, vitae porttitor est mollis id. Suspendisse blandit massa ex, et iaculis ante tempor sit amet. Mauris at dignissim risus. Nullam sed rutrum lorem. Quisque euismod, orci eget blandit fringilla, enim quam ullamcorper leo, sit amet hendrerit tellus nisi non justo. Integer maximus viverra leo ut consequat. Donec pharetra vel magna at mattis. Morbi eget mi ac turpis mattis accumsan. Quisque commodo neque sed aliquet suscipit. Nam ut lectus ultrices, consequat magna non, posuere erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce iaculis libero eu ante laoreet, nec placerat ipsum interdum.
+                    <div className='p-3'>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in ante euismod, porta tellus non, iaculis leo. Nulla mattis sed sem at luctus. In condimentum tellus et arcu elementum, sit amet dapibus felis commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non libero aliquam, tincidunt enim ut, aliquet risus. Nulla facilisi. Donec suscipit ullamcorper neque id gravida. Morbi eget sollicitudin sapien. Ut lorem mauris, egestas eget hendrerit pellentesque, varius nec neque. Morbi dui massa, pulvinar eu justo et, luctus imperdiet arcu. Mauris venenatis tincidunt erat, et rhoncus sem semper at. Integer nec felis id lorem suscipit tristique non ac nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi lorem felis, elementum eget leo sed, tempor sollicitudin velit. In volutpat turpis purus, eu ultricies mauris malesuada a. Nulla eu sem sit amet quam commodo condimentum.
+                        </p>
+                        <br></br>
+                        <p>
+                            Etiam volutpat libero ac lobortis ultrices. Curabitur felis elit, semper quis elit in, semper mattis augue. Etiam egestas libero a accumsan suscipit. Sed eleifend, ex eget cursus blandit, erat sem pellentesque magna, vulputate gravida odio est eget erat. Aenean dictum augue vitae euismod lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam volutpat ligula sapien. Nam magna massa, fringilla ut mattis in, mattis sit amet ex. Nam erat augue, lacinia a lectus in, tempus interdum diam. Nulla facilisi. Mauris finibus posuere urna, ac iaculis est tincidunt euismod. Donec vitae accumsan dui, et pellentesque erat. In sed ante enim. Donec iaculis fermentum nisi, non sodales eros commodo sit amet. Ut id nisi iaculis, tristique dolor eu, pharetra mauris.</p>
+                        <p>
+                            <br></br>
+                            Vestibulum lacinia libero turpis, id mollis odio ultricies non. Vestibulum vitae lacinia orci. Integer eu leo malesuada, mollis tortor ut, gravida ante. Nunc ultrices enim purus, vitae porttitor est mollis id. Suspendisse blandit massa ex, et iaculis ante tempor sit amet. Mauris at dignissim risus. Nullam sed rutrum lorem. Quisque euismod, orci eget blandit fringilla, enim quam ullamcorper leo, sit amet hendrerit tellus nisi non justo. Integer maximus viverra leo ut consequat. Donec pharetra vel magna at mattis. Morbi eget mi ac turpis mattis accumsan. Quisque commodo neque sed aliquet suscipit. Nam ut lectus ultrices, consequat magna non, posuere erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce iaculis libero eu ante laoreet, nec placerat ipsum interdum.</p>
 
                     </div>
                 </Dialog>

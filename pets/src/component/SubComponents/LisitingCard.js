@@ -17,7 +17,7 @@ const ListingCard = (props) => {
       <Card
         style={{
           width: "100%",
-          height: "300px",
+          height: "250px",
           padding: "20px",
           boxSizing: "border-box",
           marginBottom: "25px",
@@ -43,18 +43,23 @@ const ListingCard = (props) => {
               padding: "0",
               fontWeight: "bold",
               color: "#454545",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
+              Width:"200px",
+              overflow:"scroll" 
+              
             }}
           >
 
 
-            {props.heading}
+            {props.title}
           </h4>
         </div>
-        <Card
+        
+        <hr style={{color:"black"}}/>
+        <div
           style={{
             height: "80%",
-            padding: "20px",
+            padding: "10px",
             display: "grid",
             gridTemplateColumns: "0.7fr 1fr",
             gridTemplateRows: "1fr 0.4fr",
@@ -130,7 +135,7 @@ const ListingCard = (props) => {
                     readOnly
                   />
                 </div>
-                <div>reviews</div>
+                <p style={{fontSize :"12px"}}>Reviews(0)</p>
               </div>
               <div
                 style={{
@@ -154,7 +159,7 @@ const ListingCard = (props) => {
                 >
                   icon1
                 </button>
-                <div>icons</div>
+                {/* <div>icons</div> */}
               </div>
             </div>
           </div>
@@ -189,7 +194,7 @@ const ListingCard = (props) => {
             </NavLink>
             <NavigateNextIcon />
           </PrimaryButton>
-        </Card>
+        </div>
       </Card>
     </NavLink>
   )

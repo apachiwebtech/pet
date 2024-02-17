@@ -174,7 +174,7 @@ const routing = createBrowserRouter([
 function checkLocalStorageAndRedirect(navigate) {
   const pet_email = localStorage.getItem('pet_email');
   if (pet_email == null) {
-    navigate('/reg'); // Redirect to dashboard if id exists in localStorage
+    navigate('/log'); // Redirect to dashboard if id exists in localStorage
   }
 }
 
@@ -217,7 +217,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // checkLocalStorageAndRedirect(navigate);
+    checkLocalStorageAndRedirect(navigate);
     getUserName();
   }, [navigate]);
 
@@ -228,7 +228,7 @@ function App() {
     <>
       <Header />
       <Outlet />
-      {window.location.pathname !== '/splash'&& window.location.pathname !== '/log'&& window.location.pathname !== '/otp' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname) &&   !/^\/pet\/\d+$/.test(window.location.pathname) && window.location.pathname !== '/pet' && window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
+      {window.location.pathname !== '/splash'&& window.location.pathname !== '/log'&& window.location.pathname !== '/otp' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/serviceproform' && window.location.pathname !== '/reg' &&   !/^\/detailPage\/\d+$/.test(window.location.pathname)  &&   !/^\/community\/\d+$/.test(window.location.pathname) &&    !/^\/pet\/\d+$/.test(window.location.pathname)  &&   !/^\/vet\/\d+$/.test(window.location.pathname)  &&   !/^\/groomers\/\d+$/.test(window.location.pathname)  &&   !/^\/walkers\/\d+$/.test(window.location.pathname)  &&   !/^\/boarders\/\d+$/.test(window.location.pathname)&& window.location.pathname !== '/pet'  &&   !/^\/trainers\/\d+$/.test(window.location.pathname)  &&   !/^\/product\/\d+$/.test(window.location.pathname)  &&   !/^\/playareas\/\d+$/.test(window.location.pathname)  &&   !/^\/lost\/\d+$/.test(window.location.pathname)&& window.location.pathname !== '/services' && window.location.pathname !== '/bookappointment' &&  !/^\/addservice\/\d+$/.test(window.location.pathname) &&  !/^\/addproduct\/\d+$/.test(window.location.pathname) && !/^\/bookappointment\/\d+$/.test(window.location.pathname) && <Footer />}
     </>
 
   );

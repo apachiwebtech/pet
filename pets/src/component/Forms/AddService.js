@@ -39,6 +39,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const AddService = () => {
     const [open, setOpen] = React.useState(false);
+    const [recommend,setRecommend] = useState('')
     const [image, setImage] = useState(null);
     const [catid, setCatid] = useState("");
     const [image2, setImage2] = useState(null);
@@ -46,7 +47,7 @@ const AddService = () => {
     const [image3, setImage3] = useState(null);
     const [state, setState] = useState([])
     const [stateid, setStateId] = useState()
-    const [loader , setLoader] = useState(false)
+    const [loader, setLoader] = useState(false)
     const [cat, setCat] = useState([])
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTime2, setSelectedTime2] = useState(null);
@@ -170,7 +171,7 @@ const AddService = () => {
         setSelectedTime13(newTime.format());
     };
     const handleTimeChange14 = (newTime) => {
-      
+
         setSelectedTime14(newTime.format());
     };
 
@@ -516,7 +517,7 @@ const AddService = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const isValid = validateForm();
-        
+
         if (isValid) {
             setLoader(true)
             const formData = new FormData();
@@ -528,6 +529,7 @@ const AddService = () => {
             formData.append('pincode', value.pincode)
             formData.append('image', image)
             formData.append('latitude', coordinates.lat)
+            formData.append('recommend', recommend)
             formData.append('longitude', coordinates.lng)
             formData.append('image2', image2)
             formData.append('image3', image3)
@@ -587,6 +589,13 @@ const AddService = () => {
         }
     };
 
+    const HandleChangeRecom = (selectedValue) => {
+        console.log(selectedValue.map((item)=> item.id), "reco");
+
+        setRecommend(selectedValue.map((item)=> item.id))
+      
+    };
+
     async function getstate() {
         axios.get(`${BASE_URL}/state`)
             .then((res) => {
@@ -602,11 +611,13 @@ const AddService = () => {
     }, [])
 
 
+    console.log(recommend)
+
 
     return (
         <div >
             <div>
-               {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)" ,zIndex :"12"}} />}
+                {loader && <CircularProgress color="success" style={{ position: "absolute", top: "50%", left: "45%", transform: "translateY(-50%)", zIndex: "12" }} />}
             </div>
             {scriptLoaded && (
 
@@ -627,7 +638,7 @@ const AddService = () => {
                                     borderRadius: "8px",
                                     border: "none",
                                     boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
-                                    fontFamily:"Ubuntu', sans-serif"
+                                    fontFamily: "Ubuntu', sans-serif"
                                 }}
                                 className='my-2'
                                 renderInput={(params) => <TextField {...params} label="Category" />}
@@ -708,7 +719,7 @@ const AddService = () => {
                                     borderRadius: "8px",
                                     border: "none",
                                     boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
-                                    fontFamily:"Ubuntu', sans-serif"
+                                    fontFamily: "Ubuntu', sans-serif"
                                 }}
                                 className='my-2'
                                 renderInput={(params) => <TextField {...params} label="State" />}
@@ -723,7 +734,7 @@ const AddService = () => {
                                 {errors.city && <span className="text-danger">{errors.city}</span>}
                             </div>
                             <div className='my-2 mx-2 col-5'>
-                                <CustomInput name="pincode" placeholder="Pincode" onChange={onHandleChange} />
+                                <CustomInput type="number"  name="pincode" placeholder="Pincode" onChange={onHandleChange} />
                                 {errors.pincode && <span className="text-danger">{errors.pincode}</span>}
                             </div>
                         </div>
@@ -809,6 +820,28 @@ const AddService = () => {
                                     </Table>
                                 </TableContainer>
                             </Dialog>
+                        </div>
+                        <div>
+                            <Autocomplete
+                                multiple
+                                id="size-small-outlined-multi"
+                                size="small"
+                                options={state}
+                                getOptionLabel={(option) => option.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                sx={{
+                                    width: "100%",
+                                    borderRadius: "8px",
+                                    border: "none",
+                                    boxShadow: " 0 2px 6px rgba(0, 0, 0, 0.3)",
+                                    fontFamily: "Ubuntu', sans-serif"
+                                }}
+                                className='my-2'
+                                onChange={(event, value) => HandleChangeRecom(value)} 
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Recommened " placeholder="Favorites" />
+                                )}
+                            />
                         </div>
                         <div>
                             <CustomTextarea className="my-2" placeholder="Add Description" name="description" onChange={onHandleChange} />

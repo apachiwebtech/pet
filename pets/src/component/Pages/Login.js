@@ -34,7 +34,7 @@ const Login = () => {
     const [otp, setOTP] = useState('');
     const [error, setError] = useState(false);
     const navigate = useNavigate();
-    const[error2 , setError2] = useState(false)
+    const [error2, setError2] = useState(false)
     const [selectedValue, setSelectedValue] = React.useState('1');
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
@@ -84,23 +84,23 @@ const Login = () => {
                             setError(true)
                             setTimeout(() => {
                                 setError(false)
-                                
-                            },5000);
+
+                            }, 5000);
                         }
-                        
-                        
+
+
                     })
                     .catch((err) => {
                         console.log(err);
                     })
-                    
-                }
-                else {
-                    setError2(true)
-                    setTimeout(() => {
-                        
-                        setError2(false)
-                    }, 5000);
+
+            }
+            else {
+                setError2(true)
+                setTimeout(() => {
+
+                    setError2(false)
+                }, 5000);
             }
         } else {
             const data = {
@@ -112,22 +112,22 @@ const Login = () => {
                 axios.post(`${BASE_URL}/provid_login`, data)
                     .then((res) => {
                         if (res.data[0].id) {
-                        navigate('/otp')
-                        const id = res.data[0].email; // Define id here
-                        const value = res.data[0].value; // Define id here
-                        const otp = res.data[0].otp;
-                        console.log(otp)
-                        // console.log(role)
-                        localStorage.setItem("pet_email", id)
-                        localStorage.setItem("pet_value", value)
-                        localStorage.setItem("pet_role", 2)
-                        localStorage.setItem('otp', otp)
-                        }else{
+                            navigate('/otp')
+                            const id = res.data[0].email; // Define id here
+                            const value = res.data[0].value; // Define id here
+                            const otp = res.data[0].otp;
+                            console.log(otp)
+                            // console.log(role)
+                            localStorage.setItem("pet_email", id)
+                            localStorage.setItem("pet_value", value)
+                            localStorage.setItem("pet_role", 2)
+                            localStorage.setItem('otp', otp)
+                        } else {
                             setError(true)
                             setTimeout(() => {
                                 setError(false)
-                                
-                            },5000);
+
+                            }, 5000);
                         }
 
 
@@ -138,10 +138,10 @@ const Login = () => {
 
             }
             else {
-               setError2(true)
-               setTimeout(() => {
-                setError2(false)
-            }, 5000);
+                setError2(true)
+                setTimeout(() => {
+                    setError2(false)
+                }, 5000);
             }
 
         }
@@ -164,8 +164,8 @@ const Login = () => {
 
     return (
         <div className='reg-main px-4' >
-            {error && <Alert severity="error" style={{position : "absolute",top:"74px"}}>Email id not found</Alert>}
-            {error2 && <Alert severity="warning" style={{position : "absolute",top:"74px"}}>Enter email</Alert>}
+            {error && <Alert severity="error" style={{ position: "absolute", top: "74px" }}>Email id not found</Alert>}
+            {error2 && <Alert severity="warning" style={{ position: "absolute", top: "74px" }}>Enter email</Alert>}
 
             <div className='text-center py-5'>
                 <img src={logo} width="100px" alt='' />
@@ -191,26 +191,35 @@ const Login = () => {
                         <Radio
                             checked={selectedValue === '1'}
                             onChange={handleChange}
+                            id='pet'
                             value="1"
-                            sx={{color :"#5DB15B", '&.Mui-checked': {
-                                color:"#5DB15B" ,}}}
+                            sx={{
+                                color: "#5DB15B", '&.Mui-checked': {
+                                    color: "#5DB15B",
+                                }
+                            }}
                             name="radio-buttons"
                             inputProps={{ 'aria-label': 'A' }}
-                            />
-                        <span>PET OWNER</span>
+                        />
+                        <label htmlFor='pet' style={{ position: "static", transform: "translate(0px)", fontSize: "12px" }}>PET OWNER</label>
                     </div>
                     <div className='col-6'>
 
                         <Radio
                             checked={selectedValue === '2'}
                             onChange={handleChange}
-                            sx={{color :"#5DB15B", '&.Mui-checked': {
-                                color:"#5DB15B" ,}}}
+                            id='service'
+                            sx={{
+                                color: "#5DB15B", '&.Mui-checked': {
+                                    color: "#5DB15B",
+                                }
+                            }}
                             value="2"
                             name="radio-buttons"
                             inputProps={{ 'aria-label': 'B' }}
                         />
-                        <span>SERVICE PROVIDER</span>
+                        <label htmlFor='service' style={{ position: "static", transform: "translate(0px)", fontSize: "12px" }}>SERVICE PROVIDER</label>
+
                     </div>
 
                 </div>

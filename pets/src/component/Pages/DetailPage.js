@@ -41,13 +41,13 @@ const DetailPage = () => {
   const { id } = useParams();
   const { ratings } = useParams();
 
-  console.log(ratings , "rate")
+  // console.log(ratings , "rate")
   const serviceProvider = DUMMY_DATA.find((itm) => itm.id === id);
   const [open, setOpen] = useState(false);
 
   const [recommenderFor, setRecommendedFor] = useState([]);
   const [detail, setDetail] = useState({});
-  console.log("component rerendered");
+  // console.log("component rerendered");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -55,7 +55,7 @@ const DetailPage = () => {
   const [time, setTime] = useState([])
   const handleRating = (rate) => {
     setRating(rate);
-    console.log(rate);
+    // console.log(rate);
   };
 
 
@@ -74,22 +74,22 @@ const DetailPage = () => {
   useEffect(() => {
     axios.get(`${BASE_URL}/detailPage/${id}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setDetail(res.data[0]);
       }).catch((err) => {
         console.log(err);
       })
-  }, [id])
+  }, [])
 
   useEffect(() => {
     axios.get(`${BASE_URL}/recommendedFor/${id}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setRecommendedFor(res.data);
       }).catch((err) => {
         console.log(err);
       })
-  }, [id])
+  }, [])
 
   useEffect(() => {
     axios.get(`${BASE_URL}/timedata/${id}`)
@@ -99,8 +99,8 @@ const DetailPage = () => {
       }).catch((err) => {
         console.log(err);
       })
-  }, [id])
-  console.log(detail.address)
+  }, [])
+
 
   const handleCommentSubmuit = (event) => {
 
@@ -111,7 +111,7 @@ const DetailPage = () => {
       rating: rating,
     }
 
-    console.log(comment);
+    // console.log(comment);
 
 
     setRating(1);

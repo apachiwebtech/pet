@@ -17,6 +17,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Card from "../UI/Card";
 import axios from "axios";
 import { BASE_URL } from "../Utils/BaseUrl";
+import { TextField } from "@mui/material";
 
 
 
@@ -26,14 +27,19 @@ const BookingAppointment = () => {
   const [msg, setMsg] = useState("")
   const [hide, setHide] = useState(false)
   const [selectedDate, setSelectedDate] = useState(dayjs(date));
-  const [progress , setProgress] = useState(false)
+  const [progress, setProgress] = useState(false)
+  const [comment, setComment] = useState("")
 
   const handleDateChange = (newDate) => {
-    
+
     setSelectedDate(newDate.format());
     // You can do something with the selected date value here, like sending it to a server or updating state.
     console.log('Selected Date:', newDate); // Example: Log the selected date to the console
   };
+
+
+
+  console.log(comment)
 
   const newTheme = (theme) =>
     createTheme({
@@ -42,15 +48,27 @@ const BookingAppointment = () => {
         MuiPickersToolbar: {
           styleOverrides: {
             root: {
-              color: "#bbdefb",
+              color: "#5DB15B",
               borderRadius: 2,
               borderWidth: 1,
-              borderColor: "#2196f3",
+              borderColor: "#5DB15B",
               border: "1px solid",
-              backgroundColor: "#0d47a1",
+              backgroundColor: "#5DB15B",
             },
           },
         },
+        MuiDateCalendar: {
+          styleOverrides: {
+            root: {
+              color: '#bbdefb',
+              borderRadius: 1,
+              borderWidth: 12,
+              borderColor: '#2196f3',
+              border: '0px solid',
+              backgroundColor: '#fff',
+            }
+          }
+        }
       },
     });
 
@@ -60,7 +78,8 @@ const BookingAppointment = () => {
     const appointmentData = {
       date: selectedDate,
       user_id: localStorage.getItem('pet_id'),
-      service_id: id
+      service_id: id,
+      comment :comment
     };
     axios.post(`${BASE_URL}/book_appoint`, appointmentData)
       .then((res) => {
@@ -72,64 +91,50 @@ const BookingAppointment = () => {
       .finally(() => {
         setHide(true)
         setProgress(false)
-        
-        setTimeout(() => {
-          setHide(false)
-        }, 5000);
       })
 
     // navigate("/");
   };
   return (
-    <div
-      className="container"
-      style={{
-        backgroundColor: "",
-        height: "calc(100vh - 150px)",
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        marginTop: "10px",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          backgroundColor: "",
-          display: "grid",
-          gridTemplateRows: "repeat(2, 1fr)",
-          gap: "10px",
-        }}
-      >
-        <Card style={{ padding: "0", height: "100%" }}>
+
+    <div className="p-3">
+      <div>
+        <Card >
           <ThemeProvider theme={newTheme}>
             <DemoItem label="">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <StaticDateTimePicker defaultValue={dayjs(date)} value={selectedDate}
-                  onChange={handleDateChange} />
+
+                <StaticDateTimePicker defaultValue={dayjs(date)}
+                  onChange={handleDateChange} disablePast={true}
+                  sx={{ height: "520px" }}
+                />
               </LocalizationProvider>
             </DemoItem>
           </ThemeProvider>
         </Card>
-        {
-          hide ? <Alert style={{ height: "50px" }} variant="filled" severity="success">
-            <div className="d-flex justify-content-between">
-              {msg}
-              <p className="px-5 text-light" style={{ textDecoration: "underline" }}> <Link to="/myappointment">Details <i class="bi bi-arrow-right"></i></Link></p>
-            </div>
-          </Alert> : null
-        }
 
+        <TextField onChange={(e) =>setComment(e.target.value)} className="my-3" style={{ width: "100%" }} id="outlined-basic" label="Add comment" variant="outlined" />
 
       </div>
 
 
+
       <div style={{ width: "100%" }}>
-        <PrimaryButton style={{ width: "100%" }} onClick={handleSubmit}>
-          Book Appointment
-        </PrimaryButton>
-        {progress?<LinearProgress /> : null}
+        {
+          hide ? <Alert style={{ height: "50px" }} variant="filled" severity="success">
+            <div className="d-flex justify-content-between" style={{ fontSize: "12px" }}>
+              {msg}
+              <p className="px-5 text-light" style={{ textDecoration: "underline" }}> <Link to="/myappointment" style={{ color: "#fff" }}>Details <i class="bi bi-arrow-right"></i></Link></p>
+            </div>
+          </Alert> : null
+        }
+        {hide ? null :
+          <PrimaryButton style={{ width: "100%" }} onClick={handleSubmit}>
+            Book Appointment
+          </PrimaryButton>
+        }
+
+        {progress ? <LinearProgress /> : null}
       </div>
 
     </div>

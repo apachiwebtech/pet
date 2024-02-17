@@ -65,7 +65,7 @@ const Footer = () => {
           style={{ color: '#fff' }}
           icon={<MoveToInboxIcon />}
         /> : null}
-        {localStorage.getItem("pet_role") == 1 ? 
+        {localStorage.getItem("pet_role") == 1 ?
           <BottomNavigationAction
             component={Link}
             to='/community/:id'
@@ -80,11 +80,17 @@ const Footer = () => {
           to='/setting'
           label="Setting"
           value="setting"
-          
+
           style={{ color: '#fff' }}
           icon={<SettingsOutlinedIcon />}
         />
-        {/* <BottomNavigationAction label="Logout" value="logout" icon={<LogoutOutlinedIcon />} /> */}
+        <BottomNavigationAction
+          // component={Link}
+          // to='/setting' label="Logout"
+          style={{ color: '#fff' }}
+          value="logout"
+          icon={<LogoutOutlinedIcon />}
+        />
       </BottomNavigation>
     </div>
 

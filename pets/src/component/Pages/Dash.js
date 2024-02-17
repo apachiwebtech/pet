@@ -8,12 +8,13 @@ import appo from '../icon/cal.png'
 import order from '../icon/order.png'
 import service from '../icon/service.png'
 import product from '../icon/product.png'
+import Loader from '../UI/Loader';
 const Dash = () => {
   const [feild, setfeild] = useState([])
   const [search, setSearch] = useState('')
   const [count, setCount] = useState([])
+  const [hide, setHide] = useState(false)
 
-  
   async function getDashicon() {
     const data = {
       type: localStorage.getItem("pet_role")
@@ -22,6 +23,7 @@ const Dash = () => {
     axios.post(`${BASE_URL}/dashboard`, data)
 
       .then((res) => {
+        setHide(true)
         setfeild(res.data)
       })
       .catch((err) => {
@@ -51,7 +53,7 @@ const Dash = () => {
 
   useEffect(() => {
     getCount()
-  },[])
+  }, [])
 
 
   async function getprivate() {
@@ -61,8 +63,9 @@ const Dash = () => {
     }
     axios.post(`${BASE_URL}/getPrivate`, data)
       .then((res) => {
-    
-        if(res.data){
+
+
+        if (res.data) {
           localStorage.setItem('selectedRadioValue', res.data[0].private);
         }
       })
@@ -77,57 +80,64 @@ const Dash = () => {
 
   return (
     <div className='mx-3'>
-      <div className='text-center '>
+      <div className='text-center py-3'>
         <p className='hello-text'>Hello, how can we help you</p>
-        <Search setSearch={setSearch} />
+        {/* <Search setSearch={setSearch} /> */}
       </div>
+      {hide ?null: <Loader/>}
+
+      {
+        hide ? <div className='row text-center pt-3 icon-area'>
+
+          {
+            feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item, index) => {
+              return (
+                <div className='col-4 py-2' key={index}>
+                  <Link to={`/${item.link}/${item.id}`}><img src={`https://thetalentclub.co.in/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
+                  {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
+                  <p>{item.title}</p>
+                </div>
+              )
+            })
+          }
 
 
-      <div className='row text-center pt-3 icon-area'>
-
-        {
-          feild.filter((item) => (item.title.toLowerCase()).includes(search.toLowerCase())).map((item, index) => {
-            return (
-              <div className='col-4 py-2' key={index}>
-                <Link to={`/${item.link}/${item.id}`}><img src={`https://thetalentclub.co.in/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /></Link>
-                {/* <img src={`https://myproject-demo.com/pet-app/upload/category/${item.icon}`} className='dash-icon' alt='' /> */}
-                <p>{item.title}</p>
+          {
+            localStorage.getItem("pet_role") == 2 ?
+              <div className='col-4 py-2' style={{ position: "relative" }}>
+                <Link to="/servicerequest"><img className='dash-icon' src={service} alt='' /></Link>
+                <p>Service <br />Request</p>
+                <span className='count'>{count.count}</span>
+              </div> :
+              <div className='col-4 py-2'>
+                <Link to="/myappointment"><img className='dash-icon' src={appo} alt='' /></Link>
+                <p>My <br />Appointment</p>
               </div>
-            )
-          })
-        }
+          }
+          {
+            localStorage.getItem("pet_role") == 2 ?
+              <div className='col-4 py-2'>
+                <Link to="/productrequest"><img className='dash-icon' src={order} alt='' /></Link>
+                <p>Product  <br /> Request</p>
 
-      </div>
-      <hr />
-      <div className='d-flex justify-content-between text-center icon-area'>
+              </div> :
+              <div className='col-4 py-2'>
+                <img className='dash-icon' src={order} alt='' />
+                <p>My Order <br /> Booking</p>
+              </div>
+          }
 
-        {
-          localStorage.getItem("pet_role") == 2 ?
-            <div className='' style={{position :"relative"}}>
-              <Link to="/servicerequest"><img className='dash-icon' src={service} alt='' /></Link>
-              <p>Service <br />Request</p>
-              <span className='count'>{count.count}</span>
-            </div> :
-            <div className=''>
-              <Link to="/myappointment"><img className='dash-icon' src={appo} alt='' /></Link>
-              <p>My <br />Appointment</p>
-            </div>
-        }
-        {
-          localStorage.getItem("pet_role") == 2 ?
-            <div className=' '>
-              <Link to="/productrequest"><img className='dash-icon' src={order} alt='' /></Link>
-              <p>Product  <br /> Request</p>
-            
-            </div> :
-            <div className=' '>
-              <img className='dash-icon' src={order} alt='' />
-              <p>My Order <br /> Booking</p>
-            </div>
-        }
+        </div> : null
+      }
 
-      </div>
+
+
+
+
+
+
     </div>
+
   )
 }
 
